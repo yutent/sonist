@@ -115,6 +115,8 @@ export default Anot({
 
               fs.echo(json.lyrics, it.lyrics)
               fs.echo(JSON.stringify(LS.getAll(), '', 2), MUSIC_DB_PATH)
+
+              LYRICS.__init__(it.lyrics)
             })
           }
         })
