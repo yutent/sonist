@@ -84,6 +84,8 @@ Anot({
       duration: 0
     },
     ctrlLrc: '暂无歌词...',
+    allLrcView: false,
+    allLrc: '',
     lrc: {
       l: { bg: '', txt: '' },
       r: { bg: '', txt: '' }
@@ -175,6 +177,11 @@ Anot({
       this.lrc = lrc
     })
 
+    // ktv模式的歌词
+    LYRICS.on('view-all', lrc => {
+      this.allLrc = lrc
+    })
+
     this.activeModule(this.mod)
 
     remote.app.on('browser-window-focus', _ => {
@@ -215,6 +222,10 @@ Anot({
       }
     },
 
+    toggleLrcView() {
+      this.allLrcView = !this.allLrcView
+    },
+
     toggleOptBox() {
       this.optBoxShow = !this.optBoxShow
     },
@@ -248,6 +259,11 @@ Anot({
       this.volume = volume
       SONIST.volume = volume
       Anot.ls('volume', volume)
+    },
+
+    forwardLrc(time) {
+      LYRICS.forward(time)
+      layer.toast(`歌词已${time > 0 ? '提前' : '延后'} ${time} 秒`)
     },
 
     __draw__() {

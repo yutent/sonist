@@ -204,7 +204,10 @@ table {overflow:auto;display:table;width:100%;line-height:2.5rem;
     .contrl-bar {background:rgba(233, 233, 233, .1);
     
       .play-box  .item,
-      .stat-box .ctrl {color:#fff;}
+      .stat-box .ctrl {color:#fff;
+      
+        &:hover {color:nth($cr, 1)}
+      }
     }
   }
 
@@ -217,6 +220,7 @@ table {overflow:auto;display:table;width:100%;line-height:2.5rem;
 
         img {width:30rem;height:30rem;border:.5rem solid rgba(255, 255, 255, .5);border-radius:50%;}
         .summary {flex:1; padding:0 5rem}
+        pre {overflow:auto;height:30rem}
         h3 {line-height:3;font-size:1.8rem;}
       }
       .lrc-box {flex:0 10rem;display:flex;flex-flow:column wrap;padding:0 5rem;line-height:5rem;color:#fff;font-size:3rem;
@@ -229,6 +233,18 @@ table {overflow:auto;display:table;width:100%;line-height:2.5rem;
           span {background-clip:text!important;color:transparent;}
         }
       
+      }
+
+
+      .tool-box {position:absolute;right:0;top:15rem;width:13rem;height:auto;padding:1.5rem 0;background:rgba(255, 255, 255, .1);border-radius:.3rem  0 0 .3rem;opacity:.3;transform:translateX(8.8rem);@include  ts();
+      
+        .item {height:3.4rem;padding:0 .8rem;line-height:3.4rem;
+        
+          &:hover {background:rgba(255, 255, 255, .1);}
+        }
+        i {padding:0 1rem 0 .8rem}
+      
+        &:hover {opacity:1;transform:translateX(0)}
       }
     }
   

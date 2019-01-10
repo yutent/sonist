@@ -113,13 +113,17 @@
 
     <div class="inner-content">
       <div class="info">
-        <img :attr-src="curr.cover" />
-        <div class="summary">
+        <img :attr-src="curr.cover" :click="toggleLrcView" />
+        <div class="summary" :visible="!allLrcView">
           <h3 :text="curr.title"></h3>
           <section>歌手: {{curr.artist}}</section>
           <section>专辑: {{curr.album}}</section>
           <section>时长: {{curr.duration | time}}</section>
         </div>
+        <div class="summary" :visible="allLrcView">
+          <pre class="summary" :text="allLrc"></pre>
+        </div>
+        
       </div>
 
       <div class="lrc-box">
@@ -130,6 +134,22 @@
           <span :text="lrc.r.txt" :css="{background: lrc.r.bg}"></span>
         </section>
       </div>
+
+      <div class="tool-box">
+        <section class="item" :click="forwardLrc(-0.5)">
+          <i class="do-icon-trigon-up"></i>歌词 -0.5s
+        </section>
+        <section class="item">
+          <i class="do-icon-search"></i>歌词有误
+        </section>
+        <section class="item" :click="layer.alert('歌词编辑功能暂时未开放')">
+          <i class="do-icon-edit"></i>歌词编辑
+        </section>
+        <section class="item" :click="forwardLrc(0.5)">
+          <i class="do-icon-trigon-down"></i>歌词 +0.5s
+        </section>
+      </div>
+
     </div>
   </div>
 
