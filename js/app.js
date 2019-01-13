@@ -16,6 +16,8 @@ import Artist from '/js/modules/artist.js'
 import Local from '/js/modules/local.js'
 import Profile from '/js/modules/profile.js'
 
+import KTV from '/js/modules/ktv.js'
+
 const log = console.log
 
 const fs = require('iofs')
@@ -84,12 +86,7 @@ Anot({
       duration: 0
     },
     ctrlLrc: '暂无歌词...',
-    allLrcView: false,
-    allLrc: '',
-    lrc: {
-      l: { bg: '', txt: '' },
-      r: { bg: '', txt: '' }
-    }
+    ...KTV.data
   },
   skip: [],
   computed: {
@@ -222,10 +219,6 @@ Anot({
       }
     },
 
-    toggleLrcView() {
-      this.allLrcView = !this.allLrcView
-    },
-
     toggleOptBox() {
       this.optBoxShow = !this.optBoxShow
     },
@@ -259,11 +252,6 @@ Anot({
       this.volume = volume
       SONIST.volume = volume
       Anot.ls('volume', volume)
-    },
-
-    forwardLrc(time) {
-      LYRICS.forward(time)
-      layer.toast(`歌词已${time > 0 ? '提前' : '延后'} ${time} 秒`)
     },
 
     __draw__() {
@@ -427,6 +415,7 @@ Anot({
           }
         }
       }
-    }
+    },
+    ...KTV.methods
   }
 })

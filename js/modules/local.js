@@ -75,12 +75,13 @@ export default Anot({
     __updateSong__(it, idx) {
       if (!it.cover) {
         if (idx === undefined) {
-          for (let i in this.list.$model) {
-            if (this.list[i].id === it.id) {
-              idx = i
-              break
-            }
-          }
+          idx = SONIST.__CURR__
+          // for (let i in this.list.$model) {
+          //   if (this.list[i].id === it.id) {
+          //     idx = i
+          //     break
+          //   }
+          // }
         }
         let _P = Promise.resolve(true)
         if (!it.kgHash) {
@@ -104,8 +105,8 @@ export default Anot({
               it.cover = json.img
               it.lyrics = path.join(LYRICS_PATH, `${it.id}.lrc`)
 
-              this.list.set(idx, it)
               LS.insert(it)
+              this.list.set(idx, it)
 
               SONIST.clear()
               SONIST.push(LS.getAll())
