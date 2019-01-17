@@ -259,6 +259,12 @@ Anot({
       this.optBoxShow = false
       this.mod = mod
     },
+    // 设置保存 回调
+    onProfileSaved() {
+      this.toggleModule('local')
+      appInit = Anot.ss('app-init')
+    },
+
     togglePlayMode() {
       let mod = this.playMode
       mod++

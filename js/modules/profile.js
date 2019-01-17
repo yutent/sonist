@@ -63,6 +63,8 @@ export default Anot({
       Anot.ss('app-init', cache)
 
       layer.toast('保存成功')
+
+      this.__APP__.onProfileSaved()
     }
   }
 })
