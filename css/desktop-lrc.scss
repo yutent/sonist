@@ -30,8 +30,10 @@ body {position:fixed;left:0;top:0;display:flex;width:100%;height:100%;line-heigh
   
   }
 
+  .touch-bar {position:absolute;left:0;top:0;z-index:9;width:100%;height:2rem;}
+
   .quit,
-  .lock {visibility:hidden;position:absolute;z-index:9;right:1rem;top:.5rem;font-size:1.8rem;font-weight:bold;
+  .lock {visibility:hidden;position:absolute;right:1rem;top:.5rem;font-size:1.8rem;font-weight:bold;
     &:hover {color:nth($cr, 1)}
   }
   .lock {right:4rem;
