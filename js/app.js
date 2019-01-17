@@ -26,6 +26,8 @@ const path = require('path')
 const { remote } = require('electron')
 
 const WIN = remote.getCurrentWindow()
+const CURR_SCREEN = remote.screen.getPrimaryDisplay()
+
 const HOME_PATH = remote.app.getPath('appData')
 const APP_INI_PATH = path.join(HOME_PATH, 'app.ini')
 const LYRICS_PATH = path.join(HOME_PATH, 'lyrics')
@@ -64,6 +66,26 @@ let appInit = fs.cat(APP_INI_PATH)
 Anot.ss('app-init', appInit + '')
 
 appInit = JSON.parse(appInit)
+
+const LRC_WIN = new remote.BrowserWindow({
+  title: '',
+  width: 1024,
+  height: 100,
+  frame: false,
+  resizable: false,
+  alwaysOnTop: true,
+  x: (CURR_SCREEN.size.width - 1024) / 2,
+  y: CURR_SCREEN.size.height - 100,
+  skipTaskbar: true,
+  hasShadow: false,
+  thickFrame: false,
+  transparent: true,
+  show: false
+})
+// LRC_WIN.setIgnoreMouseEvents(true)
+window.LRC_WIN = LRC_WIN
+
+LRC_WIN.loadURL('app://sonist/desktop-lrc.html')
 
 Anot({
   $id: 'app',
@@ -172,6 +194,7 @@ Anot({
     // ktv模式的歌词
     LYRICS.on('ktv-lrc', lrc => {
       this.lrc = lrc
+      LRC_WIN.emit('ktv-lrc', lrc)
     })
 
     // ktv模式的歌词
@@ -221,6 +244,13 @@ Anot({
 
     toggleOptBox() {
       this.optBoxShow = !this.optBoxShow
+    },
+    toggleDesktopLrc() {
+      if (LRC_WIN.isVisible()) {
+        LRC_WIN.hide()
+      } else {
+        LRC_WIN.show()
+      }
     },
     toggleModule(mod) {
       if ('mv' === mod) {
