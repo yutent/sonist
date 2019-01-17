@@ -262,7 +262,7 @@ Anot({
     // 设置保存 回调
     onProfileSaved() {
       this.toggleModule('local')
-      appInit = Anot.ss('app-init')
+      appInit = JSON.parse(Anot.ss('app-init'))
     },
 
     togglePlayMode() {
