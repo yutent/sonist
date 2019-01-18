@@ -1,18 +1,60 @@
 {
-  "name": "sonist",
-  "version": "0.1.0",
+  "name": "Sonist",
+  "version": "0.9.0",
   "description": "Music Player",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder"
   },
   "author": "yutent",
   "license": "MIT",
   "dependencies": {
-    "crypto.js": "^1.1.6",
+    "crypto.js": "^1.2.0",
     "iofs": "^1.1.0"
   },
   "devDependencies": {
-    "electron": "^4.0.0"
+    "electron": "^4.0.0",
+    "electron-builder": "^20.38.5"
+  },
+  "build": {
+    "appId": "cc.doui.sonist",
+    "productName": "Sonist",
+    "copyright": "Copyright © year ${author}",
+    "directories": {
+      "output": "build"
+    },
+    "files": ["src/**/*", "node_modules/iofs/*", "node_modules/crypto.js/*"],
+    "mac": {
+      "category": "public.app-category.music",
+      "target": "dmg",
+      "icon": "icons/app.icns"
+    },
+    "linux": {
+      "category": "AudioVideo;Audio;Player;Music",
+      "target": [
+        {
+          "target": "deb",
+          "arch": "x64"
+        },
+        {
+          "target": "AppImage",
+          "arch": "x64"
+        }
+      ],
+      "icon": "icons/app.png"
+    },
+    "deb": {
+      "depends": [
+        "gconf2",
+        "gconf-service",
+        "libnotify4",
+        "libappindicator1",
+        "libxtst6",
+        "libnss3",
+        "ffprobe",
+        "ffmpeg"
+      ]
+    }
   }
 }
