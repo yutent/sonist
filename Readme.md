@@ -44,7 +44,8 @@
 
 ```bash
 cd project #你下载的项目所在的目录
-npm i && npm start
+npm i
+npm start # 如果你使用vscode打开项目, 则可以直接按F5运行
 ```
 
 
