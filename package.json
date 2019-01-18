@@ -1,5 +1,5 @@
 {
-  "name": "Sonist",
+  "name": "sonist",
   "version": "0.9.0",
   "description": "Music Player",
   "main": "src/main.js",
@@ -20,7 +20,7 @@
   "build": {
     "appId": "cc.doui.sonist",
     "productName": "Sonist",
-    "copyright": "Copyright © year ${author}",
+    "copyright": "Copyright © 2019 ${author}",
     "directories": {
       "output": "build"
     },
@@ -28,7 +28,8 @@
     "mac": {
       "category": "public.app-category.music",
       "target": "dmg",
-      "icon": "icons/app.icns"
+      "icon": "icons/app.icns",
+      "darkModeSupport": false
     },
     "linux": {
       "category": "AudioVideo;Audio;Player;Music",
