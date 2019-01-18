@@ -1,4 +1,11 @@
-const { app, BrowserWindow, protocol, Tray } = require('electron')
+const {
+  app,
+  BrowserWindow,
+  protocol,
+  Tray,
+  Menu,
+  session
+} = require('electron')
 const path = require('path')
 const fs = require('iofs')
 const log = console.log
@@ -18,6 +25,30 @@ const MIME_TYPES = {
 let win = null
 let tray = null
 
+const template = [
+  {
+    label: 'View',
+    submenu: [{ role: 'zoomin' }, { role: 'zoomout' }]
+  },
+  {
+    role: 'window',
+    submenu: [{ role: 'minimize' }, { role: 'close' }]
+  }
+]
+
+if (process.platform === 'darwin') {
+  template.unshift({
+    label: 'Sonist',
+    submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'quit' }]
+  })
+
+  // Window menu
+  template[2].submenu = [{ role: 'minimize' }]
+}
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)
+
 function createWindow() {
   // 创建浏览器窗口
   win = new BrowserWindow({
@@ -26,6 +57,7 @@ function createWindow() {
     height: 640,
     frame: false,
     resizable: false,
+    icon: './images/app.png',
     webPreferences: {
       webSecurity: false,
       experimentalFeatures: true
@@ -61,6 +93,9 @@ app.on('ready', () => {
   tray.on('click', _ => {
     win.show()
   })
+
+  // const ses = session.defaultSession
+  // ses.setUserAgent('Hello wolrd')
 
   createWindow()
   win.tray = tray
