@@ -57,7 +57,7 @@ function createWindow() {
     height: 640,
     frame: false,
     resizable: false,
-    icon: './images/app.png',
+    icon: './src/images/app.png',
     webPreferences: {
       webSecurity: false,
       experimentalFeatures: true
@@ -88,7 +88,7 @@ app.on('ready', () => {
     cb({ data: buf, mimeType: MIME_TYPES[ext] })
   })
 
-  tray = new Tray('./images/trays/trayTemplate.png')
+  tray = new Tray('./src/images/trays/trayTemplate.png')
 
   tray.on('click', _ => {
     win.show()
