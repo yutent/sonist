@@ -4,6 +4,7 @@ const {
   protocol,
   Tray,
   Menu,
+  MenuItem,
   session
 } = require('electron')
 const path = require('path')
@@ -25,7 +26,26 @@ const MIME_TYPES = {
 let win = null
 let tray = null
 
-const template = [
+/* ----------------------------------------------------- */
+
+const TRAYMENU_TMPL = [
+  {
+    label: '显示Sonist',
+    type: 'normal',
+    click: () => {
+      win.show()
+    }
+  },
+  {
+    type: 'separator'
+  },
+  {
+    label: '退出应用',
+    type: 'normal',
+    role: 'quit'
+  }
+]
+const MENUBAR_TMPL = [
   {
     label: 'View',
     submenu: [{ role: 'zoomin' }, { role: 'zoomout' }]
@@ -37,17 +57,19 @@ const template = [
 ]
 
 if (process.platform === 'darwin') {
-  template.unshift({
+  MENU_TMPL.unshift({
     label: 'Sonist',
     submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'quit' }]
   })
 
   // Window menu
-  template[2].submenu = [{ role: 'minimize' }]
+  MENUBAR_TMPL[2].submenu = [{ role: 'minimize' }]
 }
 
-const menu = Menu.buildFromTemplate(template)
-Menu.setApplicationMenu(menu)
+let traymenuList = Menu.buildFromTemplate(TRAYMENU_TMPL)
+let menubarList = Menu.buildFromTemplate(MENUBAR_TMPL)
+
+/* ----------------------------------------------------- */
 
 function createWindow() {
   // 创建浏览器窗口
@@ -90,14 +112,19 @@ app.on('ready', () => {
 
   tray = new Tray(path.resolve(ROOT, './images/trays/trayTemplate.png'))
 
-  tray.on('click', _ => {
-    win.show()
-  })
+  if (process.platform === 'darwin') {
+    tray.on('click', _ => {
+      win.show()
+    })
+  } else {
+    tray.setContextMenu(traymenuList)
+  }
+  Menu.setApplicationMenu(menubarList)
 
   // const ses = session.defaultSession
   // ses.setUserAgent('Hello wolrd')
 
   createWindow()
-  win.tray = tray
+  // win.tray = tray
   win.webContents.openDevTools()
 })

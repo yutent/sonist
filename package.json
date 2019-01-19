@@ -23,6 +23,7 @@
     "productName": "Sonist",
     "copyright": "Copyright © 2019 ${author}",
     "directories": {
+      "buildResources": "icons",
       "output": "build"
     },
     "files": ["src/**/*", "node_modules/iofs/*", "node_modules/crypto.js/*"],
@@ -44,7 +45,7 @@
           "arch": "x64"
         }
       ],
-      "icon": "icons/app.png"
+      "icon": "./icons/"
     },
     "deb": {
       "depends": [
