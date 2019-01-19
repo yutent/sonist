@@ -54,7 +54,6 @@
         "libappindicator1",
         "libxtst6",
         "libnss3",
-        "ffprobe",
         "ffmpeg"
       ]
     }
