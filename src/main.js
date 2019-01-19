@@ -4,7 +4,6 @@ const {
   protocol,
   Tray,
   Menu,
-  MenuItem,
   session
 } = require('electron')
 const path = require('path')
@@ -30,8 +29,7 @@ let tray = null
 
 const TRAYMENU_TMPL = [
   {
-    label: '显示Sonist',
-    type: 'normal',
+    label: '显示主窗口',
     click: () => {
       win.show()
     }
@@ -40,8 +38,7 @@ const TRAYMENU_TMPL = [
     type: 'separator'
   },
   {
-    label: '退出应用',
-    type: 'normal',
+    label: '退出',
     role: 'quit'
   }
 ]
@@ -57,7 +54,7 @@ const MENUBAR_TMPL = [
 ]
 
 if (process.platform === 'darwin') {
-  MENU_TMPL.unshift({
+  MENUBAR_TMPL.unshift({
     label: 'Sonist',
     submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'quit' }]
   })
@@ -89,7 +86,9 @@ function createWindow() {
   // 然后加载应用的 index.html。
   win.loadURL('app://sonist/index.html')
 }
+app.commandLine.appendSwitch('--lang', 'zh-CN')
 app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required')
+
 app.setPath('appData', path.resolve(HOME, '.sonist/'))
 protocol.registerStandardSchemes(['app'], { secure: true })
 
@@ -102,7 +101,7 @@ if (!fs.exists(appPath)) {
 }
 
 //  创建窗口
-app.on('ready', () => {
+app.once('ready', () => {
   protocol.registerBufferProtocol('app', (req, cb) => {
     let file = req.url.replace(/^app:\/\/sonist\//, '')
     let ext = path.extname(req.url).slice(1)
@@ -116,15 +115,18 @@ app.on('ready', () => {
     tray.on('click', _ => {
       win.show()
     })
+    tray.on('right-click', _ => {
+      tray.popUpContextMenu(traymenuList)
+    })
   } else {
     tray.setContextMenu(traymenuList)
   }
   Menu.setApplicationMenu(menubarList)
 
-  // const ses = session.defaultSession
-  // ses.setUserAgent('Hello wolrd')
+  session.defaultSession.setUserAgent(
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+  )
 
   createWindow()
-  // win.tray = tray
-  win.webContents.openDevTools()
+  // win.openDevTools()
 })

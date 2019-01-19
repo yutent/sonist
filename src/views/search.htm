@@ -1,4 +1,4 @@
-<div class="do-mod-search">
+<div class="do-mod-search" anot="search">
   <div class="tabbar">
     <span class="item active">我的音乐</span>
     <span class="item">汪苏泷 <i class="do-icon-close"></i></span>
@@ -17,7 +17,6 @@
       </thead>
       <tbody>
         <tr
-          :class="{active: it.id === curr.id}"
           :for="it in list"
           :dblclick="play(it, $index)">
           <td><i class="s-icon-music"></i></td>

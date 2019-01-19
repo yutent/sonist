@@ -15,6 +15,7 @@ import Api from '/js/api.js'
 import Artist from '/js/modules/artist.js'
 import Local from '/js/modules/local.js'
 import Profile from '/js/modules/profile.js'
+import Search from '/js/modules/search.js'
 
 import KTV from '/js/modules/ktv.js'
 
@@ -80,10 +81,9 @@ const LRC_WIN = new remote.BrowserWindow({
   hasShadow: false,
   thickFrame: false,
   transparent: true,
+  // focusable: false,
   show: false
 })
-// LRC_WIN.setIgnoreMouseEvents(true)
-window.LRC_WIN = LRC_WIN
 
 LRC_WIN.loadURL('app://sonist/desktop-lrc.html')
 
@@ -236,6 +236,9 @@ Anot({
           break
         case 'profile':
           Profile.__init__()
+          break
+        case 'search':
+          Search.__init__()
           break
         default:
           break
