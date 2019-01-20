@@ -168,3 +168,9 @@ app.once('ready', () => {
     }
   })
 })
+
+app.on('activate', _ => {
+  if (win) {
+    win.show()
+  }
+})
