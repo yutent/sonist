@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<link href="lib/css/reset-basic.css" rel="stylesheet">
+<link href="lib/css/elem-ui.css" rel="stylesheet">
+<style>
+
+.do-fn-drag {-webkit-app-region:drag;user-select: none;}
+.do-fn-nodrag {-webkit-app-region:no-drag;}
+
+html {font-size:62.5%}
+body {position:fixed;left:0;top:0;width:100%;height:100%;padding:4rem 3rem;line-height:2;font-size:1.4rem;color:#62778d;}
+span {color:#ff5061;font-weight:bold}
+cite {color:#dae1e9;font-style:italic}
+</style>
+</head>
+
+<body class="do-fn-drag">
+<h1>欢迎使用Sonist!</h1>
+<pre>
+检测到你系统中没有安装<span>ffmpeg</span>。
+请先安装<span>ffmpeg</span>。
+
+如果你的系统是MacOS, 可以使用brew来安装:
+brew install ffmpeg
+
+如果你的系统是Linux, 可以使用包管理器"apt/yum/pacman等来安装":
+sudo apt install ffmpeg   <cite># 以debian系为例</cite>
+
+</pre>
+</body>
+</html>

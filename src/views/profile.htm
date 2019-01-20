@@ -29,7 +29,11 @@
   <section class="block">
     <span class="label">本地音乐目录</span>
     <div class="field">
-      <anot-input :value="setting.musicPath"></anot-input>
+      <span 
+        class="path-holder do-fn-ell" 
+        :attr-title="setting.musicPath"
+        :text="setting.musicPath ||  '请选择你的歌曲目录'">
+      </span>
       <anot-button color="teal" @click="openDir">选择目录...</anot-button>
     </div>
   </section>

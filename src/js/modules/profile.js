@@ -27,7 +27,7 @@ export default Anot({
       allowPlayOnBack: appInit.allowPlayOnBack,
       autoLrc: appInit.autoLrc,
       theme: appInit.theme || 1,
-      musicPath: appInit.musicPath
+      musicPath: appInit.musicPath || ''
     }
   },
   watch: {
@@ -44,7 +44,7 @@ export default Anot({
       dialog.showOpenDialog(
         {
           properties: ['openDirectory'],
-          defaultPath: app.getPath('home')
+          defaultPath: appInit.musicPath || app.getPath('home')
         },
         dir => {
           if (dir) {

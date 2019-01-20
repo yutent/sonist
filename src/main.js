@@ -8,6 +8,7 @@ const {
 } = require('electron')
 const path = require('path')
 const fs = require('iofs')
+const { exec } = require('child_process')
 const log = console.log
 
 const ROOT = __dirname
@@ -109,24 +110,35 @@ app.once('ready', () => {
     cb({ data: buf, mimeType: MIME_TYPES[ext] })
   })
 
-  tray = new Tray(path.resolve(ROOT, './images/trays/trayTemplate.png'))
+  exec('which ffprobe', (err, res) => {
+    if (res) {
+      tray = new Tray(path.resolve(ROOT, './images/trays/trayTemplate.png'))
 
-  if (process.platform === 'darwin') {
-    tray.on('click', _ => {
-      win.show()
-    })
-    tray.on('right-click', _ => {
-      tray.popUpContextMenu(traymenuList)
-    })
-  } else {
-    tray.setContextMenu(traymenuList)
-  }
-  Menu.setApplicationMenu(menubarList)
+      if (process.platform === 'darwin') {
+        tray.on('click', _ => {
+          win.show()
+        })
+        tray.on('right-click', _ => {
+          tray.popUpContextMenu(traymenuList)
+        })
+      } else {
+        tray.setContextMenu(traymenuList)
+      }
+      Menu.setApplicationMenu(menubarList)
 
-  session.defaultSession.setUserAgent(
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-  )
+      session.defaultSession.setUserAgent(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+      )
 
-  createWindow()
-  // win.openDevTools()
+      createWindow()
+      win.openDevTools()
+    } else {
+      win = new BrowserWindow({
+        width: 600,
+        height: 360,
+        titleBarStyle: 'hiddenInset'
+      })
+      win.loadURL('app://sonist/depends.html')
+    }
+  })
 })
