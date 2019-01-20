@@ -28,7 +28,11 @@
     <div class="holder"></div>
     <div class="tools do-fn-drag">
       <div class="search do-fn-nodrag">
-        <input class="do-ui-input" placeholder="搜索 音乐/歌手/专辑" value="">
+        <input 
+          class="do-ui-input" 
+          placeholder="搜索 音乐/歌手/专辑" 
+          :keyup="searchMusic"
+          :duplex="searchTxt">
         <i class="icon do-icon-search"></i>
       </div>
     </div>

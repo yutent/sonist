@@ -93,6 +93,7 @@ Anot({
     theme: appInit.theme || 1, // 1:macos, 2: deepin
     winFocus: false,
     mod: 'local',
+    searchTxt: '',
     playMode: Anot.ls('play-mode') >>> 0, // 0:all | 1:single |  2:random
     ktvMode: 0,
     isPlaying: false,
@@ -293,6 +294,16 @@ Anot({
       this.volume = volume
       SONIST.volume = volume
       Anot.ls('volume', volume)
+    },
+
+    searchMusic(ev) {
+      if (ev.keyCode === 13) {
+        if (this.searchTxt === ':debug:') {
+          log('-----  调试模式  -----')
+          this.searchTxt = ''
+          WIN.openDevTools()
+        }
+      }
     },
 
     __draw__() {

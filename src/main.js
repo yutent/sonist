@@ -11,6 +11,19 @@ const fs = require('iofs')
 const { exec } = require('child_process')
 const log = console.log
 
+/* ******************************* */
+/* **********修复环境变量*********** */
+/* ******************************* */
+let PATH_SET = new Set()
+process.env.PATH.split(':').forEach(_ => {
+  PATH_SET.add(_)
+})
+PATH_SET.add('/usr/local/bin')
+PATH_SET.add('/usr/local/sbin')
+
+process.env.PATH = Array.from(PATH_SET).join(':')
+PATH_SET = null
+
 const ROOT = __dirname
 const HOME = app.getPath('home')
 const MIME_TYPES = {
@@ -81,7 +94,8 @@ function createWindow() {
     webPreferences: {
       webSecurity: false,
       experimentalFeatures: true
-    }
+    },
+    show: false
   })
 
   // 然后加载应用的 index.html。
@@ -131,6 +145,10 @@ app.once('ready', () => {
       )
 
       createWindow()
+
+      win.on('ready-to-show', _ => {
+        win.show()
+      })
       // win.openDevTools()
     } else {
       win = new BrowserWindow({
@@ -144,6 +162,9 @@ app.once('ready', () => {
       })
       win.setMenuBarVisibility(false)
       win.loadURL('app://sonist/depends.html')
+      win.on('closed', _ => {
+        app.exit()
+      })
     }
   })
 })
