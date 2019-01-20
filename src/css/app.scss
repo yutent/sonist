@@ -64,20 +64,26 @@ table {overflow:auto;display:table;width:100%;line-height:2.5rem;
       &.focus {
         .quit {background-image:url(/images/btn-close.svg);}
         .min {background-image:url(/images/btn-mini.svg);}
-        .max {background-image:url(/images/btn-maxi.svg);}
+        // .max {background-image:url(/images/btn-maxi.svg);}
       }
       &:hover {
         .quit {background-image:url(/images/btn-close_a.svg);}
         .min {background-image:url(/images/btn-mini_a.svg);}
-        .max {background-image:url(/images/btn-maxi_a.svg);}
+        // .max {background-image:url(/images/btn-maxi_a.svg);}
       }
     }
   
     .btn-box-win {position:absolute;right:1.2rem;top:0;width:auto;height:4rem;padding:.9rem 0;line-height:1.8rem;
   
-      .item,.opt {position:relative;display:inline-block;width:2.2rem;height:2.2rem;margin:0 .2rem;padding:.2rem;font-size:1.6rem;
+      .item,
+      .opt {position:relative;display:inline-block;width:2.2rem;height:2.2rem;margin:0 .2rem;padding:.2rem;font-size:1.6rem;
       }
-      .item:hover {transform:scale(1.1)}
+      .item {text-align:center;
+
+        &:hover {background:rgba(0, 0, 0, .05);}
+        &.quit:hover {color:nth($cr, 1);}
+        &.disabled {color:nth($cp, 3);background:none}
+      }
   
       .opt i {font-size:1.8rem;}
   

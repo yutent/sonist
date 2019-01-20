@@ -136,8 +136,13 @@ app.once('ready', () => {
       win = new BrowserWindow({
         width: 600,
         height: 360,
+        skipTaskbar: true,
+        maximizable: false,
+        minimizable: false,
+        resizable: false,
         titleBarStyle: 'hiddenInset'
       })
+      win.setMenuBarVisibility(false)
       win.loadURL('app://sonist/depends.html')
     }
   })

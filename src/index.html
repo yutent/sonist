@@ -48,8 +48,8 @@
       </div>
       <span :if="theme === 2">
         <i class="item do-icon-minimize" :click="minimize"></i>
-        <i class="item do-icon-maximize" :click="maximize"></i>
-        <i class="item do-icon-close" :click="quit(false)"></i>
+        <i class="item do-icon-maximize disabled" :click="maximize"></i>
+        <i class="item do-icon-close quit" :click="quit(false)"></i>
       </span>
     </nav>
   </div>

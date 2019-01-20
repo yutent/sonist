@@ -223,7 +223,9 @@ Anot({
         }
       }
     },
-    minimize() {},
+    minimize() {
+      WIN.minimize()
+    },
     maximize() {},
 
     activeModule(mod) {
@@ -252,7 +254,7 @@ Anot({
       if (LRC_WIN.isVisible()) {
         LRC_WIN.hide()
       } else {
-        LRC_WIN.show()
+        LRC_WIN.showInactive()
       }
     },
     toggleModule(mod) {
