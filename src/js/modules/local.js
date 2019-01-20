@@ -19,6 +19,8 @@ const HOME_PATH = app.getPath('appData')
 const MUSIC_DB_PATH = path.join(HOME_PATH, 'music.db')
 const LYRICS_PATH = path.join(HOME_PATH, 'lyrics')
 
+const SUPPORTED_EXTS = ['.mp3', '.webm', '.ogg', '.flac', '.m4a', '.aac']
+
 let appInit = {}
 let dbCache = fs.cat(MUSIC_DB_PATH)
 dbCache = JSON.parse(dbCache)
@@ -179,7 +181,19 @@ export default Anot({
       if (appInit.musicPath) {
         if (fs.isdir(appInit.musicPath)) {
           this.__load__ = layer.load(4)
-          this.__LIST__ = fs.ls(appInit.musicPath)
+
+          this.__LIST__ = fs.ls(appInit.musicPath, true).filter(_ => {
+            if (fs.isdir(_)) {
+              return false
+            } else {
+              let { ext, name } = path.parse(song)
+              if (!ext || name.startsWith('.')) {
+                return false
+              }
+              return SUPPORTED_EXTS.includes(ext)
+            }
+          })
+
           this.__NEW_NUM__ = 0
           ev.target.textContent = '正在扫描, 请稍候...'
           this.__checkSong__(ev.target)
