@@ -129,35 +129,38 @@ export default Anot({
     __checkSong__(el) {
       let song = this.__LIST__.pop()
 
+      let scaned = this.__WAIT_FOR_SCAN__ - this.__LIST__.length
+      this.__APP__.progress = ((100 * scaned) / this.__WAIT_FOR_SCAN__) >>> 0
+
       if (!song) {
         el.textContent = '重新扫描'
         el = null
-        if (this.__NEW_NUM__ > 0) {
-          LS.sort('artist', true)
-          dbCache = LS.getAll()
-          this.list.clear()
-          this.list.pushArray(dbCache)
 
-          SONIST.clear()
-          SONIST.push(dbCache)
+        LS.sort('artist', true)
+        dbCache = LS.getAll()
+        this.list.clear()
+        this.list.pushArray(dbCache)
 
-          fs.echo(JSON.stringify(dbCache, '', 2), MUSIC_DB_PATH)
-          dbCache = null
-        }
+        SONIST.clear()
+        SONIST.push(dbCache)
 
-        layer.close(this.__load__)
+        fs.echo(JSON.stringify(dbCache, '', 2), MUSIC_DB_PATH)
+        dbCache = null
+
         layer.toast(`刷新缓存完成,新增${this.__NEW_NUM__}首`)
-        delete this.__load__
+
+        this.__APP__.loading = false
+        this.__APP__.progress = 0
+        delete this.__NEW_NUM__
         return
       }
 
       Anot.nextTick(() => {
-        let name = path.basename(song)
-        if (name.startsWith('.')) {
-          return this.__checkSong__(el)
-        }
         let hash = crypto.md5Sign(song)
-        if (LS.get(hash)) {
+        let item = LS.get(hash)
+        if (item) {
+          item.path = `file://${song}`
+          LS.update(hash, item)
           return this.__checkSong__(el)
         }
         this.__NEW_NUM__++
@@ -175,25 +178,25 @@ export default Anot({
       })
     },
     refresh(ev) {
-      if (this.__load__) {
+      if (this.__APP__.loading) {
         return
       }
       if (appInit.musicPath) {
         if (fs.isdir(appInit.musicPath)) {
-          this.__load__ = layer.load(4)
+          this.__APP__.loading = true
 
           this.__LIST__ = fs.ls(appInit.musicPath, true).filter(_ => {
             if (fs.isdir(_)) {
               return false
             } else {
-              let { ext, name } = path.parse(song)
+              let { ext, name } = path.parse(_)
               if (!ext || name.startsWith('.')) {
                 return false
               }
               return SUPPORTED_EXTS.includes(ext)
             }
           })
-
+          this.__WAIT_FOR_SCAN__ = this.__LIST__.length
           this.__NEW_NUM__ = 0
           ev.target.textContent = '正在扫描, 请稍候...'
           this.__checkSong__(ev.target)
@@ -202,6 +205,11 @@ export default Anot({
         }
       } else {
         layer.toast('请先设置音乐目录', 'error')
+      }
+    },
+    closeEditByEnter(ev) {
+      if (ev.keyCode === 13 && ev.ctrlKey) {
+        this.closeEdit()
       }
     },
     closeEdit() {

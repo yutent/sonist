@@ -31,7 +31,7 @@
   </div>
 
   <div class="edit-form" :if="editMode">
-    <div class="form">
+    <div class="form"  :keyup="closeEditByEnter">
       <section class="section title">
         歌曲信息编辑
         <i class="do-icon-close" :click="closeEdit"></i>
@@ -58,4 +58,5 @@
 
     </div>
   </div>
+
 </div>

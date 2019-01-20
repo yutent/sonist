@@ -294,6 +294,27 @@ table {overflow:auto;display:table;width:100%;line-height:2.5rem;
   }
 
 
+  .loading {position:fixed;left:0;top:0;z-index:65536;display:flex;justify-content:center;align-items:center;width:100%;height:100%;
+  
+    .box {position:relative;display:flex;justify-content:center;align-items:center;width:8rem;height:8rem;
+      
+      i {position:absolute;width:8rem;height:8rem;border:3px solid nth($ct, 1);border-radius:50%;opacity:.5;
+        &:nth-child(1) {animation:load 2.5s ease-in-out infinite;}
+        &:nth-child(2) {animation:load 2.5s .5s ease-in-out infinite;}
+        &:nth-child(3) {animation:load 2.5s 1s ease-in-out infinite;}
+        &:nth-child(4) {animation:load 2.5s 1.5s ease-in-out infinite;}
+        &:nth-child(5) {animation:load 2.5s 2s ease-in-out infinite;}
+      }
+      span {position:absolute;width:8rem;height:8rem;background:url(/images/load1.png) no-repeat center center;background-size:cover;
+        
+        &:nth-child(6) {animation:play 1.5s linear infinite;}
+        &:nth-child(7) {background-image:url(/images/load2.png);animation:load2 2.5s linear infinite;}
+      }
+      cite {font-size:2.4rem}
+    }
+  
+  }
+
 }
 
 
@@ -320,7 +341,15 @@ table {overflow:auto;display:table;width:100%;line-height:2.5rem;
 .do-layer .layer-box.do-mod-contextmenu__fixed {padding:0}
 
 
+@keyframes load {
+  from {opacity: .5;  transform: scale(1)}
+  to {opacity: 0;  transform: scale(1.5)}
+}
 
+@keyframes load2 {
+  from {transform:rotate(360deg)}
+  to {transform:rotate(0deg)}
+}
 
 @keyframes play {
   from {transform:rotate(0deg)}

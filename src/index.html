@@ -163,6 +163,16 @@
 
   </div>
 
+
+  <div class="loading" :if="loading">
+    <div class="box">
+      <i></i><i></i><i></i><i></i><i></i>
+      <span></span>
+      <span></span>
+      <cite>{{progress}}%</cite>
+    </div>
+  </div>
+
 </div>
 
 </body>

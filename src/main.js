@@ -58,6 +58,18 @@ const TRAYMENU_TMPL = [
 ]
 const MENUBAR_TMPL = [
   {
+    label: 'Edit',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'selectall' }
+    ]
+  },
+  {
     label: 'View',
     submenu: [{ role: 'zoomin' }, { role: 'zoomout' }]
   },
@@ -74,7 +86,7 @@ if (process.platform === 'darwin') {
   })
 
   // Window menu
-  MENUBAR_TMPL[2].submenu = [{ role: 'minimize' }]
+  MENUBAR_TMPL[3].submenu = [{ role: 'minimize' }]
 }
 
 let traymenuList = Menu.buildFromTemplate(TRAYMENU_TMPL)

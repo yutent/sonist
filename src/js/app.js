@@ -81,7 +81,6 @@ const LRC_WIN = new remote.BrowserWindow({
   hasShadow: false,
   thickFrame: false,
   transparent: true,
-  // focusable: false,
   show: false
 })
 
@@ -109,7 +108,9 @@ Anot({
       duration: 0
     },
     ctrlLrc: '暂无歌词...',
-    ...KTV.data
+    ...KTV.data,
+    loading: false,
+    progress: 0
   },
   skip: [],
   computed: {

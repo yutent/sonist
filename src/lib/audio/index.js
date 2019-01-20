@@ -199,7 +199,7 @@ export const ID3 = song => {
           title: format.tags.TITLE || format.tags.title || name,
           album: format.tags.ALBUM || format.tags.album || '',
           artist: format.tags.ARTIST || format.tags.artist || '',
-          duration: +format.duration,
+          duration: Math.ceil(format.duration),
           size: +(format.size / 1024 / 1024).toFixed(2)
         })
       } catch (err) {

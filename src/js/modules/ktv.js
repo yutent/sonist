@@ -70,7 +70,6 @@ export default {
               hash: it.FileHash
             }
           })
-          log(list, this.lrcForm.result)
         })
       }
     },

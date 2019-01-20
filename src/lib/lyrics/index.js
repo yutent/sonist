@@ -128,6 +128,9 @@ class Lyrics {
     if (!this.curr.length && this.tmpLib.length) {
       this.curr = this.tmpLib.splice(0, 2)
     }
+    if (this.curr.length < 2) {
+      this.curr.push(this.curr[0])
+    }
     let stat = 0
 
     // 当前时间小于第1句的结束时间
