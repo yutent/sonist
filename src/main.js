@@ -131,7 +131,7 @@ app.once('ready', () => {
       )
 
       createWindow()
-      win.openDevTools()
+      // win.openDevTools()
     } else {
       win = new BrowserWindow({
         width: 600,
