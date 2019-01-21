@@ -1,15 +1,11 @@
-const {
-  app,
-  BrowserWindow,
-  protocol,
-  Tray,
-  Menu,
-  session
-} = require('electron')
+const { app, BrowserWindow, protocol, session, ipcMain } = require('electron')
 const path = require('path')
 const fs = require('iofs')
 const { exec } = require('child_process')
 const log = console.log
+
+const createTray = require('./tools/tray')
+const createMenu = require('./tools/menu')
 
 /* ******************************* */
 /* **********修复环境变量*********** */
@@ -36,63 +32,23 @@ const MIME_TYPES = {
   gif: 'image/gif'
 }
 
-let win = null
-let tray = null
-
 /* ----------------------------------------------------- */
+app.commandLine.appendSwitch('--lang', 'zh-CN')
+app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required')
 
-const TRAYMENU_TMPL = [
-  {
-    label: '显示主窗口',
-    click: () => {
-      win.show()
-    }
-  },
-  {
-    type: 'separator'
-  },
-  {
-    label: '退出',
-    role: 'quit'
-  }
-]
-const MENUBAR_TMPL = [
-  {
-    label: 'Edit',
-    submenu: [
-      { role: 'undo' },
-      { role: 'redo' },
-      { type: 'separator' },
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      { role: 'selectall' }
-    ]
-  },
-  {
-    label: 'View',
-    submenu: [{ role: 'zoomin' }, { role: 'zoomout' }]
-  },
-  {
-    role: 'window',
-    submenu: [{ role: 'minimize' }, { role: 'close' }]
-  }
-]
+app.setPath('appData', path.resolve(HOME, '.sonist/'))
+protocol.registerStandardSchemes(['app'], { secure: true })
 
-if (process.platform === 'darwin') {
-  MENUBAR_TMPL.unshift({
-    label: 'Sonist',
-    submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'quit' }]
-  })
-
-  // Window menu
-  MENUBAR_TMPL[3].submenu = [{ role: 'minimize' }]
+let appPath = app.getPath('appData')
+if (!fs.exists(appPath)) {
+  fs.mkdir(appPath)
+  fs.mkdir(path.join(appPath, 'lyrics'))
+  fs.mkdir(path.join(appPath, 'cache'))
+  fs.echo('{}', path.join(appPath, 'app.ini'))
+  fs.echo('[]', path.join(appPath, 'music.db'))
 }
-
-let traymenuList = Menu.buildFromTemplate(TRAYMENU_TMPL)
-let menubarList = Menu.buildFromTemplate(MENUBAR_TMPL)
-
 /* ----------------------------------------------------- */
+let win = null
 
 function createWindow() {
   // 创建浏览器窗口
@@ -113,19 +69,9 @@ function createWindow() {
   // 然后加载应用的 index.html。
   win.loadURL('app://sonist/index.html')
 }
-app.commandLine.appendSwitch('--lang', 'zh-CN')
-app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required')
-
-app.setPath('appData', path.resolve(HOME, '.sonist/'))
-protocol.registerStandardSchemes(['app'], { secure: true })
-
-let appPath = app.getPath('appData')
-if (!fs.exists(appPath)) {
-  fs.mkdir(appPath)
-  fs.mkdir(path.join(appPath, 'lyrics'))
-  fs.echo('{}', path.join(appPath, 'app.ini'))
-  fs.echo('[]', path.join(appPath, 'music.db'))
-}
+/* ****************************************** */
+/* *************   init   ******************* */
+/* ****************************************** */
 
 //  创建窗口
 app.once('ready', () => {
@@ -138,30 +84,19 @@ app.once('ready', () => {
 
   exec('which ffprobe', (err, res) => {
     if (res) {
-      tray = new Tray(path.resolve(ROOT, './images/trays/trayTemplate.png'))
-
-      if (process.platform === 'darwin') {
-        tray.on('click', _ => {
-          win.show()
-        })
-        tray.on('right-click', _ => {
-          tray.popUpContextMenu(traymenuList)
-        })
-      } else {
-        tray.setContextMenu(traymenuList)
-      }
-      Menu.setApplicationMenu(menubarList)
-
       session.defaultSession.setUserAgent(
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
       )
 
       createWindow()
 
+      createTray(win)
+      createMenu(win)
+
       win.on('ready-to-show', _ => {
         win.show()
       })
-      // win.openDevTools()
+      win.openDevTools()
     } else {
       win = new BrowserWindow({
         width: 600,
