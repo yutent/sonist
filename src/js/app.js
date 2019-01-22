@@ -58,7 +58,15 @@ Anot.ss('app-init', appInit + '')
 appInit = JSON.parse(appInit)
 
 const LRC_WIN = createDesktopLrcWindow(MAIN_SCREEN)
+const MINI_WIN = createMiniWindow(MAIN_SCREEN, WIN)
 
+WIN.hide()
+MINI_WIN.show()
+
+MINI_WIN.opener = WIN
+MINI_WIN.openDevTools()
+
+window.MINI_WIN = MINI_WIN
 Anot({
   $id: 'app',
   state: {
@@ -74,6 +82,7 @@ Anot({
     volume: Anot.ls('volume') || 70,
     curr: {
       id: '',
+      cover: '',
       title: '',
       artist: '',
       album: '',
@@ -201,7 +210,10 @@ Anot({
     minimize() {
       WIN.minimize()
     },
-    maximize() {},
+    change2mini() {
+      WIN.hide()
+      MINI_WIN.show()
+    },
 
     activeModule(mod) {
       switch (mod) {
@@ -276,6 +288,8 @@ Anot({
           log('-----  调试模式  -----')
           this.searchTxt = ''
           WIN.openDevTools()
+        } else {
+          layer.toast('搜索功能还未开放')
         }
       }
     },

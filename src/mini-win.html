@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+<link href="lib/css/reset-basic.css" rel="stylesheet">
+<link href="/css/common.css" rel="stylesheet">
+<link href="/css/mini-win.css" rel="stylesheet">
+<script>window.LIBS_BASE_URL = location.origin + '/lib';</script>
+<script type="module" src="js/mini-win.js"></script>
+</head>
+<body class="do-fn-noselect" anot="mini">
+  <div class="app">
+    <span class="cover">
+      <img :attr-src="curr.cover" />
+    </span>
+    <div class="ctrl">
+      <h3 class="title" :text="curr.title"></h3>
+      <div class="btns">
+        <span class="s-icon-prev" :click="nextSong(-1)"></span>
+        <span 
+          class="play"
+          :class="{'s-icon-play': !isPlaying, 's-icon-pause': isPlaying}" 
+          :click="play(null)">
+        </span>
+        <span class="s-icon-next" :click="nextSong(1)"></span>
+        
+      </div>
+    </div>
+    <div class="tools" :click="handleTool">
+      <span data-key="pin" class="do-icon-pin" :class="{active: pinned}"></span>
+      <span data-key="quit" class="do-icon-maximized"></span>
+    </div>
+
+    <div class="actions" :click="handleAction">
+      <span data-key="lrc">词</span>
+      <span data-key="mode"
+        :class="{
+          's-icon-all': playMode === 0,
+          's-icon-single': playMode === 1,
+          's-icon-random': playMode === 2
+        }">
+      </span>
+    </div>
+    
+  </div>
+</body>
+</html>

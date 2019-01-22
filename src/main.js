@@ -1,4 +1,11 @@
-const { app, BrowserWindow, protocol, session, ipcMain } = require('electron')
+/**
+ * 主入口
+ * @author yutent<yutent@doui.cc>
+ * @date 2019/12/13 00:37:04
+ */
+
+'use strict'
+const { app, BrowserWindow, session } = require('electron')
 const path = require('path')
 const fs = require('iofs')
 const { exec } = require('child_process')
@@ -6,6 +13,7 @@ const log = console.log
 
 const createTray = require('./tools/tray')
 const createMenu = require('./tools/menu')
+const createServer = require('./tools/server')
 
 /* ******************************* */
 /* **********修复环境变量*********** */
@@ -22,22 +30,13 @@ PATH_SET = null
 
 const ROOT = __dirname
 const HOME = app.getPath('home')
-const MIME_TYPES = {
-  js: 'application/javascript',
-  html: 'text/html',
-  htm: 'text/html',
-  css: 'text/css',
-  jpg: 'image/jpg',
-  png: 'image/png',
-  gif: 'image/gif'
-}
 
 /* ----------------------------------------------------- */
 app.commandLine.appendSwitch('--lang', 'zh-CN')
 app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required')
 
 app.setPath('appData', path.resolve(HOME, '.sonist/'))
-protocol.registerStandardSchemes(['app'], { secure: true })
+// protocol.registerStandardSchemes(['app'], { secure: true })
 
 let appPath = app.getPath('appData')
 if (!fs.exists(appPath)) {
@@ -48,6 +47,10 @@ if (!fs.exists(appPath)) {
   fs.echo('[]', path.join(appPath, 'music.db'))
 }
 /* ----------------------------------------------------- */
+
+createServer(ROOT)
+
+// throw new Error('hee')
 let win = null
 
 function createWindow() {
@@ -67,7 +70,10 @@ function createWindow() {
   })
 
   // 然后加载应用的 index.html。
-  win.loadURL('app://sonist/index.html')
+  // win.loadURL('https://yutent.me')
+  win.loadURL(`http://127.0.0.1:10240/index.html`)
+
+  // win.loadURL('app://sonist/index.html')
 }
 /* ****************************************** */
 /* *************   init   ******************* */
@@ -75,13 +81,6 @@ function createWindow() {
 
 //  创建窗口
 app.once('ready', () => {
-  protocol.registerBufferProtocol('app', (req, cb) => {
-    let file = req.url.replace(/^app:\/\/sonist\//, '')
-    let ext = path.extname(req.url).slice(1)
-    let buf = fs.cat(path.resolve(ROOT, file))
-    cb({ data: buf, mimeType: MIME_TYPES[ext] })
-  })
-
   exec('which ffprobe', (err, res) => {
     if (res) {
       session.defaultSession.setUserAgent(
@@ -108,7 +107,7 @@ app.once('ready', () => {
         titleBarStyle: 'hiddenInset'
       })
       win.setMenuBarVisibility(false)
-      win.loadURL('app://sonist/depends.html')
+      win.loadURL('http://127.0.0.1:10240/depends.html')
       win.on('closed', _ => {
         app.exit()
       })

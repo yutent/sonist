@@ -27,24 +27,25 @@ export const createDesktopLrcWindow = function(screen) {
     show: false
   })
 
-  win.loadURL('app://sonist/desktop-lrc.html')
+  win.loadURL('http://127.0.0.1:10240/desktop-lrc.html')
   return win
 }
 
-export const createMiniWindow = function(screen) {
+export const createMiniWindow = function(screen, pwin) {
   let win = new BrowserWindow({
     title: '',
-    width: 480,
+    width: 320,
     height: 60,
     frame: false,
+    parent: pwin,
     resizable: false,
     alwaysOnTop: true,
-    x: screen.size.width - 480,
+    x: screen.size.width - 320,
     y: 0,
     skipTaskbar: true,
     show: false
   })
 
-  win.loadURL('app://sonist/mini-win.html')
+  win.loadURL('http://127.0.0.1:10240/mini-win.html')
   return win
 }
