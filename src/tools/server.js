@@ -13,12 +13,12 @@ const fs = require('iofs')
 const MIME_TYPES = {
   '.js': 'text/javascript; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
-  '.htm': 'text/html; charset=utf-8',
+  '.htm': 'text/plain; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.jpg': 'image/jpg',
   '.png': 'image/png',
   '.gif': 'image/gif',
-  '.svg': 'image/svg',
+  '.svg': 'image/svg+xml',
   '.ico': 'image/ico'
 }
 

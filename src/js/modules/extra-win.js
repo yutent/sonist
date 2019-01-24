@@ -37,7 +37,7 @@ export const createMiniWindow = function(screen, pwin) {
     width: 320,
     height: 60,
     frame: false,
-    parent: pwin,
+    // parent: pwin,
     resizable: false,
     alwaysOnTop: true,
     x: screen.size.width - 320,
