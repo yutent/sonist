@@ -7,7 +7,10 @@
     "start": "electron .",
     "pack": "electron-builder"
   },
-  "author": { "name": "yutent", "email": "yutent@doui.cc" },
+  "author": {
+    "name": "yutent",
+    "email": "yutent@doui.cc"
+  },
   "homepage": "https://yutent.me",
   "license": "MIT",
   "dependencies": {
@@ -15,7 +18,7 @@
     "iofs": "^1.1.0"
   },
   "devDependencies": {
-    "electron": "^4.0.0",
+    "electron": "^4.0.2",
     "electron-builder": "^20.38.5"
   },
   "build": {
@@ -26,7 +29,11 @@
       "buildResources": "icons",
       "output": "build"
     },
-    "files": ["src/**/*", "node_modules/iofs/*", "node_modules/crypto.js/*"],
+    "files": [
+      "src/**/*",
+      "node_modules/iofs/*",
+      "node_modules/crypto.js/*"
+    ],
     "mac": {
       "category": "public.app-category.music",
       "target": "dmg",

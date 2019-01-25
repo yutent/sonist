@@ -5,15 +5,25 @@
  */
 
 'use strict'
-const { app, BrowserWindow, session } = require('electron')
+const { app, BrowserWindow, session, protocol } = require('electron')
 const path = require('path')
 const fs = require('iofs')
 const { exec } = require('child_process')
 const log = console.log
+const MIME_TYPES = {
+  '.js': 'text/javascript',
+  '.html': 'text/html',
+  '.htm': 'text/plain',
+  '.css': 'text/css',
+  '.jpg': 'image/jpg',
+  '.png': 'image/png',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/ico'
+}
 
 const createTray = require('./tools/tray')
 const createMenu = require('./tools/menu')
-const createServer = require('./tools/server')
 
 /* ******************************* */
 /* **********修复环境变量*********** */
@@ -36,7 +46,7 @@ app.commandLine.appendSwitch('--lang', 'zh-CN')
 app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required')
 
 app.setPath('appData', path.resolve(HOME, '.sonist/'))
-// protocol.registerStandardSchemes(['app'], { secure: true })
+protocol.registerStandardSchemes(['app'], { secure: true })
 
 let appPath = app.getPath('appData')
 if (!fs.exists(appPath)) {
@@ -48,14 +58,9 @@ if (!fs.exists(appPath)) {
 }
 /* ----------------------------------------------------- */
 
-createServer(ROOT)
-
-// throw new Error('hee')
-let win = null
-
 function createWindow() {
   // 创建浏览器窗口
-  win = new BrowserWindow({
+  let win = new BrowserWindow({
     title: 'sonist',
     width: 1024,
     height: 640,
@@ -70,10 +75,15 @@ function createWindow() {
   })
 
   // 然后加载应用的 index.html。
-  // win.loadURL('https://yutent.me')
-  win.loadURL(`http://127.0.0.1:10240/index.html`)
 
-  // win.loadURL('app://sonist/index.html')
+  win.loadURL('app://local/index.html')
+
+  win.on('ready-to-show', _ => {
+    win.show()
+    win.openDevTools()
+  })
+
+  return win
 }
 /* ****************************************** */
 /* *************   init   ******************* */
@@ -81,21 +91,22 @@ function createWindow() {
 
 //  创建窗口
 app.once('ready', () => {
+  protocol.registerBufferProtocol('app', (req, cb) => {
+    let file = req.url.replace(/^app:\/\/local\//, '')
+    let ext = path.extname(req.url)
+    let buff = fs.cat(path.resolve(ROOT, file))
+    cb({ data: buff, mimeType: MIME_TYPES[ext] })
+  })
   exec('which ffprobe', (err, res) => {
     if (res) {
       session.defaultSession.setUserAgent(
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
       )
 
-      createWindow()
+      let win = createWindow()
 
       createTray(win)
       createMenu(win)
-
-      win.on('ready-to-show', _ => {
-        win.show()
-      })
-      win.openDevTools()
     } else {
       win = new BrowserWindow({
         width: 600,
@@ -107,7 +118,7 @@ app.once('ready', () => {
         titleBarStyle: 'hiddenInset'
       })
       win.setMenuBarVisibility(false)
-      win.loadURL('http://127.0.0.1:10240/depends.html')
+      win.loadURL('app://local/depends.html')
       win.on('closed', _ => {
         app.exit()
       })

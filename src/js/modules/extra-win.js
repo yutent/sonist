@@ -27,7 +27,8 @@ export const createDesktopLrcWindow = function(screen) {
     show: false
   })
 
-  win.loadURL('http://127.0.0.1:10240/desktop-lrc.html')
+  // win.loadURL('http://127.0.0.1:10240/desktop-lrc.html')
+  win.loadURL('app://local/desktop-lrc.html')
   return win
 }
 
@@ -46,6 +47,7 @@ export const createMiniWindow = function(screen, pwin) {
     show: false
   })
 
-  win.loadURL('http://127.0.0.1:10240/mini-win.html')
+  // win.loadURL('http://127.0.0.1:10240/mini-win.html')
+  win.loadURL('app://local/mini-win.html')
   return win
 }
