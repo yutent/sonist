@@ -9,21 +9,14 @@
 import Api from '/js/api.js'
 import { ID3 } from '/lib/audio/index.js'
 
-const fs = require('iofs')
 const path = require('path')
 const crypto = require('crypto.js')
-const { app, dialog } = require('electron').remote
+const { remote, ipcRenderer } = require('electron')
 
 const log = console.log
-const HOME_PATH = app.getPath('appData')
-const MUSIC_DB_PATH = path.join(HOME_PATH, 'music.db')
-const LYRICS_PATH = path.join(HOME_PATH, 'lyrics')
-
-const SUPPORTED_EXTS = ['.mp3', '.webm', '.ogg', '.flac', '.m4a', '.aac']
 
 let appInit = {}
-let dbCache = fs.cat(MUSIC_DB_PATH)
-dbCache = JSON.parse(dbCache)
+let dbCache = []
 
 export default Anot({
   $id: 'local',
@@ -40,8 +33,10 @@ export default Anot({
     }
   },
   mounted() {
-    LS.insert(dbCache)
     appInit = JSON.parse(Anot.ss('app-init'))
+    dbCache = ipcRenderer.sendSync('get-music')
+
+    LS.insert(dbCache)
 
     dbCache = null
     this.__APP__ = Anot.vmodels.app
@@ -78,12 +73,6 @@ export default Anot({
       if (!it.cover) {
         if (idx === undefined) {
           idx = SONIST.__CURR__
-          // for (let i in this.list.$model) {
-          //   if (this.list[i].id === it.id) {
-          //     idx = i
-          //     break
-          //   }
-          // }
         }
         let _P = Promise.resolve(true)
         if (!it.kgHash) {
@@ -105,7 +94,6 @@ export default Anot({
               it.albumId = json.album_id
               it.kgHash = json.hash
               it.cover = json.img
-              it.lyrics = path.join(LYRICS_PATH, `${it.id}.lrc`)
 
               LS.insert(it)
               this.list.set(idx, it)
@@ -116,10 +104,13 @@ export default Anot({
               this.__APP__.updateCurr(it)
               this.__APP__.draw(true)
 
-              fs.echo(json.lyrics, it.lyrics)
-              fs.echo(JSON.stringify(LS.getAll(), '', 2), MUSIC_DB_PATH)
+              ipcRenderer.send('save-lrc', {
+                id: it.id,
+                lrc: json.lyrics
+              })
+              ipcRenderer.send('set-music', LS.getAll())
 
-              LYRICS.__init__(it.lyrics)
+              LYRICS.__init__(it.id)
             })
           }
         })
@@ -144,7 +135,7 @@ export default Anot({
         SONIST.clear()
         SONIST.push(dbCache)
 
-        fs.echo(JSON.stringify(dbCache, '', 2), MUSIC_DB_PATH)
+        ipcRenderer.send('set-music', dbCache)
         dbCache = null
 
         layer.toast(`刷新缓存完成,新增${this.__NEW_NUM__}首`)
@@ -160,6 +151,7 @@ export default Anot({
         let item = LS.get(hash)
         if (item) {
           item.path = `file://${song}`
+          delete item.lyrics
           LS.update(hash, item)
           return this.__checkSong__(el)
         }
@@ -182,22 +174,12 @@ export default Anot({
         return
       }
       if (appInit.musicPath) {
-        if (fs.isdir(appInit.musicPath)) {
+        this.__LIST__ = ipcRenderer.sendSync('scan-dir', appInit.musicPath)
+        if (this.__LIST__) {
           this.__APP__.loading = true
-
-          this.__LIST__ = fs.ls(appInit.musicPath, true).filter(_ => {
-            if (fs.isdir(_)) {
-              return false
-            } else {
-              let { ext, name } = path.parse(_)
-              if (!ext || name.startsWith('.')) {
-                return false
-              }
-              return SUPPORTED_EXTS.includes(ext)
-            }
-          })
           this.__WAIT_FOR_SCAN__ = this.__LIST__.length
           this.__NEW_NUM__ = 0
+
           ev.target.textContent = '正在扫描, 请稍候...'
           this.__checkSong__(ev.target)
         } else {
@@ -238,7 +220,7 @@ export default Anot({
       SONIST.clear()
       SONIST.push(LS.getAll())
 
-      fs.echo(JSON.stringify(LS.getAll(), '', 2), MUSIC_DB_PATH)
+      ipcRenderer.send('set-music', LS.getAll())
     },
     handleMenu(it, idx, ev) {
       let that = this
@@ -281,7 +263,7 @@ export default Anot({
                 SONIST.clear()
                 SONIST.push(LS.getAll())
 
-                fs.echo(JSON.stringify(LS.getAll(), '', 2), MUSIC_DB_PATH)
+                ipcRenderer.send('set-music', LS.getAll())
               }
             )
           } else {

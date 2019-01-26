@@ -20,24 +20,18 @@ import Search from '/js/modules/search.js'
 import KTV from '/js/modules/ktv.js'
 import PLAYCTRL from '/js/modules/play-ctrl.js'
 
-import {
-  createDesktopLrcWindow,
-  createMiniWindow
-} from '/js/modules/extra-win.js'
-
 const log = console.log
 
 const fs = require('iofs')
 const path = require('path')
 
-const { remote } = require('electron')
+const { remote, ipcRenderer } = require('electron')
+
+const { createDesktopLrcWindow, createMiniWindow } = remote.app.windows
 
 const WIN = remote.getCurrentWindow()
 const MAIN_SCREEN = remote.screen.getPrimaryDisplay()
 
-const HOME_PATH = remote.app.getPath('appData')
-const APP_INI_PATH = path.join(HOME_PATH, 'app.ini')
-const LYRICS_PATH = path.join(HOME_PATH, 'lyrics')
 const PLAY_MODE = {
   0: 'all',
   1: 'single',
@@ -51,22 +45,20 @@ window.TS = store.collection('temp')
 window.SONIST = new AudioPlayer()
 window.LYRICS = new Lyrics()
 
-let appInit = fs.cat(APP_INI_PATH)
+let appInit = ipcRenderer.sendSync('get-init')
 
-Anot.ss('app-init', appInit + '')
-
-appInit = JSON.parse(appInit)
+Anot.ss('app-init', appInit)
 
 const LRC_WIN = createDesktopLrcWindow(MAIN_SCREEN)
-const MINI_WIN = createMiniWindow(MAIN_SCREEN, WIN)
+// const MINI_WIN = createMiniWindow(MAIN_SCREEN, WIN)
 
-WIN.hide()
-MINI_WIN.show()
+// WIN.hide()
+// MINI_WIN.show()
 
-MINI_WIN.opener = WIN
-MINI_WIN.openDevTools()
+// MINI_WIN.opener = WIN
+// MINI_WIN.openDevTools()
 
-window.MINI_WIN = MINI_WIN
+// window.MINI_WIN = MINI_WIN
 Anot({
   $id: 'app',
   state: {
@@ -330,7 +322,7 @@ Anot({
         this.updateCurr(song)
         this.isPlaying = true
         this.draw(true)
-        LYRICS.__init__(song.lyrics)
+        LYRICS.__init__(song.id)
       } else {
         if (SONIST.stat === 'ready') {
           let played = this.isPlaying
@@ -351,7 +343,7 @@ Anot({
               this.draw(true)
               // this.ktvMode = 1
 
-              LYRICS.__init__(it.lyrics)
+              LYRICS.__init__(it.id)
             })
           }
         }

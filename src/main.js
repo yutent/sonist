@@ -22,112 +22,55 @@ const MIME_TYPES = {
   '.ico': 'image/ico'
 }
 
+require('./tools/init')
 const createTray = require('./tools/tray')
 const createMenu = require('./tools/menu')
+const {
+  createMainWindow,
+  createErrorWindow,
+  createDesktopLrcWindow,
+  createMiniWindow
+} = require('./tools/windows')
 
-/* ******************************* */
-/* **********修复环境变量*********** */
-/* ******************************* */
-let PATH_SET = new Set()
-process.env.PATH.split(':').forEach(_ => {
-  PATH_SET.add(_)
-})
-PATH_SET.add('/usr/local/bin')
-PATH_SET.add('/usr/local/sbin')
-
-process.env.PATH = Array.from(PATH_SET).join(':')
-PATH_SET = null
-
+app.windows = { createDesktopLrcWindow, createMiniWindow }
 const ROOT = __dirname
-const HOME = app.getPath('home')
 
 /* ----------------------------------------------------- */
 app.commandLine.appendSwitch('--lang', 'zh-CN')
 app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required')
 
-app.setPath('appData', path.resolve(HOME, '.sonist/'))
 protocol.registerStandardSchemes(['app'], { secure: true })
 
-let appPath = app.getPath('appData')
-if (!fs.exists(appPath)) {
-  fs.mkdir(appPath)
-  fs.mkdir(path.join(appPath, 'lyrics'))
-  fs.mkdir(path.join(appPath, 'cache'))
-  fs.echo('{}', path.join(appPath, 'app.ini'))
-  fs.echo('[]', path.join(appPath, 'music.db'))
-}
 /* ----------------------------------------------------- */
 
-function createWindow() {
-  // 创建浏览器窗口
-  let win = new BrowserWindow({
-    title: 'sonist',
-    width: 1024,
-    height: 640,
-    frame: false,
-    resizable: false,
-    icon: path.resolve(ROOT, './images/app.png'),
-    webPreferences: {
-      webSecurity: false,
-      experimentalFeatures: true
-    },
-    show: false
-  })
-
-  // 然后加载应用的 index.html。
-
-  win.loadURL('app://local/index.html')
-
-  win.on('ready-to-show', _ => {
-    win.show()
-    win.openDevTools()
-  })
-
-  return win
-}
-/* ****************************************** */
-/* *************   init   ******************* */
-/* ****************************************** */
-
-//  创建窗口
+//  初始化应用
 app.once('ready', () => {
+  // 注册协议
   protocol.registerBufferProtocol('app', (req, cb) => {
     let file = req.url.replace(/^app:\/\/local\//, '')
     let ext = path.extname(req.url)
     let buff = fs.cat(path.resolve(ROOT, file))
     cb({ data: buff, mimeType: MIME_TYPES[ext] })
   })
+  // 修改app的UA
+  session.defaultSession.setUserAgent(
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+  )
+
+  // 判断依赖
   exec('which ffprobe', (err, res) => {
     if (res) {
-      session.defaultSession.setUserAgent(
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-      )
-
-      let win = createWindow()
-
+      let win = createMainWindow(path.resolve(ROOT, './images/app.png'))
       createTray(win)
       createMenu(win)
+      // mac专属事件,点击dock栏图标,可激活窗口
+      app.on('activate', _ => {
+        if (win) {
+          win.show()
+        }
+      })
     } else {
-      win = new BrowserWindow({
-        width: 600,
-        height: 360,
-        skipTaskbar: true,
-        maximizable: false,
-        minimizable: false,
-        resizable: false,
-        titleBarStyle: 'hiddenInset'
-      })
-      win.setMenuBarVisibility(false)
-      win.loadURL('app://local/depends.html')
-      win.on('closed', _ => {
-        app.exit()
-      })
+      createErrorWindow()
     }
   })
-})
-
-app.on('activate', _ => {
-  if (win) {
-    win.show()
-  }
 })

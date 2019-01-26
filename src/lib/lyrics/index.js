@@ -7,13 +7,13 @@
 'use strict'
 
 const log = console.log
-const fs = require('iofs')
 const { EventEmitter } = require('events')
 const util = require('util')
+const { ipcRenderer } = require('electron')
 
 class Lyrics {
   // 歌词初始化
-  __init__(lrcFile) {
+  __init__(id) {
     this.lib = []
     this.curr = []
     this.lrc = {
@@ -21,21 +21,16 @@ class Lyrics {
       r: { bg: '', txt: '' }
     }
 
-    if (!lrcFile || !fs.exists(lrcFile)) {
-      log('no lrc file', lrcFile)
+    let lrc = ipcRenderer.sendSync('read-lrc', id)
+    if (!id || lrc === null) {
+      log('no lrc file', id)
       return false
     }
 
-    this.__LRC__ = lrcFile
-
-    // log(this.__LRC__)
-
-    let lrc = fs
-      .cat(lrcFile)
-      .toString('utf8')
-      .split('\n')
+    this.__ID__ = id
 
     this.lib = lrc
+      .split('\n')
       .map(it => {
         if (it) {
           let matches = it.match(/^\[([0-9\.\:]+)\](.+)/)
@@ -85,7 +80,7 @@ class Lyrics {
 
   // 歌词向前调整指定时间
   forward(time = 0) {
-    if (!this.__LRC__) {
+    if (!this.__ID__) {
       return
     }
     clearTimeout(this.__TIMER__)
@@ -109,7 +104,7 @@ class Lyrics {
 
     // 延时3秒写入
     this.__TIMER__ = setTimeout(() => {
-      fs.echo(lrc, this.__LRC__)
+      ipcRenderer.sendSync('save-lrc', { id: this.__ID__, lrc })
     }, 3000)
   }
 

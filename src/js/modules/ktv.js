@@ -9,13 +9,7 @@
 import Api from '/js/api.js'
 import Local from '/js/modules/local.js'
 
-const fs = require('iofs')
-const path = require('path')
-const { app } = require('electron').remote
-
-const HOME_PATH = app.getPath('appData')
-const MUSIC_DB_PATH = path.join(HOME_PATH, 'music.db')
-const LYRICS_PATH = path.join(HOME_PATH, 'lyrics')
+const { ipcRenderer } = require('electron')
 const log = console.log
 
 export default {
@@ -85,9 +79,8 @@ export default {
           song.albumId = json.album_id
           song.kgHash = json.hash
           song.cover = json.img
-          song.lyrics = path.join(LYRICS_PATH, `${song.id}.lrc`)
 
-          LS.insert(song)
+          LS.update(id, song)
           Local.list.set(SONIST.__CURR__, song)
 
           SONIST.clear()
@@ -96,10 +89,10 @@ export default {
           this.updateCurr(song)
           this.draw(true)
 
-          fs.echo(json.lyrics, song.lyrics)
-          fs.echo(JSON.stringify(LS.getAll(), '', 2), MUSIC_DB_PATH)
+          ipcRenderer.send('save-lrc', { id, lrc: json.lyrics })
+          ipcRenderer.send('set-music', LS.getAll())
 
-          LYRICS.__init__(song.lyrics)
+          LYRICS.__init__(id)
 
           layer.toast('歌词应用成功...')
 

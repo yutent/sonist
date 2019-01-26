@@ -8,17 +8,14 @@
 
 import '/lib/form/index.js'
 
-const fs = require('iofs')
-const path = require('path')
-const { app, dialog } = require('electron').remote
+const {
+  remote: { app, dialog },
+  ipcRenderer
+} = require('electron')
+
 const log = console.log
 
-const HOME_PATH = app.getPath('appData')
-const APP_INI_PATH = path.join(HOME_PATH, 'app.ini')
-
-let appInit = fs.cat(APP_INI_PATH)
-
-appInit = JSON.parse(appInit)
+let appInit = ipcRenderer.sendSync('get-init')
 
 export default Anot({
   $id: 'profile',
@@ -58,9 +55,9 @@ export default Anot({
 
       Object.assign(appInit, setting)
 
-      let cache = JSON.stringify(appInit, '', 2)
-      fs.echo(cache, APP_INI_PATH)
-      Anot.ss('app-init', cache)
+      ipcRenderer.send('set-init', appInit)
+
+      Anot.ss('app-init', appInit)
 
       layer.toast('保存成功')
 
