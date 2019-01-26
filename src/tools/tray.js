@@ -18,7 +18,7 @@ module.exports = function(win) {
     {
       label: '显示主窗口',
       click() {
-        win.show()
+        win.webContents.send('dock-click')
       }
     },
     { type: 'separator' },
@@ -27,7 +27,7 @@ module.exports = function(win) {
 
   if (process.platform === 'darwin') {
     tray.on('click', _ => {
-      win.show()
+      win.webContents.send('dock-click')
     })
     tray.on('right-click', _ => {
       tray.popUpContextMenu(menuList)

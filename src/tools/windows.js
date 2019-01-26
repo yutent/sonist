@@ -33,7 +33,7 @@ exports.createMainWindow = function(icon) {
 
   win.on('ready-to-show', _ => {
     win.show()
-    win.openDevTools()
+    // win.openDevTools()
   })
 
   return win
@@ -50,7 +50,10 @@ exports.createErrorWindow = function() {
     maximizable: false,
     minimizable: false,
     resizable: false,
-    titleBarStyle: 'hiddenInset'
+    titleBarStyle: 'hiddenInset',
+    webPreferences: {
+      devTools: false
+    }
   })
   win.setMenuBarVisibility(false)
   win.loadURL('app://local/depends.html')
@@ -76,7 +79,10 @@ exports.createDesktopLrcWindow = function(screen) {
     hasShadow: false,
     thickFrame: false,
     transparent: true,
-    show: false
+    show: false,
+    webPreferences: {
+      devTools: false
+    }
   })
 
   win.loadURL('app://local/desktop-lrc.html')
@@ -97,7 +103,10 @@ exports.createMiniWindow = function(screen) {
     x: screen.size.width - 320,
     y: 0,
     skipTaskbar: true,
-    show: false
+    show: false,
+    webPreferences: {
+      devTools: false
+    }
   })
 
   // win.loadURL('http://127.0.0.1:10240/mini-win.html')

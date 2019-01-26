@@ -26,10 +26,10 @@ body {background:transparent;
   
   }
 
-  .touch-bar {position:absolute;left:0;top:0;z-index:9;width:100%;height:2rem;}
+  .touch-bar {position:absolute;right:0;top:0;z-index:9;height:2rem;}
 
   .quit,
-  .lock {visibility:hidden;position:absolute;right:1rem;top:.5rem;font-size:1.8rem;font-weight:bold;
+  .lock {visibility:hidden;position:absolute;right:1rem;top:.5rem;font-size:1.8rem;font-weight:bold;text-shadow:0 0 .1rem #fff;
     &:hover {color:nth($cr, 1)}
     &:active {color:nth($co, 1)}
   }
@@ -39,7 +39,7 @@ body {background:transparent;
   }
 
 
-  &:hover {background:rgba(29, 35, 44, 0.2);
+  &:hover {background:rgba(29, 35, 44, 0.15);
   
     .quit, .lock {visibility:visible;}
   }

@@ -67,7 +67,7 @@ app.once('ready', () => {
       // mac专属事件,点击dock栏图标,可激活窗口
       app.on('activate', _ => {
         if (win) {
-          win.show()
+          win.webContents.send('dock-click')
         }
       })
     } else {

@@ -52,7 +52,9 @@ Anot.ss('app-init', appInit)
 const LRC_WIN = createDesktopLrcWindow(MAIN_SCREEN)
 const MINI_WIN = createMiniWindow(MAIN_SCREEN, WIN)
 
-// LRC_WIN.showInactive()
+// WIN.on('show', _ => {
+//   MINI_WIN.hide()
+// })
 
 Anot({
   $id: 'app',
@@ -205,6 +207,13 @@ Anot({
             SONIST.mode = PLAY_MODE[ev.value]
             Anot.ls('play-mode', ev.value)
           }
+      }
+    })
+
+    // 迷你模式开启时, 不响应托盘和dock栏的点击事件
+    ipcRenderer.on('dock-click', () => {
+      if (!MINI_WIN.isVisible()) {
+        WIN.show()
       }
     })
   },

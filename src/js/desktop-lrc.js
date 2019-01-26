@@ -25,10 +25,9 @@ Anot({
       l: { bg: '#fff', txt: '暂无歌词...' },
       r: { bg: '', txt: '' }
     },
-    isLock: JSON.parse(Anot.ss('lock'))
+    isLock: +Anot.ls('lock-lrc')
   },
   mounted() {
-    WIN.openDevTools()
     WIN.on('ktv-lrc', lrc => {
       this.lrc = lrc
     })
@@ -39,13 +38,9 @@ Anot({
       WIN.hide()
     },
     lock() {
-      this.isLock = !this.isLock
-      Anot.ss('lock', this.isLock)
-      if (this.isMac) {
-        WIN.setMovable(!this.isLock)
-      } else {
-        // location.reload()
-      }
+      WIN.setMovable(!!this.isLock)
+      this.isLock = this.isLock ^ 1
+      Anot.ls('lock-lrc', this.isLock)
     }
   }
 })
