@@ -25,7 +25,8 @@ export default Anot({
       autoLrc: appInit.autoLrc,
       theme: appInit.theme || 1,
       musicPath: appInit.musicPath || ''
-    }
+    },
+    version: app.getVersion()
   },
   watch: {
     'setting.theme'(v) {
