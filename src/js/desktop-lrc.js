@@ -12,28 +12,40 @@ const { remote } = require('electron')
 
 const WIN = remote.getCurrentWindow()
 
+const $doc = Anot(document)
+const log = console.log
+
+window.WIN = WIN
+
 Anot({
   $id: 'lrc',
   state: {
+    isMac: process.platform === 'darwin',
     lrc: {
       l: { bg: '#fff', txt: '暂无歌词...' },
       r: { bg: '', txt: '' }
     },
-    isLock: false
+    isLock: JSON.parse(Anot.ss('lock'))
   },
   mounted() {
+    WIN.openDevTools()
     WIN.on('ktv-lrc', lrc => {
       this.lrc = lrc
     })
   },
+  skip: ['isMac'],
   methods: {
     quit(force) {
-      // WIN.close()
       WIN.hide()
     },
     lock() {
-      WIN.setMovable(this.isLock)
       this.isLock = !this.isLock
+      Anot.ss('lock', this.isLock)
+      if (this.isMac) {
+        WIN.setMovable(!this.isLock)
+      } else {
+        // location.reload()
+      }
     }
   }
 })

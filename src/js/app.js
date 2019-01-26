@@ -52,6 +52,8 @@ Anot.ss('app-init', appInit)
 const LRC_WIN = createDesktopLrcWindow(MAIN_SCREEN)
 const MINI_WIN = createMiniWindow(MAIN_SCREEN, WIN)
 
+// LRC_WIN.showInactive()
+
 Anot({
   $id: 'app',
   state: {

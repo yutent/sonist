@@ -31,10 +31,11 @@ body {background:transparent;
   .quit,
   .lock {visibility:hidden;position:absolute;right:1rem;top:.5rem;font-size:1.8rem;font-weight:bold;
     &:hover {color:nth($cr, 1)}
+    &:active {color:nth($co, 1)}
   }
   .lock {right:4rem;
 
-    &.active {color:nth($cp, 3)}
+    &.active {color:nth($ct, 1)}
   }
 
 

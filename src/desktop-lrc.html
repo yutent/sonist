@@ -9,7 +9,7 @@
 <script>window.LIBS_BASE_URL = location.origin + '/lib';</script>
 <script type="module" src="js/desktop-lrc.js"></script>
 </head>
-<body class="do-fn-noselect" anot="lrc">
+<body class="do-fn-noselect" :class="{'do-fn-drag': isMac || !isLock}" anot="lrc">
   <div class="lrc-box">
     <section class="left">
       <span class="shadow" :text="lrc.l.txt"></span>
@@ -27,9 +27,10 @@
     </section>
   </div>
 
-  <div class="touch-bar do-fn-drag">
-    <a class="do-icon-lock lock do-fn-nodrag" :class="{active: isLock}" :click="lock"></a>
-    <a class="do-icon-close quit do-fn-nodrag" :click="quit"></a>
+
+  <div class="touch-bar do-fn-nodrag">
+    <a class="do-icon-lock lock" :class="{active: isLock}" :click="lock"></a>
+    <a class="do-icon-close quit" :click="quit"></a>
   </div>
 </body>
 </html>
