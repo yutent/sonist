@@ -8,36 +8,58 @@
 
 import '/lib/anot.next.js'
 
-const { remote } = require('electron')
+const { remote, ipcRenderer } = require('electron')
 
 const WIN = remote.getCurrentWindow()
-const MAIN_WIN = WIN.getParentWindow()
 
-window.WIN = WIN
+ipcRenderer.on('post-main', (ev, val) => {
+  window.__MAIN__ = val
+})
+
 Anot({
   $id: 'mini',
   state: {
     isPlaying: false,
     curr: {
       id: '',
-      title: '假装不合适',
+      title: '',
       artist: '',
       album: '',
       time: 0,
       duration: 0,
-      cover: '/images/album.png'
+      cover: ''
     },
     pinned: true,
     playMode: Anot.ls('play-mode') >>> 0
   },
   mounted() {
-    WIN.on('ktv-lrc', lrc => {
-      this.lrc = lrc
+    WIN.on('mini-init', song => {
+      this.curr = song
+      if (song.id) {
+        this.isPlaying = true
+      }
+      this.playMode = Anot.ls('play-mode') >>> 0
     })
   },
   methods: {
-    play() {},
-    nextSong() {},
+    handleCtrl(ev) {
+      let key = ev.target.dataset.key
+
+      switch (key) {
+        case 'prev':
+          remote.app.__MAIN__.emit('mini-ctrl', 'prev')
+          break
+        case 'play':
+          this.isPlaying = !this.isPlaying
+          remote.app.__MAIN__.emit('mini-ctrl', 'play')
+          break
+        case 'next':
+          remote.app.__MAIN__.emit('mini-ctrl', 'next')
+          break
+        default:
+          break
+      }
+    },
 
     handleTool(ev) {
       let key = ev.target.dataset.key
@@ -48,7 +70,7 @@ Anot({
           break
         case 'quit':
           WIN.hide()
-          MAIN_WIN.show()
+          remote.app.__MAIN__.show()
           break
         default:
           break
@@ -58,7 +80,7 @@ Anot({
       let key = ev.target.dataset.key
       switch (key) {
         case 'lrc':
-          MAIN_WIN.emit('toggle-desktoplrc')
+          remote.app.__MAIN__.emit('mini-ctrl', 'desktoplrc')
           break
         case 'mode':
           let mod = this.playMode
@@ -67,7 +89,10 @@ Anot({
             mod = 0
           }
           this.playMode = mod
-          MAIN_WIN.emit('play-mode', mod)
+          remote.app.__MAIN__.emit('mini-ctrl', {
+            name: 'play-mode',
+            value: mod
+          })
       }
     }
   }

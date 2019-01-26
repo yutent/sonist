@@ -120,14 +120,14 @@
 
   <div class="contrl-bar">
 
-    <div class="play-box">
-      <span class="item prev s-icon-prev" :click="nextSong(-1)"></span>
+    <div class="play-box" :click="handleCtrl">
+      <span class="item prev s-icon-prev" data-key="prev"></span>
       <span 
         class="item play"
-        :class="{'s-icon-play': !isPlaying, 's-icon-pause': isPlaying}" 
-        :click="play(null)">
+        data-key="prev"
+        :class="{'s-icon-play': !isPlaying, 's-icon-pause': isPlaying}">
       </span>
-      <span class="item next s-icon-next" :click="nextSong(1)"></span>
+      <span class="item next s-icon-next" data-key="prev"></span>
     </div>
 
     <div class="stat-box">

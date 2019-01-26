@@ -50,15 +50,8 @@ let appInit = ipcRenderer.sendSync('get-init')
 Anot.ss('app-init', appInit)
 
 const LRC_WIN = createDesktopLrcWindow(MAIN_SCREEN)
-// const MINI_WIN = createMiniWindow(MAIN_SCREEN, WIN)
+const MINI_WIN = createMiniWindow(MAIN_SCREEN, WIN)
 
-// WIN.hide()
-// MINI_WIN.show()
-
-// MINI_WIN.opener = WIN
-// MINI_WIN.openDevTools()
-
-// window.MINI_WIN = MINI_WIN
 Anot({
   $id: 'app',
   state: {
@@ -186,6 +179,32 @@ Anot({
     remote.app.on('browser-window-blur', _ => {
       this.winFocus = false
     })
+
+    /**
+     * 响应mini窗口的事件
+     */
+    WIN.on('mini-ctrl', ev => {
+      switch (ev) {
+        case 'prev':
+          this.nextSong(-1)
+          break
+        case 'play':
+          this.play()
+          break
+        case 'next':
+          this.nextSong(1)
+          break
+        case 'desktoplrc':
+          this.toggleDesktopLrc()
+          break
+        default:
+          if (ev.name === 'play-mode') {
+            this.playMode = ev.value
+            SONIST.mode = PLAY_MODE[ev.value]
+            Anot.ls('play-mode', ev.value)
+          }
+      }
+    })
   },
   methods: {
     quit(force) {
@@ -203,8 +222,14 @@ Anot({
       WIN.minimize()
     },
     change2mini() {
+      this.optBoxShow = false
       WIN.hide()
       MINI_WIN.show()
+      let song = this.curr.$model
+      if (!this.isPlaying) {
+        delete song.id
+      }
+      MINI_WIN.emit('mini-init', song)
     },
 
     activeModule(mod) {
@@ -286,6 +311,27 @@ Anot({
       }
     },
 
+    /**
+     * 播放按钮的事件
+     */
+    handleCtrl(ev) {
+      let key = ev.target.dataset.key
+
+      switch (key) {
+        case 'prev':
+          this.nextSong(-1)
+          break
+        case 'play':
+          this.play()
+          break
+        case 'next':
+          this.nextSong(1)
+          break
+        default:
+          break
+      }
+    },
+
     nextSong(step) {
       let _p = null
       if (step > 0) {
@@ -304,13 +350,10 @@ Anot({
       })
     },
 
-    pause() {
-      this.isPlaying = false
-    },
-
     updateCurr(obj) {
       let old = this.curr.$model
       this.curr = Object.assign(old, obj)
+      MINI_WIN.emit('mini-init', this.curr.$model)
     },
 
     play(song) {

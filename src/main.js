@@ -63,6 +63,7 @@ app.once('ready', () => {
       let win = createMainWindow(path.resolve(ROOT, './images/app.png'))
       createTray(win)
       createMenu(win)
+      app.__MAIN__ = win
       // mac专属事件,点击dock栏图标,可激活窗口
       app.on('activate', _ => {
         if (win) {

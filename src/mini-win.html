@@ -11,23 +11,23 @@
 </head>
 <body class="do-fn-noselect" anot="mini">
   <div class="app">
-    <span class="cover">
-      <img :attr-src="curr.cover" />
+    <span class="cover do-fn-drag">
+      <img :attr-src="curr.cover || '/images/album.png'" />
     </span>
     <div class="ctrl">
-      <h3 class="title" :text="curr.title"></h3>
-      <div class="btns">
-        <span class="s-icon-prev" :click="nextSong(-1)"></span>
+      <h3 class="title do-fn-ell do-fn-drag" :text="curr.title ? '正在播放: ' + curr.title : '已经停止播放...'"></h3>
+      <div class="btns" :click="handleCtrl">
+        <span class="s-icon-prev" data-key="prev"></span>
         <span 
           class="play"
-          :class="{'s-icon-play': !isPlaying, 's-icon-pause': isPlaying}" 
-          :click="play(null)">
+          data-key="play"
+          :class="{'s-icon-play': !isPlaying, 's-icon-pause': isPlaying}" >
         </span>
-        <span class="s-icon-next" :click="nextSong(1)"></span>
+        <span class="s-icon-next" data-key="next"></span>
         
       </div>
     </div>
-    <div class="tools" :click="handleTool">
+    <div class="tools do-fn-nodrag" :click="handleTool">
       <span data-key="pin" class="do-icon-pin" :class="{active: pinned}"></span>
       <span data-key="quit" class="do-icon-maximized"></span>
     </div>
