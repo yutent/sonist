@@ -35,9 +35,7 @@ Anot({
   mounted() {
     WIN.on('mini-init', song => {
       this.curr = song
-      if (song.id) {
-        this.isPlaying = true
-      }
+      this.isPlaying = !!song.id
       this.playMode = Anot.ls('play-mode') >>> 0
     })
   },
