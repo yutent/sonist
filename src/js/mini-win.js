@@ -12,10 +12,6 @@ const { remote, ipcRenderer } = require('electron')
 
 const WIN = remote.getCurrentWindow()
 
-ipcRenderer.on('post-main', (ev, val) => {
-  window.__MAIN__ = val
-})
-
 Anot({
   $id: 'mini',
   state: {
