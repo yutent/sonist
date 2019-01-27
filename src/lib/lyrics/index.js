@@ -29,6 +29,8 @@ class Lyrics {
 
     this.__ID__ = id
 
+    log(id)
+
     this.lib = lrc
       .split('\n')
       .map(it => {
@@ -104,7 +106,7 @@ class Lyrics {
 
     // 延时3秒写入
     this.__TIMER__ = setTimeout(() => {
-      ipcRenderer.sendSync('save-lrc', { id: this.__ID__, lrc })
+      ipcRenderer.send('save-lrc', { id: this.__ID__, lrc })
     }, 3000)
   }
 
