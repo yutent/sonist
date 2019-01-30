@@ -39,7 +39,7 @@ table {overflow:auto;display:table;width:100%;line-height:2.5rem;
   thead tr {height:4.5rem;border-bottom:.1rem solid rgba(200, 200, 200, .15)}
   thead th {padding:1rem .8rem;border:0;}
   tbody tr {height:auto;@include ts(background, .3s);
-    &:hover {background:rgba(63, 194, 168, .08);}
+    &:hover {background:rgba(29, 35, 44, .08);}
   }
   tbody td {padding:.9rem .8rem}
 }

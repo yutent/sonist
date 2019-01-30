@@ -1,7 +1,12 @@
 <div class="do-mod-search" anot="search">
   <div class="tabbar">
-    <span class="item active">我的音乐</span>
-    <span class="item">汪苏泷 <i class="do-icon-close"></i></span>
+    <span 
+      class="item"
+      :class="{active: curr  === it.key}"
+      :click="toggleHistory(it)"
+      :for="it in history">
+      {{it.txt}} <i class="do-icon-close" :click="delThis(it, $event)"></i>
+    </span>
   </div>
 
   <div class="table">
@@ -19,7 +24,7 @@
         <tr
           :for="it in list"
           :dblclick="play(it, $index)">
-          <td><i class="s-icon-music"></i></td>
+          <td :text="$index + 1"></td>
           <td :text="it.title"></td>
           <td class="ac" :text="it.artist"></td>
           <td class="ac" :text="it.album"></td>

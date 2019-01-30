@@ -27,10 +27,8 @@ const path = require('path')
 
 const { remote, ipcRenderer } = require('electron')
 
-const { createDesktopLrcWindow, createMiniWindow } = remote.app.windows
-
 const WIN = remote.getCurrentWindow()
-const MAIN_SCREEN = remote.screen.getPrimaryDisplay()
+const { __LRC__, __MINI__ } = remote.app
 
 const PLAY_MODE = {
   0: 'all',
@@ -49,20 +47,13 @@ let appInit = ipcRenderer.sendSync('get-init')
 
 Anot.ss('app-init', appInit)
 
-const LRC_WIN = createDesktopLrcWindow(MAIN_SCREEN)
-const MINI_WIN = createMiniWindow(MAIN_SCREEN, WIN)
-
-// WIN.on('show', _ => {
-//   MINI_WIN.hide()
-// })
-
 Anot({
   $id: 'app',
   state: {
     theme: appInit.theme || 1, // 1:macos, 2: deepin
     winFocus: false,
-    mod: 'local',
-    searchTxt: '',
+    mod: 'search',
+    searchTxt: '安羽苏',
     playMode: Anot.ls('play-mode') >>> 0, // 0:all | 1:single |  2:random
     ktvMode: 0,
     isPlaying: false,
@@ -167,7 +158,7 @@ Anot({
     // ktv模式的歌词
     LYRICS.on('ktv-lrc', lrc => {
       this.lrc = lrc
-      LRC_WIN.emit('ktv-lrc', lrc)
+      __LRC__.emit('ktv-lrc', lrc)
     })
 
     // ktv模式的歌词
@@ -212,7 +203,7 @@ Anot({
 
     // 迷你模式开启时, 不响应托盘和dock栏的点击事件
     ipcRenderer.on('dock-click', () => {
-      if (!MINI_WIN.isVisible()) {
+      if (!__MINI__.isVisible()) {
         WIN.show()
       }
     })
@@ -235,12 +226,12 @@ Anot({
     change2mini() {
       this.optBoxShow = false
       WIN.hide()
-      MINI_WIN.show()
+      __MINI__.show()
       let song = this.curr.$model
       if (!this.isPlaying) {
         delete song.id
       }
-      MINI_WIN.emit('mini-init', song)
+      __MINI__.emit('mini-init', song)
     },
 
     activeModule(mod) {
@@ -266,10 +257,10 @@ Anot({
       this.optBoxShow = !this.optBoxShow
     },
     toggleDesktopLrc() {
-      if (LRC_WIN.isVisible()) {
-        LRC_WIN.hide()
+      if (__LRC__.isVisible()) {
+        __LRC__.hide()
       } else {
-        LRC_WIN.showInactive()
+        __LRC__.showInactive()
       }
     },
     toggleModule(mod) {
@@ -277,14 +268,16 @@ Anot({
         return
       }
       this.optBoxShow = false
+      this.__last__ = this.mod
       this.mod = mod
     },
     // 设置保存 回调
     onProfileSaved() {
-      this.toggleModule('local')
+      this.toggleModule(this.__last__)
       appInit = JSON.parse(Anot.ss('app-init'))
     },
 
+    //  切换循环模式
     togglePlayMode() {
       let mod = this.playMode
       mod++
@@ -312,13 +305,25 @@ Anot({
 
     searchMusic(ev) {
       if (ev.keyCode === 13) {
-        if (this.searchTxt === ':debug:') {
+        let txt = this.searchTxt.trim()
+
+        if (!txt) {
+          return
+        }
+
+        if (txt === ':debug:') {
           log('-----  调试模式  -----')
           this.searchTxt = ''
           WIN.openDevTools()
-        } else {
-          layer.toast('搜索功能还未开放')
+          return
         }
+        if (this.mod !== 'search') {
+          this.toggleModule('search')
+        }
+
+        Search.search(txt)
+        this.searchTxt = ''
+        // layer.toast('搜索功能还未开放')
       }
     },
 
@@ -364,7 +369,7 @@ Anot({
     updateCurr(obj) {
       let old = this.curr.$model
       this.curr = Object.assign(old, obj)
-      MINI_WIN.emit('mini-init', this.curr.$model)
+      __MINI__.emit('mini-init', this.curr.$model)
     },
 
     play(song) {

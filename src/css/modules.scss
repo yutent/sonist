@@ -87,11 +87,8 @@
 
     .stat {width:2.6rem;height:2.6rem;line-height:2.6rem;}
     .ac {text-align:center}
-
-    .active {color:nth($ct, 1);background:rgba(255, 255, 255, 0.6);;
-      
-      i {animation: play 2s infinite linear;}
-    }
+    .idx {color:nth($cp, 3);text-shadow:0 .1rem 0 rgba(255, 255, 255, 0.6)}
+    .active {color:nth($ct, 1);background:rgba(255, 255, 255, 0.6);font-weight:bold}
   }
 
 
@@ -108,7 +105,10 @@
         }
 
         .label {flex:0 5rem;padding-right:2rem;color:nth($cgr, 1);text-align:right;}
-        .field {flex:1}
+        .field {flex:1;
+          
+          &.path {border:0;font-size:1.3rem;color:nth($cd, 2)}
+        }
       }
     
     }

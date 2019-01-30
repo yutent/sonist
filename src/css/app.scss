@@ -209,6 +209,10 @@
         &:hover {opacity:1;transform:translateX(0)}
       }
 
+      .slide-down {position:absolute;right:1rem;top:1rem;width:3rem;height:2rem;line-height:1.8rem;border:.1rem solid nth($cgr, 1);border-radius:.3rem;text-align:center;
+        i {transform:rotate(90deg)}
+      }
+
 
       .search-box {display:flex;justify-content:center;align-items:center;position:absolute;left:0;top:0;z-index:82;width:100%;height:56rem;background:rgba(29, 35, 44, 0.5);backdrop-filter:blur(.4rem);
       

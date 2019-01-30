@@ -33,7 +33,7 @@ exports.createMainWindow = function(icon) {
 
   win.on('ready-to-show', _ => {
     win.show()
-    // win.openDevTools()
+    win.openDevTools()
   })
 
   return win
@@ -109,7 +109,6 @@ exports.createMiniWindow = function(screen) {
     }
   })
 
-  // win.loadURL('http://127.0.0.1:10240/mini-win.html')
   win.loadURL('app://local/mini-win.html')
   return win
 }

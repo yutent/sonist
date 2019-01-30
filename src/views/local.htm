@@ -20,7 +20,7 @@
           :for="it in list"
           :on-contextmenu="handleMenu(it, $index, $event)"
           :dblclick="play(it, $index)">
-          <td class="ac"><i class="stat s-icon-music"></i></td>
+          <td class="ac idx" :text="$index + 1 + '.'"></td>
           <td :text="it.title"></td>
           <td class="ac" :text="it.artist"></td>
           <td class="ac" :text="it.album"></td>
@@ -38,7 +38,7 @@
       </section>
 
       <section class="section">
-        <span class="field" :text="form.path"></span>
+        <input readonly class="field path" :attr-value="form.path" />
       </section>
 
       <section class="section">

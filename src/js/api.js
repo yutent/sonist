@@ -106,13 +106,15 @@ export default {
       })
   },
 
-  search(keyword) {
+  search(keyword, page = 1, pagesize = 20) {
     return request
       .get('https://songsearch.kugou.com/song_search_v2')
       .send({
         keyword,
         platform: 'WebFilter',
-        tag: ''
+        tag: '',
+        page,
+        pagesize
       })
       .then(res => {
         if (res.status === 200) {

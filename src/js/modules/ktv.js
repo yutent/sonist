@@ -35,6 +35,10 @@ export default {
     toggleLrcView() {
       this.allLrcView = !this.allLrcView
     },
+
+    closeKtvMode() {
+      this.ktvMode = 0
+    },
     showLrcSearch() {
       this.lrcForm.input = `${this.curr.artist} ${this.curr.title}`
       this.lrcSearchBoxShow = true
@@ -43,6 +47,7 @@ export default {
     closeLrcSearch() {
       this.lrcSearchBoxShow = false
     },
+
     searchLrc(e) {
       if (e.keyCode === 13) {
         let { input, __input__ } = this.lrcForm

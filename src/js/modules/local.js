@@ -127,6 +127,8 @@ export default Anot({
         el.textContent = '重新扫描'
         el = null
 
+        LS.clear(true)
+        LS.insert(this.__tmp__)
         LS.sort('artist', true)
         dbCache = LS.getAll()
         this.list.clear()
@@ -142,7 +144,9 @@ export default Anot({
 
         this.__APP__.loading = false
         this.__APP__.progress = 0
+
         delete this.__NEW_NUM__
+        delete this.__tmp__
         return
       }
 
@@ -152,12 +156,14 @@ export default Anot({
         if (item) {
           item.path = `file://${song}`
           delete item.lyrics
-          LS.update(hash, item)
+          // 不直接修改数数据库的数据,避免文件被删除时,数据库中的记录还在
+          // 先存入临时数组, 最后再统一存入数据库
+          this.__tmp__.push(item)
           return this.__checkSong__(el)
         }
         this.__NEW_NUM__++
         ID3(song).then(tag => {
-          LS.insert({
+          this.__tmp__.push({
             id: hash,
             title: tag.title,
             album: tag.album,
@@ -176,6 +182,7 @@ export default Anot({
       if (appInit.musicPath) {
         this.__LIST__ = ipcRenderer.sendSync('scan-dir', appInit.musicPath)
         if (this.__LIST__) {
+          this.__tmp__ = [] //创建一个临时的数组, 用于存放扫描的音乐
           this.__APP__.loading = true
           this.__WAIT_FOR_SCAN__ = this.__LIST__.length
           this.__NEW_NUM__ = 0
