@@ -79,10 +79,7 @@ exports.createDesktopLrcWindow = function(screen) {
     hasShadow: false,
     thickFrame: false,
     transparent: true,
-    show: false,
-    webPreferences: {
-      devTools: false
-    }
+    show: false
   })
 
   win.loadURL('app://local/desktop-lrc.html')
