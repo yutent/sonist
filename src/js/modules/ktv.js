@@ -38,6 +38,7 @@ export default {
 
     closeKtvMode() {
       this.ktvMode = 0
+      this.lrcSearchBoxShow = false
     },
     showLrcSearch() {
       this.lrcForm.input = `${this.curr.artist} ${this.curr.title}`
