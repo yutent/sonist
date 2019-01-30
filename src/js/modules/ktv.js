@@ -79,25 +79,29 @@ export default {
         if (json.lyrics) {
           let { id } = SONIST.getCurrSong()
 
-          let song = LS.get(id)
+          // 本地音乐才需要更新一些额外字段
+          // 试听列表的音乐, 只更新歌词
+          if (SONIST.target === 'local') {
+            let song = LS.get(id)
 
-          song.album = json.album_name
-          song.albumId = json.album_id
-          song.kgHash = json.hash
-          song.cover = json.img
+            song.album = json.album_name
+            song.albumId = json.album_id
+            song.kgHash = json.hash
+            song.cover = json.img
 
-          LS.update(id, song)
-          Local.list.set(SONIST.__CURR__, song)
+            LS.update(id, song)
+            Local.list.set(SONIST.__CURR__, song)
 
-          SONIST.clear()
-          SONIST.push(LS.getAll())
+            SONIST.clear()
+            SONIST.push(LS.getAll())
 
-          this.updateCurr(song)
-          this.draw(true)
+            ipcRenderer.send('set-music', LS.getAll())
+
+            this.updateCurr(song)
+            this.draw(true)
+          }
 
           ipcRenderer.send('save-lrc', { id, lrc: json.lyrics })
-          ipcRenderer.send('set-music', LS.getAll())
-
           LYRICS.__init__(id)
 
           layer.toast('歌词应用成功...')

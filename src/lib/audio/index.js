@@ -122,7 +122,7 @@ class AudioPlayer {
   play(id) {
     // 播放列表里没有数据的话, 不作任何处理
     if (!this.__LIST__.length) {
-      return
+      return Promise.reject(this.__LIST__)
     }
 
     // 有ID的话,不管之前是否在播放,都切换歌曲

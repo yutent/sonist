@@ -42,6 +42,9 @@ table {overflow:auto;display:table;width:100%;line-height:2.5rem;
     &:hover {background:rgba(29, 35, 44, .08);}
   }
   tbody td {padding:.9rem .8rem}
+  .ac {text-align:center}
+  .idx {color:nth($cp, 3);text-shadow:0 .1rem 0 rgba(255, 255, 255, 0.6)}
+  .active {color:nth($ct, 1);background:rgba(255, 255, 255, 0.6);font-weight:bold}
 }
 
 ::-webkit-scrollbar {width:.6rem;height:.6rem;background:none;}

@@ -83,13 +83,7 @@
     }
   }
 
-  .table {overflow:auto;flex:1;
-
-    .stat {width:2.6rem;height:2.6rem;line-height:2.6rem;}
-    .ac {text-align:center}
-    .idx {color:nth($cp, 3);text-shadow:0 .1rem 0 rgba(255, 255, 255, 0.6)}
-    .active {color:nth($ct, 1);background:rgba(255, 255, 255, 0.6);font-weight:bold}
-  }
+  .table {overflow:auto;flex:1;}
 
 
   .edit-form {position:absolute;left:0;top:0;z-index:90;display:flex;justify-content:center;align-items:center;width:100%;height:100%;
@@ -125,21 +119,28 @@
     
   .tabbar {flex:0 1  3rem;display:flex;padding:0 .5rem;line-height:2.9rem;border-bottom:.1rem solid nth($cp, 2);text-align:center;
   
-    .item {flex:0 0 7.5rem;height:3rem;margin:0 .3rem;border:.1rem solid rgba(200, 200, 200, .3);background:rgba(255, 255, 255, .3);color:nth($cp, 3);
+    .item {flex:0 0 7.5rem;height:3rem;margin:0 .3rem;border:.1rem solid rgba(200, 200, 200, .3);border-bottom:0;color:nth($cp, 3);
 
     
-      &.active {border-bottom-color:transparent;color:nth($cd, 1);}
+      &.active {color:nth($cd, 1);}
       i {color:nth($cr, 1)}
     }
   }
 
-  .table {overflow:auto;flex:1;
+  .table {overflow:auto;flex:1;}
 
-    .active {color:nth($ct, 1)}
-    .ac {text-align:center}
+
+}
+
+#app.blur {
+  .do-mod-search {
+    .tabbar {
+      .item {border-color:nth($cp, 3);color:nth($cp, 1);
+      
+        &.active {color:nth($cd, 1);}
+      }
+    }
   }
-
-
 }
 
 

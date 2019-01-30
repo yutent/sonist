@@ -8,6 +8,8 @@
 
 import Api from '/js/api.js'
 
+const { ipcRenderer } = require('electron')
+
 const log = console.log
 
 const dict = {}
@@ -15,17 +17,103 @@ const dict = {}
 export default Anot({
   $id: 'search',
   state: {
-    curr: '',
+    tab: 'audition',
+    curr: '', //当前播放
     history: [], // 搜索历史
     list: [] // 搜索结果列表
   },
+  mounted() {
+    dict.audition = ipcRenderer.sendSync('get-temp')
+    TS.insert(dict.audition)
+
+    this.__APP__ = Anot.vmodels.app
+
+    this.__init__()
+  },
   methods: {
-    __init__() {},
-    play(it, idx) {
-      // SONIST.clear()
-      log(it.hash, it.albumId)
-      Api.getSongInfoByHash(it.hash, it.albumId).then(json => {
+    __init__() {
+      if (!this.list.length) {
+        this.list.pushArray(dict.audition)
+      }
+    },
+    play(item, idx) {
+      let song = item.$model
+
+      // 如果之前是本地播放, 则将播放列表清空再切为试听列表
+      if (SONIST.target === 'local') {
+        SONIST.target = 'temp'
+        SONIST.clear()
+        SONIST.push(TS.getAll())
+      }
+
+      /**------------------------------
+       * 在试听列表
+      ------------------------------- */
+
+      if (this.tab === 'audition') {
+        if (song.id === this.curr) {
+          return
+        }
+        return SONIST.play(idx).then(it => {
+          this.__APP__.play(it)
+          this.curr = it.id
+        })
+      }
+
+      /**------------------------------
+       * 在搜索列表
+      ------------------------------- */
+
+      // 避免重复增加
+      if (TS.get(song.kgHash)) {
+        if (song.kgHash === this.curr) {
+          return
+        }
+
+        // 找到索引id
+        for (let i = 0; i < dict.audition.length; i++) {
+          if (dict.audition[i].id === song.kgHash) {
+            idx = i
+            break
+          }
+        }
+
+        return SONIST.play(idx).then(it => {
+          this.__APP__.play(it)
+          this.curr = it.id
+        })
+      }
+
+      song.id = song.kgHash
+
+      Api.getSongInfoByHash(song.kgHash, song.albumId).then(json => {
         log(json)
+
+        song.cover = json.img
+
+        ipcRenderer.send('save-lrc', { id: song.id, lrc: json.lyrics })
+
+        fetch(json.play_url)
+          .then(res => {
+            return res.arrayBuffer()
+          })
+          .then(blob => {
+            song.path = ipcRenderer.sendSync('save-cache', {
+              buff: Buffer.from(blob),
+              file: song.kgHash
+            })
+            log(song)
+            TS.insert(song)
+            dict.audition.push(song)
+
+            SONIST.push([song])
+            SONIST.play(dict.audition.length - 1).then(it => {
+              this.__APP__.play(it)
+              this.curr = it.id
+            })
+
+            ipcRenderer.send('set-temp', TS.getAll())
+          })
       })
     },
     delThis(it, ev) {
@@ -33,7 +121,7 @@ export default Anot({
       delete dict[it.key]
     },
     toggleHistory(it) {
-      this.curr = it.key
+      this.tab = it.key
       this.list.clear()
       this.list.pushArray(dict[it.key])
     },
@@ -45,13 +133,16 @@ export default Anot({
       let load = layer.load(1)
       this.list.clear()
 
-      let key = Buffer.from(txt).toString('base64')
-
-      this.history.push({ txt, key })
-
-      this.curr = key
-
       Api.search(txt, 1, 50).then(list => {
+        layer.close(load)
+        if (!Array.isArray(list) || list.length < 1) {
+          return layer.toast(`没有找到有关[${txt}]的音乐`)
+        }
+
+        let key = Buffer.from(txt).toString('base64')
+        this.history.push({ txt, key })
+        this.tab = key
+
         dict[key] = list.map(it => {
           return {
             title: it.SongName,
@@ -59,10 +150,10 @@ export default Anot({
             album: it.AlbumName,
             albumId: it.AlbumID,
             duration: it.Duration,
-            hash: it.FileHash
+            kgHash: it.FileHash
           }
         })
-        layer.close(load)
+
         this.list.pushArray(dict[key])
       })
     }

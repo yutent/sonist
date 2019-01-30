@@ -8,7 +8,7 @@
 
 @import "./var.scss";
 
-.do-mod-app {position:relative;display:flex;flex-flow:column wrap;width:100%;height:100%;background:#fff;
+#app {position:relative;display:flex;flex-flow:column wrap;width:100%;height:100%;background:#fff;
 
   // 标题栏样式
   .title-bar {position:relative;z-index:9;display:flex;flex:0 5rem;

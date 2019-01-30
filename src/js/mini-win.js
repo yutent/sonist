@@ -6,7 +6,7 @@
 
 'use strict'
 
-import '/lib/anot.next.js'
+import '/lib/anot.js'
 
 const { remote, ipcRenderer } = require('electron')
 

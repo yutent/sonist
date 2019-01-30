@@ -1,11 +1,17 @@
 <div class="do-mod-search" anot="search">
   <div class="tabbar">
+    <span class="item" 
+      :class="{active: tab === 'audition'}" 
+      :click="toggleHistory({ key: 'audition' })">
+      试听列表
+    </span>
     <span 
       class="item"
-      :class="{active: curr  === it.key}"
+      :class="{active: tab  === it.key}"
       :click="toggleHistory(it)"
-      :for="it in history">
-      {{it.txt}} <i class="do-icon-close" :click="delThis(it, $event)"></i>
+      :for="it in history"
+      :attr-title="it.txt">
+      {{it.txt | truncate(3)}} <i class="do-icon-close" :click="delThis(it, $event)"></i>
     </span>
   </div>
 
@@ -23,8 +29,9 @@
       <tbody>
         <tr
           :for="it in list"
+          :class="{active: it.kgHash === curr}"
           :dblclick="play(it, $index)">
-          <td :text="$index + 1"></td>
+          <td class="idx" :text="$index + 1 + '.'"></td>
           <td :text="it.title"></td>
           <td class="ac" :text="it.artist"></td>
           <td class="ac" :text="it.album"></td>

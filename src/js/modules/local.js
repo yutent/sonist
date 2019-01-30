@@ -61,6 +61,14 @@ export default Anot({
       if (song.id === this.curr) {
         return
       }
+
+      // 如果之前不是本地播放, 则将播放列表清空再切为本地音乐
+      if (SONIST.target === 'temp') {
+        SONIST.target = 'local'
+        SONIST.clear()
+        SONIST.push(LS.getAll())
+      }
+
       SONIST.play(idx).then(it => {
         this.__APP__.play(it)
         this.curr = it.id

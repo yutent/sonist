@@ -4,7 +4,7 @@
  * @date 2018/12/16 17:15:57
  */
 
-import '/lib/anot.next.js'
+import '/lib/anot.js'
 import layer from '/lib/layer/index.js'
 import store from '/lib/store/index.js'
 import AudioPlayer from '/lib/audio/index.js'
@@ -47,13 +47,15 @@ let appInit = ipcRenderer.sendSync('get-init')
 
 Anot.ss('app-init', appInit)
 
+SONIST.target = 'local' //播放目标是本地音乐
+
 Anot({
   $id: 'app',
   state: {
     theme: appInit.theme || 1, // 1:macos, 2: deepin
     winFocus: false,
-    mod: 'search',
-    searchTxt: '安羽苏',
+    mod: 'local',
+    searchTxt: '',
     playMode: Anot.ls('play-mode') >>> 0, // 0:all | 1:single |  2:random
     ktvMode: 0,
     isPlaying: false,
