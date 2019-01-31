@@ -33,7 +33,7 @@ exports.createMainWindow = function(icon) {
 
   win.on('ready-to-show', _ => {
     win.show()
-    // win.openDevTools()
+    win.openDevTools()
   })
 
   return win
@@ -77,6 +77,8 @@ exports.createDesktopLrcWindow = function(screen) {
     x: (screen.size.width - 1024) / 2,
     y: screen.size.height - 100,
     transparent: true,
+    hasShadow: false,
+    thickFrame: false,
     show: false
   })
 
@@ -98,6 +100,7 @@ exports.createMiniWindow = function(screen) {
     skipTaskbar: true,
     x: screen.size.width - 320,
     y: 0,
+    thickFrame: false,
     show: false
   })
 

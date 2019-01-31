@@ -6,8 +6,7 @@
 
 'use strict'
 
-const electron = require('electron')
-const { app, BrowserWindow, session, protocol } = electron
+const { app, BrowserWindow, session, protocol } = require('electron')
 const path = require('path')
 const fs = require('iofs')
 const { exec } = require('child_process')
@@ -27,12 +26,7 @@ const MIME_TYPES = {
 require('./tools/init')
 const createTray = require('./tools/tray')
 const createMenu = require('./tools/menu')
-const {
-  createMainWindow,
-  createErrorWindow,
-  createDesktopLrcWindow,
-  createMiniWindow
-} = require('./tools/windows')
+const { createMainWindow, createErrorWindow } = require('./tools/windows')
 
 const ROOT = __dirname
 
@@ -61,15 +55,12 @@ app.once('ready', () => {
   // 判断依赖
   exec('which ffprobe', (err, res) => {
     if (res) {
-      let sp = electron.screen.getPrimaryDisplay()
       let win = createMainWindow(path.resolve(ROOT, './images/app.png'))
 
       createTray(win)
       createMenu(win)
 
       app.__MAIN__ = win
-      app.__LRC__ = createDesktopLrcWindow(sp)
-      app.__MINI__ = createMiniWindow(sp)
 
       // mac专属事件,点击dock栏图标,可激活窗口
       app.on('activate', _ => {
