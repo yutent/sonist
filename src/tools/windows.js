@@ -73,11 +73,9 @@ exports.createDesktopLrcWindow = function(screen) {
     frame: false,
     resizable: false,
     alwaysOnTop: true,
+    skipTaskbar: true,
     x: (screen.size.width - 1024) / 2,
     y: screen.size.height - 100,
-    skipTaskbar: true,
-    hasShadow: false,
-    thickFrame: false,
     transparent: true,
     show: false
   })
@@ -97,13 +95,10 @@ exports.createMiniWindow = function(screen) {
     frame: false,
     resizable: false,
     alwaysOnTop: true,
+    skipTaskbar: true,
     x: screen.size.width - 320,
     y: 0,
-    skipTaskbar: true,
-    show: false,
-    webPreferences: {
-      devTools: false
-    }
+    show: false
   })
 
   win.loadURL('app://local/mini-win.html')
