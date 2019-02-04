@@ -22,7 +22,7 @@
     <span class="label">主题风格</span>
     <div class="field">
       <anot-radio :value="setting.theme" label="1">MacOS风格</anot-radio>
-      <anot-radio :value="setting.theme" label="2">Deepin风格</anot-radio>
+      <anot-radio :value="setting.theme" label="2">Linux风格</anot-radio>
     </div>
   </section>
 
@@ -35,6 +35,58 @@
         :text="setting.musicPath ||  '请选择你的歌曲目录'">
       </span>
       <anot-button color="teal" @click="openDir">选择目录...</anot-button>
+    </div>
+  </section>
+
+  <section class="block">
+    <span class="label">快捷键</span>
+    <div class="field">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>功能说明</th>
+            <th>快捷键</th>
+            <th>全局快捷键</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="ac">
+            <td>播放/暂停</td>
+            <td>空格</td>
+            <td>{{cmd}}{{alt}}空格</td>
+          </tr>
+          <tr class="ac">
+            <td>上一首</td>
+            <td>{{cmd}}←</td>
+            <td>{{cmd}}{{alt}}←</td>
+          </tr>
+          <tr class="ac">
+            <td>下一首</td>
+            <td>{{cmd}}→</td>
+            <td>{{cmd}}{{alt}}→</td>
+          </tr>
+          <tr class="ac">
+            <td>音量+</td>
+            <td>{{cmd}}↑</td>
+            <td>{{cmd}}{{alt}}↑</td>
+          </tr>
+          <tr class="ac">
+            <td>音量-</td>
+            <td>{{cmd}}↓</td>
+            <td>{{cmd}}{{alt}}↓</td>
+          </tr>
+          <tr class="ac">
+            <td>桌面歌词</td>
+            <td>{{cmd}}R</td>
+            <td>{{cmd}}{{alt}}R</td>
+          </tr>
+          <tr class="ac">
+            <td>迷你模式</td>
+            <td>{{cmd}}{{alt}}M</td>
+            <td>{{cmd}}{{alt}}⇧M</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 

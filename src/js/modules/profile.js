@@ -26,7 +26,9 @@ export default Anot({
       theme: appInit.theme || 1,
       musicPath: appInit.musicPath || ''
     },
-    version: app.getVersion()
+    version: app.getVersion(),
+    cmd: process.platform === 'darwin' ? '⌘' : 'Ctrl',
+    alt: process.platform === 'darwin' ? '⌥' : 'Alt'
   },
   watch: {
     'setting.theme'(v) {

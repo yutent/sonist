@@ -59,7 +59,7 @@ Anot({
   state: {
     theme: appInit.theme || 1, // 1:macos, 2: deepin
     winFocus: false,
-    mod: 'local',
+    mod: 'profile',
     searchTxt: '',
     playMode: Anot.ls('play-mode') >>> 0, // 0:all | 1:single |  2:random
     ktvMode: 0,
