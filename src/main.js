@@ -6,7 +6,13 @@
 
 'use strict'
 
-const { app, BrowserWindow, session, protocol } = require('electron')
+const {
+  app,
+  BrowserWindow,
+  session,
+  protocol,
+  globalShortcut
+} = require('electron')
 const path = require('path')
 const fs = require('iofs')
 const { exec } = require('child_process')
@@ -26,6 +32,7 @@ const MIME_TYPES = {
 require('./tools/init')
 const createTray = require('./tools/tray')
 const createMenu = require('./tools/menu')
+const Shortcut = require('./tools/shortcut')
 const { createMainWindow, createErrorWindow } = require('./tools/windows')
 
 const ROOT = __dirname
@@ -68,8 +75,14 @@ app.once('ready', () => {
           win.webContents.send('dock-click')
         }
       })
+      Shortcut.__init__(win)
     } else {
       createErrorWindow()
     }
   })
+})
+
+// 退出前清空所有快捷键
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll()
 })

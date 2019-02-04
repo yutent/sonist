@@ -50,6 +50,7 @@ class AudioPlayer {
   }
 
   set volume(val) {
+    this.__PLAYER__.muted = false
     this.__PLAYER__.volume = val / 100
   }
 
@@ -163,9 +164,10 @@ class AudioPlayer {
   // 切换静音
   mute() {
     if (this.__CURR__ < 0) {
-      return
+      return false
     }
     this.__PLAYER__.muted = !this.__PLAYER__.muted
+    return this.__PLAYER__.muted
   }
 
   // 跳到指定位置播放

@@ -86,7 +86,7 @@ export default {
       this.__CTX__.fillStyle = COLORS[this.ktvMode].bar2
       this.__CTX__.fillRect(wl, 230, pw * pp, 16)
 
-      this.__DEG__ += 0.01
+      this.__DEG__ += 0.02
     },
 
     draw(force) {
@@ -108,7 +108,7 @@ export default {
           if (this.isPlaying) {
             this.timer = setInterval(_ => {
               this.__draw__()
-            }, 20)
+            }, 40)
           } else {
             this.__draw__()
           }
@@ -118,7 +118,7 @@ export default {
         if (this.isPlaying) {
           this.timer = setInterval(_ => {
             this.__draw__()
-          }, 20)
+          }, 40)
         } else {
           this.__draw__()
         }

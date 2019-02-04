@@ -146,8 +146,8 @@
       <section class="ctrl volume">
         <i 
           :class="{
-            'do-icon-unmute' : volume > 0,
-            'do-icon-mute' : volume === 0
+            'do-icon-unmute' : volume > 0 && !muted,
+            'do-icon-mute' : volume === 0 || muted
           }">
         </i>
         <span 

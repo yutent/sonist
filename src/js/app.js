@@ -67,6 +67,7 @@ Anot({
     optBoxShow: false,
     volumeCtrlShow: false,
     volume: Anot.ls('volume') || 70,
+    muted: false,
     curr: {
       id: '',
       cover: '',
@@ -129,6 +130,9 @@ Anot({
 
         if (ax < 80) {
           this.ktvMode = this.ktvMode ^ 1
+          if (!this.isPlaying) {
+            this.draw()
+          }
           return
         }
         if (ax > 124 && ay > 55 && ay < 64) {
@@ -198,6 +202,55 @@ Anot({
           break
         case 'desktoplrc':
           this.toggleDesktopLrc()
+          break
+        default:
+          if (ev.name === 'play-mode') {
+            this.playMode = ev.value
+            SONIST.mode = PLAY_MODE[ev.value]
+            Anot.ls('play-mode', ev.value)
+          }
+      }
+    })
+
+    /**
+     * 响应 全局快捷键的事件
+     */
+    WIN.on('gs-ctrl', ev => {
+      switch (ev) {
+        case 'prev':
+          this.nextSong(-1)
+          break
+        case 'play':
+          this.play()
+          break
+        case 'next':
+          this.nextSong(1)
+          break
+        case 'stop':
+          this.isPlaying = false
+          this.curr.time = 0
+          SONIST.seek(0)
+          LYRICS.seek(0)
+          SONIST.pause()
+          this.draw()
+          break
+
+        case 'vu':
+          this.volume += 5
+          if (this.volume >= 100) {
+            this.volume = 100
+          }
+          SONIST.volume = this.volume
+          break
+        case 'vd':
+          this.volume -= 5
+          if (this.volume <= 0) {
+            this.volume = 0
+          }
+          SONIST.volume = this.volume
+          break
+        case 'mute':
+          this.muted = SONIST.mute()
           break
         default:
           if (ev.name === 'play-mode') {
