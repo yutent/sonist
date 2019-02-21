@@ -33,7 +33,7 @@ exports.createMainWindow = function(icon) {
 
   win.on('ready-to-show', _ => {
     win.show()
-    win.openDevTools()
+    // win.openDevTools()
   })
 
   return win

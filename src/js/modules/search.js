@@ -93,27 +93,23 @@ export default Anot({
 
         ipcRenderer.send('save-lrc', { id: song.id, lrc: json.lyrics })
 
-        fetch(json.play_url)
-          .then(res => {
-            return res.arrayBuffer()
+        request.get(json.play_url, { dataType: 'arraybuffer' }).then(res => {
+          song.path = ipcRenderer.sendSync('save-cache', {
+            buff: Buffer.from(res.body),
+            file: song.kgHash
           })
-          .then(blob => {
-            song.path = ipcRenderer.sendSync('save-cache', {
-              buff: Buffer.from(blob),
-              file: song.kgHash
-            })
-            log(song)
-            TS.insert(song)
-            dict.audition.push(song)
+          log(song)
+          TS.insert(song)
+          dict.audition.push(song)
 
-            SONIST.push([song])
-            SONIST.play(dict.audition.length - 1).then(it => {
-              this.__APP__.play(it)
-              this.curr = it.id
-            })
-
-            ipcRenderer.send('set-temp', TS.getAll())
+          SONIST.push([song])
+          SONIST.play(dict.audition.length - 1).then(it => {
+            this.__APP__.play(it)
+            this.curr = it.id
           })
+
+          ipcRenderer.send('set-temp', TS.getAll())
+        })
       })
     },
     delThis(it, ev) {
@@ -130,7 +126,7 @@ export default Anot({
         return
       }
 
-      let load = layer.load(1)
+      let load = layer.load(2)
       this.list.clear()
 
       Api.search(txt, 1, 50).then(list => {

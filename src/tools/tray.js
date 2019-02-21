@@ -6,12 +6,12 @@
 
 'use strict'
 
-const { Tray, Menu } = require('electron')
+const { app, Tray, Menu } = require('electron')
 const path = require('path')
 const ROOT = __dirname
 
 module.exports = function(win) {
-  let tray = new Tray(
+  app.__TRAY__ = new Tray(
     path.resolve(__dirname, '../images/trays/trayTemplate.png')
   )
   let menuList = Menu.buildFromTemplate([
@@ -26,13 +26,13 @@ module.exports = function(win) {
   ])
 
   if (process.platform === 'darwin') {
-    tray.on('click', _ => {
+    app.__TRAY__.on('click', _ => {
       win.webContents.send('dock-click')
     })
-    tray.on('right-click', _ => {
-      tray.popUpContextMenu(menuList)
+    app.__TRAY__.on('right-click', _ => {
+      app.__TRAY__.popUpContextMenu(menuList)
     })
   } else {
-    tray.setContextMenu(menuList)
+    app.__TRAY__.setContextMenu(menuList)
   }
 }
