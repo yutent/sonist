@@ -217,7 +217,6 @@ Anot({
      * 响应 全局快捷键的事件
      */
     WIN.on('gs-ctrl', ev => {
-      log('gs-ctrl: ', ev)
       switch (ev) {
         case 'prev':
           this.nextSong(-1)
@@ -235,6 +234,26 @@ Anot({
           LYRICS.seek(0)
           SONIST.pause()
           this.draw()
+          break
+        case 'vu':
+          this.volume += 5
+          if (this.volume >= 100) {
+            this.volume = 100
+          }
+          SONIST.volume = this.volume
+          break
+        case 'vd':
+          this.volume -= 5
+          if (this.volume <= 0) {
+            this.volume = 0
+          }
+          SONIST.volume = this.volume
+          break
+        case 'lrc':
+          this.toggleDesktopLrc()
+          break
+        case 'mini':
+          this.change2mini()
           break
         default:
           break
@@ -280,7 +299,6 @@ Anot({
                 this.volume = 0
               }
               SONIST.volume = this.volume
-              break
             }
             break
           case 77: // M (迷你模式)
