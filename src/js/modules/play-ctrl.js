@@ -90,6 +90,10 @@ export default {
     },
 
     draw(force) {
+      //主窗口隐藏时, 暂停绘制,  以降低CPU开销
+      if (!this.winShow) {
+        return clearInterval(this.timer)
+      }
       if (force) {
         this.__img1__ = new Image()
         this.__img2__ = new Image()

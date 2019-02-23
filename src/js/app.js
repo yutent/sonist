@@ -59,6 +59,7 @@ Anot({
   state: {
     theme: appInit.theme || 1, // 1:macos, 2: deepin
     winFocus: false,
+    winShow: true,
     mod: 'local',
     searchTxt: '',
     playMode: Anot.ls('play-mode') >>> 0, // 0:all | 1:single |  2:random
@@ -82,7 +83,7 @@ Anot({
     loading: false,
     progress: 0
   },
-  skip: [],
+  skip: ['winShow'],
   computed: {
     views() {
       if (!this.mod) {
@@ -216,6 +217,7 @@ Anot({
      * 响应 全局快捷键的事件
      */
     WIN.on('gs-ctrl', ev => {
+      log('gs-ctrl: ', ev)
       switch (ev) {
         case 'prev':
           this.nextSong(-1)
@@ -234,30 +236,8 @@ Anot({
           SONIST.pause()
           this.draw()
           break
-
-        case 'vu':
-          this.volume += 5
-          if (this.volume >= 100) {
-            this.volume = 100
-          }
-          SONIST.volume = this.volume
-          break
-        case 'vd':
-          this.volume -= 5
-          if (this.volume <= 0) {
-            this.volume = 0
-          }
-          SONIST.volume = this.volume
-          break
-        case 'mute':
-          this.muted = SONIST.mute()
-          break
         default:
-          if (ev.name === 'play-mode') {
-            this.playMode = ev.value
-            SONIST.mode = PLAY_MODE[ev.value]
-            Anot.ls('play-mode', ev.value)
-          }
+          break
       }
     })
 
@@ -266,6 +246,64 @@ Anot({
       if (!__MINI__.isVisible()) {
         WIN.show()
       }
+    })
+
+    Anot(document).bind('keydown', ev => {
+      if (ev.target === document.body) {
+        switch (ev.keyCode) {
+          case 32: // 空格
+            this.play()
+            break
+          case 37: // 向左 (prev)
+            if (ev.metaKey) {
+              this.nextSong(-1)
+            }
+            break
+          case 39: // 向右 (next)
+            if (ev.metaKey) {
+              this.nextSong(1)
+            }
+            break
+          case 38: // 向上  (音量+
+            if (ev.metaKey) {
+              this.volume += 5
+              if (this.volume >= 100) {
+                this.volume = 100
+              }
+              SONIST.volume = this.volume
+            }
+            break
+          case 40: // 向下 (音量-
+            if (ev.metaKey) {
+              this.volume -= 5
+              if (this.volume <= 0) {
+                this.volume = 0
+              }
+              SONIST.volume = this.volume
+              break
+            }
+            break
+          case 77: // M (迷你模式)
+            if (ev.metaKey && ev.altKey) {
+              this.change2mini()
+            }
+            break
+          case 82: // R (桌面歌词)
+            if (ev.metaKey) {
+              this.toggleDesktopLrc()
+            }
+            break
+        }
+      }
+    })
+
+    WIN.on('show', ev => {
+      this.winShow = true
+      this.draw()
+    })
+    WIN.on('hide', ev => {
+      this.winShow = false
+      this.draw()
     })
   },
   methods: {
@@ -464,6 +502,9 @@ Anot({
 
               LYRICS.__init__(it.id)
             })
+          }
+          if (!this.winShow) {
+            __MINI__.emit('mini-ctrl', this.isPlaying ? 'play' : 'pause')
           }
         }
       }

@@ -6,7 +6,7 @@
 
 'use strict'
 
-const { app, globalShortcut: GS } = require('electron')
+const { globalShortcut: GS } = require('electron')
 
 module.exports = {
   __init__(win) {
@@ -22,17 +22,6 @@ module.exports = {
     })
     GS.register('MediaPlayPause', _ => {
       win.emit('gs-ctrl', 'play')
-    })
-
-    // 音量控制
-    GS.register('VolumeUp', _ => {
-      win.emit('gs-ctrl', 'vu')
-    })
-    GS.register('VolumeDown', _ => {
-      win.emit('gs-ctrl', 'vd')
-    })
-    GS.register('VolumeMute', _ => {
-      win.emit('gs-ctrl', 'mute')
     })
   }
 }

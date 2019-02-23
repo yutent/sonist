@@ -34,6 +34,22 @@ Anot({
       this.isPlaying = !!song.id
       this.playMode = Anot.ls('play-mode') >>> 0
     })
+
+    WIN.on('mini-ctrl', ev => {
+      switch (ev) {
+        case 'play':
+          this.isPlaying = true
+          if (!this.curr.id) {
+            remote.app.__MAIN__.emit('mini-ctrl', 'play')
+          }
+          break
+        case 'pause':
+          this.isPlaying = false
+          break
+        default:
+          break
+      }
+    })
   },
   methods: {
     handleCtrl(ev) {
