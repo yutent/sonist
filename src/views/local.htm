@@ -14,17 +14,17 @@
           <th>时长</th>
         </tr>
       </thead>
-      <tbody>
+      <tbodyclass="ac">
         <tr
           :class="{active: it.id === curr}"
           :for="it in list"
           :on-contextmenu="handleMenu(it, $index, $event)"
           :dblclick="play(it, $index)">
-          <td class="ac idx" :text="$index + 1 + '.'"></td>
-          <td :text="it.title"></td>
-          <td class="ac" :text="it.artist"></td>
-          <td class="ac" :text="it.album"></td>
-          <td class="ac" :text="it.duration | time"></td>
+          <td class="idx" :text="$index + 1 + '.'"></td>
+          <td :text="it.title | truncate(10)" :attr-title="it.title"></td>
+          <td :text="it.artist | truncate(10)" :attr-title="it.artist"></td>
+          <td :text="it.album | truncate(10)" :attr-title="it.album"></td>
+          <td :text="it.duration | time"></td>
         </tr>
       </tbody>
     </table>

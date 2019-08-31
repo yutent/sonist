@@ -41,6 +41,10 @@ const PLAY_MODE = {
   2: 'random'
 }
 
+// window.onblur = function() {
+//   location.reload()
+// }
+
 // 本地音乐和试用音乐列表
 window.LS = store.collection('local')
 window.TS = store.collection('temp')
@@ -48,7 +52,7 @@ window.TS = store.collection('temp')
 window.SONIST = new AudioPlayer()
 window.LYRICS = new Lyrics()
 
-let appInit = ipcRenderer.sendSync('get-init')
+let appInit = ipcRenderer.sendSync('sonist', { type: 'get-init' })
 
 Anot.ss('app-init', appInit)
 

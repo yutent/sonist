@@ -32,7 +32,7 @@ const MIME_TYPES = {
 require('./tools/init')
 const createTray = require('./tools/tray')
 const createMenu = require('./tools/menu')
-const Shortcut = require('./tools/shortcut')
+
 const { createMainWindow, createErrorWindow } = require('./tools/windows')
 
 const ROOT = __dirname
@@ -75,7 +75,6 @@ app.once('ready', () => {
           win.webContents.send('dock-click')
         }
       })
-      Shortcut.__init__(win)
     } else {
       createErrorWindow()
     }

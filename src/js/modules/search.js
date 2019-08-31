@@ -23,7 +23,7 @@ export default Anot({
     list: [] // 搜索结果列表
   },
   mounted() {
-    dict.audition = ipcRenderer.sendSync('get-temp')
+    dict.audition = ipcRenderer.sendSync('sonist', { type: 'get-temp' })
     TS.insert(dict.audition)
 
     this.__APP__ = Anot.vmodels.app
@@ -91,14 +91,18 @@ export default Anot({
 
         song.cover = json.img
 
-        ipcRenderer.send('save-lrc', { id: song.id, lrc: json.lyrics })
+        ipcRenderer.send('sonist', {
+          type: 'save-lrc',
+          id: song.id,
+          data: json.lyrics
+        })
 
         request.get(json.play_url, { dataType: 'arraybuffer' }).then(res => {
-          song.path = ipcRenderer.sendSync('save-cache', {
-            buff: Buffer.from(res.body),
+          song.path = ipcRenderer.sendSync('sonist', {
+            type: 'save-cache',
+            data: Buffer.from(res.body),
             file: song.kgHash
           })
-          log(song)
           TS.insert(song)
           dict.audition.push(song)
 
@@ -108,7 +112,7 @@ export default Anot({
             this.curr = it.id
           })
 
-          ipcRenderer.send('set-temp', TS.getAll())
+          ipcRenderer.send('sonist', { type: 'set-temp', data: TS.getAll() })
         })
       })
     },

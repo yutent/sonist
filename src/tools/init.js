@@ -6,10 +6,10 @@
 
 'use strict'
 
-const { app, ipcMain } = require('electron')
+const { app, ipcMain, globalShortcut: GS } = require('electron')
 const path = require('path')
-// const http = require('http')
 const fs = require('iofs')
+const Shortcut = require('./shortcut')
 
 /* ********** 修复环境变量 start *********** */
 let PATH_SET = new Set()
@@ -43,92 +43,97 @@ if (!fs.exists(APP_ROOT)) {
 }
 const SUPPORTED_EXTS = ['.mp3', '.webm', '.ogg', '.flac', '.m4a', '.aac']
 
+const DB = {
+  read(file) {
+    let cache = (fs.cat(file) || '[]').toString('utf-8')
+    try {
+      return JSON.parse(cache)
+    } catch (err) {
+      return cache
+    }
+  },
+  save(file, data) {
+    fs.echo(JSON.stringify(data), file)
+  }
+}
 /* ----------------------------------------------------------------- */
 /* ---------------------       事件开始     ------------------------- */
 /* ---------------------------------------------------------------- */
 
-// 获取应用配置
-ipcMain.on('get-init', (ev, val) => {
-  let cache = fs.cat(INIT_FILE).toString('utf-8')
-  cache = JSON.parse(cache)
-  ev.returnValue = cache
-})
-
-// 设置应用配置
-ipcMain.on('set-init', (ev, val) => {
-  fs.echo(JSON.stringify(val), INIT_FILE)
-})
-
-// 获取音乐数据库
-ipcMain.on('get-music', (ev, val) => {
-  let cache = fs.cat(DB_FILE).toString('utf-8')
-  cache = JSON.parse(cache)
-  ev.returnValue = cache
-})
-
-// 更新音乐数据库
-ipcMain.on('set-music', (ev, val) => {
-  fs.echo(JSON.stringify(val), DB_FILE)
-})
-
-// 获取临时音乐数据库
-ipcMain.on('get-temp', (ev, val) => {
-  let cache = (fs.cat(TEMP_DB) || '[]').toString('utf-8')
-  cache = JSON.parse(cache)
-  ev.returnValue = cache
-})
-
-// 更新临时音乐数据库
-ipcMain.on('set-temp', (ev, val) => {
-  fs.echo(JSON.stringify(val), TEMP_DB)
-})
-
-/**
- *  保存歌词文件
- */
-ipcMain.on('save-lrc', (ev, obj) => {
-  fs.echo(obj.lrc, path.join(LRC_DIR, `${obj.id}.lrc`))
-})
-
-/**
- *  读取歌词文件
- */
-ipcMain.on('read-lrc', (ev, id) => {
-  let file = path.join(LRC_DIR, `${id}.lrc`)
-  if (fs.exists(file)) {
-    ev.returnValue = fs.cat(file).toString('utf8')
-  } else {
-    ev.returnValue = null
-  }
-})
-
-/**
- *  保存音乐文件
- */
-ipcMain.on('save-cache', (ev, obj) => {
-  let savefile = path.join(CACHE_DIR, obj.file)
-  fs.echo(obj.buff, savefile)
-  ev.returnValue = `file://${savefile}`
-})
-
-/**
- * 扫描目录
- */
-ipcMain.on('scan-dir', (ev, dir) => {
-  if (fs.isdir(dir)) {
-    let list = fs.ls(dir, true).filter(_ => {
-      if (fs.isdir(_)) {
-        return false
+ipcMain.on('sonist', (ev, conn) => {
+  switch (conn.type) {
+    // 获取应用配置
+    case 'get-init':
+      ev.returnValue = DB.read(INIT_FILE)
+      break
+    // 设置应用配置
+    case 'set-init':
+      DB.save(INIT_FILE, conn.data)
+      break
+    // 获取音乐数据库
+    case 'get-music':
+      ev.returnValue = DB.read(DB_FILE)
+      break
+    // 更新音乐数据库
+    case 'set-music':
+      DB.save(DB_FILE, conn.data)
+      break
+    // 获取临时音乐数据库
+    case 'get-temp':
+      ev.returnValue = DB.read(TEMP_DB)
+      break
+    // 更新临时音乐数据库
+    case 'set-temp':
+      DB.save(TEMP_DB, conn.data)
+      break
+    // 读取歌词文件
+    case 'read-lrc':
+      let lrc = path.join(LRC_DIR, `${conn.id}.lrc`)
+      if (fs.exists(lrc)) {
+        ev.returnValue = DB.read(lrc)
       } else {
-        let { ext, name } = path.parse(_)
-        if (!ext || name.startsWith('.')) {
-          return false
-        }
-        return SUPPORTED_EXTS.includes(ext)
+        ev.returnValue = null
       }
-    })
-    ev.returnValue = list
-  } else {
-    ev.returnValue = null
+      break
+    // 保存歌词文件
+    case 'save-lrc':
+      fs.echo(conn.data, path.join(LRC_DIR, `${conn.id}.lrc`))
+      break
+    // 保存音乐文件
+    case 'save-cache':
+      let file = path.join(CACHE_DIR, conn.file)
+      fs.echo(conn.data, file)
+      ev.returnValue = `file://${file}`
+      break
+
+    // 扫描目录
+    case 'scan-dir':
+      if (fs.isdir(conn.path)) {
+        let list = fs.ls(conn.path, true).filter(_ => {
+          if (fs.isdir(_)) {
+            return false
+          } else {
+            let { ext, name } = path.parse(_)
+            if (!ext || name.startsWith('.')) {
+              return false
+            }
+            return SUPPORTED_EXTS.includes(ext)
+          }
+        })
+        ev.returnValue = list
+      } else {
+        ev.returnValue = null
+      }
+      break
+
+    // 启用全局快捷键
+    case 'enable-gs':
+      Shortcut.__init__()
+      break
+
+    // 禁用全局快捷键
+    case 'disable-gs':
+      GS.unregisterAll()
+      break
   }
 })
