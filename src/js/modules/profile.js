@@ -6,7 +6,9 @@
 
 'use strict'
 
-import '/lib/form/index.js'
+import '/lib/form/input.js'
+import '/lib/form/button.js'
+import '/lib/form/select.js'
 
 const {
   remote: { app, dialog },
