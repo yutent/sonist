@@ -41,7 +41,9 @@ const ROOT = __dirname
 app.commandLine.appendSwitch('--lang', 'zh-CN')
 app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required')
 
-protocol.registerStandardSchemes(['app'], { secure: true })
+protocol.registerSchemesAsPrivileged([
+  { scheme: 'app', privileges: { secure: true, standard: true } }
+])
 
 /* ----------------------------------------------------- */
 

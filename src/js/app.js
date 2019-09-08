@@ -25,15 +25,14 @@ const log = console.log
 const fs = require('iofs')
 const path = require('path')
 
-const { remote, ipcRenderer, screen } = require('electron')
+const { remote, ipcRenderer } = require('electron')
 const { createDesktopLrcWindow, createMiniWindow } = remote.require(
   './tools/windows'
 )
-const MAIN_SCREEN = screen.getPrimaryDisplay()
 
 const WIN = remote.getCurrentWindow()
-const __LRC__ = createDesktopLrcWindow(MAIN_SCREEN)
-const __MINI__ = createMiniWindow(MAIN_SCREEN)
+const __LRC__ = createDesktopLrcWindow(screen)
+const __MINI__ = createMiniWindow(screen)
 
 const PLAY_MODE = {
   0: 'all',
