@@ -5,7 +5,7 @@
  */
 
 import '/lib/anot.js'
-import '/lib/layer/next.js'
+import '/lib/layer/index.js'
 import '/lib/store/index.js'
 import AudioPlayer from '/lib/audio/index.js'
 import Lyrics from '/lib/lyrics/index.js'
