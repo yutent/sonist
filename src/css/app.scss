@@ -8,10 +8,10 @@
 
 @import "./var.scss";
 
-#app {position:relative;display:flex;flex-flow:column wrap;width:100%;height:100%;background:#fff;
+#app {position:relative;display:flex;flex-direction:column;width:100%;height:100%;background:#fff;
 
   // 标题栏样式
-  .title-bar {position:relative;z-index:9;display:flex;flex:0 5rem;
+  .title-bar {position:relative;z-index:9;display:flex;height:5rem;
     
     .btn-box {position:absolute;left:1.2rem;top:0;width:auto;height:3rem;padding:.9rem 0;
   
@@ -58,9 +58,7 @@
 
     .tools {flex:1;padding:1rem;
       
-      .search {position:relative;display:inline-block;line-height:3rem;}
-      .icon {position:absolute;right:0;top:0;width:2.6rem;height:3rem;}
-      input {width:20rem;padding:0 1.3rem;border-radius:1.5rem;}
+      .search {display:flex;width:30rem;}
     }
   }
 
@@ -69,10 +67,10 @@
   .main-body {flex:1;display:flex;
   
     // 侧边栏
-    .sidebar {flex:0 22rem;position:relative;height:100%;background:nth($cp, 1);
+    .sidebar {width:18rem;position:relative;height:100%;background:nth($cp, 1);
   
       // 用户信息
-      .user-box {width:18rem;height:16.5rem;margin:0 2rem;text-align:center;
+      .user-box {width:14rem;height:16.5rem;margin:0 2rem;text-align:center;
       
         .avatar {overflow:hidden;width:12rem;height:12rem;margin:0 3rem;border:.6rem solid #fff;border-radius:50%;box-shadow:0 .5rem  1.5rem rgba(0, 0, 0, .15);}
         img {width:100%;height:100%;}
@@ -96,14 +94,14 @@
     }
 
     // 功能模块
-    .module {position:relative;flex:1;display:flex;flex-flow:column wrap;}
+    .module {position:relative;flex:1;display:flex;flex-direction:column;}
   }
 
 
-  .contrl-bar {position:relative;z-index:99;display:flex;flex:0 8rem;background:nth($cp, 1);
+  .contrl-bar {position:relative;z-index:99;display:flex;height:6.5rem;background:nth($cp, 1);
   
     // 播放控制按钮
-    .play-box {flex:0 22rem;display:flex;justify-content:center;align-items:center;height:8rem;padding:1rem 2rem;text-align:center;
+    .play-box {width:18rem;display:flex;justify-content:center;align-items:center;height:6.5rem;padding:.75rem 1.5rem;text-align:center;
 
       .item {flex:0 5rem;margin:0 .5rem;line-height:1;font-size:4.2rem;color:nth($ct, 2);@include ts();
           

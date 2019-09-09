@@ -15,8 +15,8 @@
   <div class="title-bar do-fn-drag">
 
     <nav class="btn-box do-fn-nodrag" :if="theme === 1" :class="{focus: winFocus}">
-      <i class="item quit" :click="quit(false)"></i>
-      <i class="item min" :click="minimize"></i>
+      <i class="item quit" @click="quit(false)"></i>
+      <i class="item min" @click="minimize"></i>
       <i class="item max"></i>
     </nav>
 
@@ -24,33 +24,31 @@
     <!-- 背景点位标签 -->
     <div class="holder"></div>
     <div class="tools do-fn-drag">
-      <div class="search do-fn-nodrag">
-        <input 
-          class="do-ui-input" 
-          placeholder="搜索 音乐/歌手/专辑" 
-          :keyup="searchMusic"
-          :duplex="searchTxt">
-        <i class="icon do-icon-search"></i>
-      </div>
+      <wc-input 
+        class="search do-fn-nodrag" 
+        label="搜索 音乐/歌手/专辑" 
+        round
+        @submit="searchMusic"
+        :duplex="searchTxt"></wc-input>
     </div>
 
 
     <nav class="btn-box-win do-fn-nodrag">
       <div class="opt">
-        <i class="do-icon-menu-right" :click="toggleOptBox"></i>
+        <i class="do-icon-menu-right" @click="toggleOptBox"></i>
         <section class="opt-list" :visible="optBoxShow">
-          <span :click="change2mini"><i class="do-icon-maximized"></i> 迷你模式</span>
-          <span :click="toggleModule('profile')">
+          <span @click="change2mini"><i class="do-icon-maximized"></i> 迷你模式</span>
+          <span @click="toggleModule('profile')">
             <i class="do-icon-setting"></i> 首选项
           </span>
           <span class="pipe"></span>
-          <span :click="quit(true)"><i class="do-icon-logout"></i> 退出</span>
+          <span @click="quit(true)"><i class="do-icon-logout"></i> 退出</span>
         </section>
       </div>
       <span :if="theme === 2">
-        <i class="item do-icon-minimize" :click="minimize"></i>
+        <i class="item do-icon-minimize" @click="minimize"></i>
         <i class="item do-icon-maximize disabled"></i>
-        <i class="item do-icon-close quit" :click="quit(false)"></i>
+        <i class="item do-icon-close quit" @click="quit(false)"></i>
       </span>
     </nav>
   </div>
@@ -71,29 +69,29 @@
       <dl class="music-box do-fn-nodrag">
         <dt class="title">酷狗在线</dt>
         <dd class="item" 
-          :click="toggleModule('rank')"
+          @click="toggleModule('rank')"
           :class="{active: mod === 'rank'}">
           <i class="s-icon-rank"></i> 排行榜
         </dd>
         <dd class="item" 
-          :click="toggleModule('artist')"
+          @click="toggleModule('artist')"
           :class="{active: mod === 'artist'}">
           <i class="s-icon-singer"></i> 歌手
         </dd>
         <dd class="item disabled" 
-          :click="toggleModule('mv')"
+          @click="toggleModule('mv')"
           :class="{active: mod === 'mv'}">
           <i class="s-icon-mv"></i> MV
         </dd>
 
         <dt class="title">我的音乐</dt>
         <dd class="item" 
-          :click="toggleModule('search')"
+          @click="toggleModule('search')"
           :class="{active: mod === 'search'}">
           <i class="s-icon-heart"></i> 试听列表
         </dd>
         <dd class="item" 
-          :click="toggleModule('local')"
+          @click="toggleModule('local')"
           :class="{active: mod === 'local'}">
           <i class="s-icon-play-list"></i> 本地音乐
         </dd>
@@ -118,7 +116,7 @@
 
   <div class="contrl-bar">
 
-    <div class="play-box" :click="handleCtrl">
+    <div class="play-box" @click="handleCtrl">
       <span class="item prev s-icon-prev" data-key="prev"></span>
       <span 
         class="item play"
@@ -139,7 +137,7 @@
           's-icon-single': playMode === 1,
           's-icon-random': playMode === 2
         }"
-        :click="togglePlayMode">
+        @click="togglePlayMode">
       </span>
       <section class="ctrl volume">
         <i 
@@ -150,12 +148,12 @@
         </i>
         <span 
           class="volume-ctrl" 
-          :click="changeValume">
+          @click="changeValume">
           <em :css="{flex: '0 ' + volume + '%'}"></em>
         </span>
       </section>
       <span class="ctrl s-icon-eq"></span>
-      <span class="ctrl lrc" :click="toggleDesktopLrc">词</span>
+      <span class="ctrl lrc" @click="toggleDesktopLrc">词</span>
     </div>
 
   </div>

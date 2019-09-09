@@ -19,6 +19,7 @@ exports.createMainWindow = function(icon) {
     height: 640,
     frame: false,
     resizable: false,
+    transparent: true,
     icon,
     webPreferences: {
       webSecurity: false,

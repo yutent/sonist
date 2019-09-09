@@ -1,6 +1,6 @@
 <div class="do-mod-local" anot="local">
   <div class="tabbar">
-    本地音乐({{list.length}}首)<span class="refresh" :click="refresh">重新扫描</span>
+    本地音乐({{list.length}}首)<span class="refresh" @click="refresh">重新扫描</span>
   </div>
 
   <div class="table">
@@ -19,7 +19,7 @@
           :class="{active: it.id === curr}"
           :for="it in list"
           :on-contextmenu="handleMenu(it, $index, $event)"
-          :dblclick="play(it, $index)">
+          @dblclick="play(it, $index)">
           <td class="idx" :text="$index + 1 + '.'"></td>
           <td :text="it.title | truncate(10)" :attr-title="it.title"></td>
           <td :text="it.artist | truncate(10)" :attr-title="it.artist"></td>
@@ -34,7 +34,7 @@
     <div class="form"  :keyup="closeEditByEnter">
       <section class="section title">
         歌曲信息编辑
-        <i class="do-icon-close" :click="closeEdit"></i>
+        <i class="do-icon-close" @click="closeEdit"></i>
       </section>
 
       <section class="section">

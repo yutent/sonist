@@ -1,6 +1,6 @@
 <div class="inner-content">
   <div class="info">
-    <img :attr-src="curr.cover" :click="toggleLrcView" />
+    <img :attr-src="curr.cover" @click="toggleLrcView" />
     <div class="summary" :visible="!allLrcView">
       <h3 :text="curr.title"></h3>
       <section>歌手: {{curr.artist}}</section>
@@ -23,28 +23,28 @@
   </div>
 
   <div class="tool-box">
-    <section class="item" :click="forwardLrc(-0.5)">
+    <section class="item" @click="forwardLrc(-0.5)">
       <i class="do-icon-trigon-up"></i>歌词 -0.5s
     </section>
-    <section class="item" :click="showLrcSearch">
+    <section class="item" @click="showLrcSearch">
       <i class="do-icon-search"></i>歌词有误
     </section>
-    <section class="item" :click="layer.alert('歌词编辑功能暂时未开放')">
+    <section class="item" @click="layer.alert('歌词编辑功能暂时未开放')">
       <i class="do-icon-edit"></i>歌词编辑
     </section>
-    <section class="item" :click="forwardLrc(0.5)">
+    <section class="item" @click="forwardLrc(0.5)">
       <i class="do-icon-trigon-down"></i>歌词 +0.5s
     </section>
   </div>
 
-  <span class="slide-down do-fn-nodrag" :click="closeKtvMode">
+  <span class="slide-down do-fn-nodrag" @click="closeKtvMode">
     <i class="do-icon-right"></i>
   </span>
 
 
   <div class="search-box" :if="lrcSearchBoxShow">
     <div class="content">
-      <div class="title">歌词搜索 <i class="do-icon-close" :click="closeLrcSearch"></i></div>
+      <div class="title">歌词搜索 <i class="do-icon-close" @click="closeLrcSearch"></i></div>
       <section class="section">
         <input 
           class="do-ui-input" 
@@ -65,7 +65,7 @@
           <span :text="it.artist"></span>
           <span :text="it.album"></span>
           <span :text="it.duration | time"></span>
-          <span><a class="do-ui-button blue medium" :click="useThisLrc(it)">使用</a></span>
+          <span><a class="do-ui-button blue medium" @click="useThisLrc(it)">使用</a></span>
         </li>
         <li class="item" :if="lrcForm.result.size() < 1"><span>没有搜到任何结果...</span></li>
       </ul>
