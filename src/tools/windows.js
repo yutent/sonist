@@ -22,7 +22,8 @@ exports.createMainWindow = function(icon) {
     icon,
     webPreferences: {
       webSecurity: false,
-      experimentalFeatures: true
+      experimentalFeatures: true,
+      nodeIntegration: true
     },
     show: false
   })
@@ -33,7 +34,7 @@ exports.createMainWindow = function(icon) {
 
   win.on('ready-to-show', _ => {
     win.show()
-    // win.openDevTools()
+    win.openDevTools()
   })
 
   return win
@@ -74,12 +75,15 @@ exports.createDesktopLrcWindow = function(screen) {
     resizable: false,
     alwaysOnTop: true,
     skipTaskbar: true,
-    x: (screen.size.width - 1024) / 2,
-    y: screen.size.height - 100,
+    x: (screen.width - 1024) / 2,
+    y: screen.height - 100,
     transparent: true,
     hasShadow: false,
     thickFrame: false,
-    show: false
+    show: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
   })
 
   win.loadURL('app://local/desktop-lrc.html')
@@ -98,10 +102,13 @@ exports.createMiniWindow = function(screen) {
     resizable: false,
     alwaysOnTop: true,
     skipTaskbar: true,
-    x: screen.size.width - 320,
+    x: screen.width - 320,
     y: 0,
     thickFrame: false,
-    show: false
+    show: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
   })
 
   win.loadURL('app://local/mini-win.html')

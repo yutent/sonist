@@ -95,13 +95,17 @@ export default {
             SONIST.clear()
             SONIST.push(LS.getAll())
 
-            ipcRenderer.send('set-music', LS.getAll())
+            ipcRenderer.send('sonist', { type: 'set-music', data: LS.getAll() })
 
             this.updateCurr(song)
             this.draw(true)
           }
 
-          ipcRenderer.send('save-lrc', { id, lrc: json.lyrics })
+          ipcRenderer.send('sonist', {
+            type: 'save-lrc',
+            id,
+            data: json.lyrics
+          })
           LYRICS.__init__(id)
 
           layer.toast('歌词应用成功...')

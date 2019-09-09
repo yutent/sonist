@@ -5,8 +5,8 @@
  */
 
 import '/lib/anot.js'
-import layer from '/lib/layer/index.js'
-import store from '/lib/store/index.js'
+import '/lib/layer/index.js'
+import '/lib/store/index.js'
 import AudioPlayer from '/lib/audio/index.js'
 import Lyrics from '/lib/lyrics/index.js'
 
@@ -25,21 +25,24 @@ const log = console.log
 const fs = require('iofs')
 const path = require('path')
 
-const { remote, ipcRenderer, screen } = require('electron')
+const { remote, ipcRenderer } = require('electron')
 const { createDesktopLrcWindow, createMiniWindow } = remote.require(
   './tools/windows'
 )
-const MAIN_SCREEN = screen.getPrimaryDisplay()
 
 const WIN = remote.getCurrentWindow()
-const __LRC__ = createDesktopLrcWindow(MAIN_SCREEN)
-const __MINI__ = createMiniWindow(MAIN_SCREEN)
+const __LRC__ = createDesktopLrcWindow(screen)
+const __MINI__ = createMiniWindow(screen)
 
 const PLAY_MODE = {
   0: 'all',
   1: 'single',
   2: 'random'
 }
+
+// window.onblur = function() {
+//   location.reload()
+// }
 
 // 本地音乐和试用音乐列表
 window.LS = store.collection('local')
@@ -48,7 +51,7 @@ window.TS = store.collection('temp')
 window.SONIST = new AudioPlayer()
 window.LYRICS = new Lyrics()
 
-let appInit = ipcRenderer.sendSync('get-init')
+let appInit = ipcRenderer.sendSync('sonist', { type: 'get-init' })
 
 Anot.ss('app-init', appInit)
 

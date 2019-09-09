@@ -1,6 +1,6 @@
 {
   "name": "sonist",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Music Player",
   "main": "src/main.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "iofs": "^1.1.0"
   },
   "devDependencies": {
-    "electron": "^4.0.2",
+    "electron": "^6.0.0",
     "electron-builder": "^20.38.5"
   },
   "build": {

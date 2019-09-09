@@ -92,6 +92,14 @@
 
 
   <section class="block">
+    <span class="label">启用全局快捷键</span>
+    <div class="field">
+      <anot-switch :value="setting.allowGS"></anot-switch><span>(即使app在后台也能控制)</span>
+    </div>
+  </section>
+
+
+  <section class="block">
     <span class="label">关于Sonist</span>
     <div class="desc">
       <p>当前版本:  {{version}}</p>

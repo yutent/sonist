@@ -21,15 +21,13 @@ class Lyrics {
       r: { bg: '', txt: '' }
     }
 
-    let lrc = ipcRenderer.sendSync('read-lrc', id)
+    let lrc = ipcRenderer.sendSync('sonist', { type: 'read-lrc', id })
     if (!id || lrc === null) {
       log('no lrc file', id)
       return false
     }
 
     this.__ID__ = id
-
-    log(id)
 
     this.lib = lrc
       .split('\n')
@@ -106,7 +104,11 @@ class Lyrics {
 
     // 延时3秒写入
     this.__TIMER__ = setTimeout(() => {
-      ipcRenderer.send('save-lrc', { id: this.__ID__, lrc })
+      ipcRenderer.send('sonist', {
+        type: 'save-lrc',
+        id: this.__ID__,
+        data: lrc
+      })
     }, 3000)
   }
 

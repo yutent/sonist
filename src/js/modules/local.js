@@ -34,7 +34,7 @@ export default Anot({
   },
   mounted() {
     appInit = JSON.parse(Anot.ss('app-init'))
-    dbCache = ipcRenderer.sendSync('get-music')
+    dbCache = ipcRenderer.sendSync('sonist', { type: 'get-music' })
 
     LS.insert(dbCache)
 
@@ -112,11 +112,15 @@ export default Anot({
               this.__APP__.updateCurr(it)
               this.__APP__.draw(true)
 
-              ipcRenderer.send('save-lrc', {
+              ipcRenderer.send('sonist', {
+                type: 'save-lrc',
                 id: it.id,
-                lrc: json.lyrics
+                data: json.lyrics
               })
-              ipcRenderer.send('set-music', LS.getAll())
+              ipcRenderer.send('sonist', {
+                type: 'set-music',
+                data: LS.getAll()
+              })
 
               LYRICS.__init__(it.id)
             })
@@ -145,7 +149,7 @@ export default Anot({
         SONIST.clear()
         SONIST.push(dbCache)
 
-        ipcRenderer.send('set-music', dbCache)
+        ipcRenderer.send('sonist', { type: 'set-music', data: dbCache })
         dbCache = null
 
         layer.toast(`刷新缓存完成,新增${this.__NEW_NUM__}首`)
@@ -188,7 +192,10 @@ export default Anot({
         return
       }
       if (appInit.musicPath) {
-        this.__LIST__ = ipcRenderer.sendSync('scan-dir', appInit.musicPath)
+        this.__LIST__ = ipcRenderer.sendSync('sonist', {
+          type: 'scan-dir',
+          path: appInit.musicPath
+        })
         if (this.__LIST__) {
           this.__tmp__ = [] //创建一个临时的数组, 用于存放扫描的音乐
           this.__APP__.loading = true
@@ -235,7 +242,7 @@ export default Anot({
       SONIST.clear()
       SONIST.push(LS.getAll())
 
-      ipcRenderer.send('set-music', LS.getAll())
+      ipcRenderer.send('sonist', { type: 'set-music', data: LS.getAll() })
     },
     handleMenu(it, idx, ev) {
       let that = this
@@ -278,7 +285,10 @@ export default Anot({
                 SONIST.clear()
                 SONIST.push(LS.getAll())
 
-                ipcRenderer.send('set-music', LS.getAll())
+                ipcRenderer.send('sonist', {
+                  type: 'set-music',
+                  data: LS.getAll()
+                })
               }
             )
           } else {

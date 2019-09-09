@@ -6,7 +6,9 @@
 
 'use strict'
 
-import '/lib/form/index.js'
+import '/lib/form/input.js'
+import '/lib/form/button.js'
+import '/lib/form/select.js'
 
 const {
   remote: { app, dialog },
@@ -15,7 +17,7 @@ const {
 
 const log = console.log
 
-let appInit = ipcRenderer.sendSync('get-init')
+let appInit = ipcRenderer.sendSync('sonist', { type: 'get-init' })
 
 export default Anot({
   $id: 'profile',
@@ -24,7 +26,8 @@ export default Anot({
       allowPlayOnBack: appInit.allowPlayOnBack,
       autoLrc: appInit.autoLrc,
       theme: appInit.theme || 1,
-      musicPath: appInit.musicPath || ''
+      musicPath: appInit.musicPath || '',
+      allowGS: !!appInit.allowGS
     },
     version: app.getVersion(),
     cmd: process.platform === 'darwin' ? '⌘' : 'Ctrl',
@@ -34,6 +37,15 @@ export default Anot({
     'setting.theme'(v) {
       v = +v
       this.__APP__.theme = v
+    },
+    'setting.allowGS'(v) {
+      if (v) {
+        log('++++++++++++')
+        ipcRenderer.send('sonist', { type: 'enable-gs' })
+      } else {
+        log('-----------')
+        ipcRenderer.send('sonist', { type: 'disable-gs' })
+      }
     }
   },
   methods: {
@@ -58,7 +70,7 @@ export default Anot({
 
       Object.assign(appInit, setting)
 
-      ipcRenderer.send('set-init', appInit)
+      ipcRenderer.send('sonist', { type: 'set-init', data: appInit })
 
       Anot.ss('app-init', appInit)
 
