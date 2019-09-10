@@ -8,9 +8,12 @@
 <link href="css/modules.css" rel="stylesheet">
 <script type="module"  src="js/app.js"></script>
 </head>
-<body class="do-fn-noselect" anot="app" :css="{'background-image': coverBG}">
-
-<div id="app" :class="{blur: isPlaying  && !ktvMode, ktv: ktvMode}">
+<body class="do-fn-noselect">
+<div 
+  id="app" 
+  anot="app" 
+  :class="{blur: isPlaying  && !ktvMode, ktv: ktvMode}" 
+  :css="{'background-image': coverBG}">
 
   <div class="title-bar do-fn-drag">
 
@@ -58,13 +61,6 @@
   <div class="main-body">
 
     <aside class="sidebar do-fn-drag">
-    
-      <div class="user-box">
-        <div class="avatar">
-          <img src="images/avatar.jpg" alt="yutent">
-        </div>
-        <h2 class="uname">yutent</h2>
-      </div>
 
       <dl class="music-box do-fn-nodrag">
         <dt class="title">酷狗在线</dt>
@@ -116,14 +112,15 @@
 
   <div class="contrl-bar">
 
-    <div class="play-box" @click="handleCtrl">
-      <span class="item prev s-icon-prev" data-key="prev"></span>
+    <div class="play-box">
+
+      <div class="btn-bg"></div>
       <span 
-        class="item play"
+        class="action play"
         data-key="play"
-        :class="{'s-icon-play': !isPlaying, 's-icon-pause': isPlaying}">
+        :class="{'s-icon-play': !isPlaying, 's-icon-pause': isPlaying}">||
       </span>
-      <span class="item next s-icon-next" data-key="next"></span>
+      <span class="action next" data-key="next">>></span>
     </div>
 
     <div class="stat-box">

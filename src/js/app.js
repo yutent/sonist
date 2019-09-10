@@ -104,7 +104,7 @@ Anot({
       if (this.curr.cover) {
         return `url(${this.curr.cover})`
       } else {
-        return 'none'
+        return ''
       }
     }
   },
