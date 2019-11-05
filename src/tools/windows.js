@@ -15,7 +15,7 @@ exports.createMainWindow = function(icon) {
   // 创建浏览器窗口
   let win = new BrowserWindow({
     title: 'sonist',
-    width: 1024,
+    width: 1000,
     height: 640,
     frame: false,
     resizable: false,
@@ -69,7 +69,7 @@ exports.createErrorWindow = function() {
 exports.createDesktopLrcWindow = function(screen) {
   let win = new BrowserWindow({
     title: '',
-    width: 1024,
+    width: 1000,
     height: 100,
     frame: false,
     resizable: false,

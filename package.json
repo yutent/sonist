@@ -18,8 +18,8 @@
     "iofs": "^1.1.0"
   },
   "devDependencies": {
-    "electron": "^6.0.0",
-    "electron-builder": "^20.38.5"
+    "electron": "^7.1.0",
+    "electron-builder": "^22.1.0"
   },
   "build": {
     "appId": "cc.doui.sonist",
