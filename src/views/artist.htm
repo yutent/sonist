@@ -1,6 +1,6 @@
 <div class="do-mod-artist" anot="artist">
 
-  <div class="filter-box" :click="search">
+  <div class="filter-box" @click="search">
     <section class="item" data-key="hot" :class="{active: filter === 'hot'}">热门歌手</section>
     <section class="item" data-key="0,0" :class="{active: filter === '0,0'}">入驻音乐人</section>
 
@@ -35,7 +35,7 @@
   </div>
 
 
-  <ul class="list-box" :click="pickArtist">
+  <ul class="list-box" @click="pickArtist">
     <li class="item" :for="it in list" :data="{artist: it.id, index: $index}">
       <img :attr="{src: it.avatar, alt: it.name}" />
       <summary>
@@ -52,12 +52,12 @@
     <div class="content">
       <h3 class="name">
         <i class="s-icon-singer"></i>
-        <a :click="toArtistListPage">歌手列表</a>
+        <a @click="toArtistListPage">歌手列表</a>
         <i class="do-icon-right"></i>
         <span :text="artist.name"></span>
       </h3>
       <cite class="desc">
-        介绍: {{artist.info | truncate(50)}} <span :click="showArtistInfo">详细</span>
+        介绍: {{artist.info | truncate(50)}} <span @click="showArtistInfo">详细</span>
       </cite>
 
       <dl class="song-album">

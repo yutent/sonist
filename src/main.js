@@ -6,13 +6,7 @@
 
 'use strict'
 
-const {
-  app,
-  BrowserWindow,
-  session,
-  protocol,
-  globalShortcut
-} = require('electron')
+const { app, session, protocol, globalShortcut } = require('electron')
 const path = require('path')
 const fs = require('iofs')
 const { exec } = require('child_process')

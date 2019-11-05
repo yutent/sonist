@@ -6,7 +6,13 @@
 
 import '/lib/anot.js'
 import '/lib/layer/index.js'
+import '/lib/form/button.js'
+import '/lib/form/input.js'
+import '/lib/form/switch.js'
+import '/lib/form/checkbox.js'
+import '/lib/form/radio.js'
 import '/lib/store/index.js'
+
 import AudioPlayer from '/lib/audio/index.js'
 import Lyrics from '/lib/lyrics/index.js'
 
@@ -98,7 +104,7 @@ Anot({
       if (this.curr.cover) {
         return `url(${this.curr.cover})`
       } else {
-        return 'none'
+        return ''
       }
     }
   },

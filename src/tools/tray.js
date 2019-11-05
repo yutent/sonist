@@ -11,9 +11,7 @@ const path = require('path')
 const ROOT = __dirname
 
 module.exports = function(win) {
-  app.__TRAY__ = new Tray(
-    path.resolve(__dirname, '../images/trays/trayTemplate.png')
-  )
+  app.__TRAY__ = new Tray(path.join(ROOT, '../images/trays/trayTemplate.png'))
   let menuList = Menu.buildFromTemplate([
     {
       label: '显示主窗口',
