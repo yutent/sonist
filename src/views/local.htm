@@ -3,7 +3,7 @@
     本地音乐({{list.length}}首)<span class="refresh" @click="refresh">重新扫描</span>
   </div>
 
-  <div class="table">
+  <wc-scroll class="table">
     <table>
       <thead>
         <tr>
@@ -28,7 +28,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
+  </wc-scroll>
 
   <div class="edit-form" :if="editMode">
     <div class="form"  :keyup="closeEditByEnter">

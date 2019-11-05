@@ -74,7 +74,10 @@
 // 本地音乐模块
 .do-mod-local {flex:1;display:flex;flex-flow:column wrap;
     
-  .tabbar {flex:0 1  3rem;padding:0 1rem;line-height:2.9rem;border-bottom:.1rem solid rgba(200, 200, 200, .3);
+  .tabbar {
+    flex:0 1  3rem;
+    padding:0 1rem;line-height:2.9rem;
+    border-bottom:.1rem solid rgba(200, 200, 200, .3);
   
     .refresh {margin-left:1rem;color:nth($ct, 1);text-decoration:underline;
       
@@ -83,10 +86,13 @@
     }
   }
 
-  .table {overflow:auto;flex:1;}
+  .table {flex:1;}
 
 
-  .edit-form {position:absolute;left:0;top:0;z-index:90;display:flex;justify-content:center;align-items:center;width:100%;height:100%;
+  .edit-form {
+    position:absolute;left:0;top:0;z-index:90;
+    display:flex;justify-content:center;align-items:center;
+    width:100%;height:100%;
   
   
     .form {position:relative;display:flex;flex-flow:column wrap;flex:0 40rem;width:5rem;height:auto;padding:.5rem 4rem 2rem;background:#fff;box-shadow:0 .5rem  2rem rgba(0, 0, 0, .2);
