@@ -20,7 +20,7 @@ import Api from '/js/api.js'
 
 import Artist from '/js/modules/artist.js'
 import Local from '/js/modules/local.js'
-import Profile from '/js/modules/profile.js'
+// import Profile from '/js/modules/profile.js'
 import Search from '/js/modules/search.js'
 
 import KTV from '/js/modules/ktv.js'
@@ -32,13 +32,13 @@ const fs = require('iofs')
 const path = require('path')
 
 const { remote, ipcRenderer } = require('electron')
-const { createDesktopLrcWindow, createMiniWindow } = remote.require(
-  './tools/windows'
-)
+// const { createDesktopLrcWindow, createMiniWindow } = remote.require(
+//   './tools/windows'
+// )
 
-const WIN = remote.getCurrentWindow()
-const __LRC__ = createDesktopLrcWindow(screen)
-const __MINI__ = createMiniWindow(screen)
+// const WIN = remote.getCurrentWindow()
+// const __LRC__ = createDesktopLrcWindow(screen)
+// const __MINI__ = createMiniWindow(screen)
 
 const PLAY_MODE = {
   0: 'all',

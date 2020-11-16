@@ -10,10 +10,7 @@ import '/lib/form/input.js'
 import '/lib/form/button.js'
 import '/lib/form/select.js'
 
-const {
-  remote: { app, dialog },
-  ipcRenderer
-} = require('electron')
+const { remote: { app, dialog } = {}, ipcRenderer } = require('electron')
 
 const log = console.log
 

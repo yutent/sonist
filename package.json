@@ -1,6 +1,6 @@
 {
-  "name": "sonist",
-  "version": "1.2.0",
+  "name": "top.yutent.sonist",
+  "version": "2.0.0-alpha-1",
   "description": "Music Player",
   "main": "src/main.js",
   "scripts": {
@@ -9,25 +9,29 @@
   },
   "author": {
     "name": "yutent",
-    "email": "yutent@doui.cc"
+    "email": "yutent.io@gmail.com"
   },
   "homepage": "https://yutent.me",
   "license": "MIT",
   "dependencies": {
-    "crypto.js": "^1.2.0",
-    "iofs": "^1.1.0"
+    "crypto.js": "^2.0.2",
+    "iofs": "^1.5.1"
   },
   "devDependencies": {
-    "electron": "^7.1.0",
+    "electron": "^10.0.0",
     "electron-builder": "^22.1.0"
   },
   "build": {
-    "appId": "cc.doui.sonist",
+    "appId": "top.yutent.sonist",
     "productName": "Sonist",
     "copyright": "Copyright © 2019 ${author}",
     "directories": {
       "buildResources": "icons",
       "output": "build"
+    },
+    "electronDownload": {
+      "version": "10.1.5",
+      "mirror": "https://npm.taobao.org/mirrors/electron/"
     },
     "files": [
       "src/**/*",
