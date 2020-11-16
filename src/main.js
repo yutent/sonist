@@ -52,27 +52,20 @@ app.once('ready', () => {
   })
   // 修改app的UA
   session.defaultSession.setUserAgent(
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
   )
 
-  // 判断依赖
-  exec('which ffprobe', (err, res) => {
-    if (res) {
-      let win = createMainWindow(path.resolve(ROOT, './images/app.png'))
+  let win = createMainWindow(path.resolve(ROOT, './images/app.png'))
 
-      createTray(win)
-      createMenu(win)
+  createTray(win)
+  createMenu(win)
 
-      app.__MAIN__ = win
+  app.__MAIN__ = win
 
-      // mac专属事件,点击dock栏图标,可激活窗口
-      app.on('activate', _ => {
-        if (win) {
-          win.webContents.send('dock-click')
-        }
-      })
-    } else {
-      createErrorWindow()
+  // mac专属事件,点击dock栏图标,可激活窗口
+  app.on('activate', _ => {
+    if (win) {
+      win.webContents.send('dock-click')
     }
   })
 })

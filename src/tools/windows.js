@@ -15,11 +15,16 @@ exports.createMainWindow = function(icon) {
   // 创建浏览器窗口
   let win = new BrowserWindow({
     title: 'sonist',
-    width: 1000,
-    height: 640,
+    width: 820,
+    height: 460,
     frame: false,
     resizable: false,
+    maximizable: false,
     icon,
+    transparent: true,
+    backgroundColor: '#00ffffff',
+    vibrancy: 'dark',
+    visualEffectState: 'active',
     webPreferences: {
       webSecurity: false,
       experimentalFeatures: true,
@@ -51,7 +56,6 @@ exports.createErrorWindow = function() {
     maximizable: false,
     minimizable: false,
     resizable: false,
-    titleBarStyle: 'hiddenInset',
     webPreferences: {
       devTools: false
     }

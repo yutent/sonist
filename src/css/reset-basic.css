@@ -39,22 +39,13 @@ a:focus,input,textarea,button:focus,input:focus,textarea:focus {outline:none;}
 }
 body {font-family:Helvetica, Arial,"WenQuanYi Micro Hei","PingFang SC","Hiragino Sans GB","Segoe UI", "Microsoft Yahei", sans-serif;-webkit-font-smoothing: antialiased;text-size-adjust: 100%;-webkit-tap-highlight-color: transparent;}
 code,pre,samp {font-family:Menlo,Monaco,Consolas,"Courier New",monospace;}
-[anot],[\:repeat],[\:if],[is-widget],slot {visibility:hidden;}
+[anot],[\:repeat],[\:if] {visibility:hidden;}
 
-.do-fn-cl { *zoom: 1; }
-.do-fn-cl::after { content: "."; display: block; height: 0; clear: both; visibility: hidden; overflow:hidden;} 
-.do-fn-clear {clear:both;display:inline;}
 
-.do-fn-show{display:block;}
-.do-fn-hide{display:none;}
-.do-fn-fl{float:left;}
-.do-fn-fr{float:right;}
-.do-fn-noselect {-webkit-touch-callout: none;-webkit-user-select: none;-moz-user-select: none;user-select: none;}
-.do-fn-noselect img, .do-fn-noselect a {-webkit-user-drag:none;}
-.do-fn-ell {overflow:hidden; white-space:nowrap; text-overflow:ellipsis }
-.do-st-thin {-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
-.do-st-hand {cursor:pointer;}
 
-[class^="do-icon-"], [class*=" do-icon-"] {display:inline-block;font-family:"uifont" !important;font-style:normal;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+.noselect {-webkit-touch-callout: none;-webkit-user-select: none;-moz-user-select: none;user-select: none;}
+.noselect img, .noselect a {-webkit-user-drag:none;}
+.text-ell {overflow:hidden; white-space:nowrap; text-overflow:ellipsis }
+.osx-thin {-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
 
 

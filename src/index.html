@@ -2,167 +2,179 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<link href="lib/css/reset-basic.css" rel="stylesheet">
+<link href="css/reset-basic.css" rel="stylesheet">
 <link href="css/common.css" rel="stylesheet">
 <link href="css/app.css" rel="stylesheet">
-<link href="css/modules.css" rel="stylesheet">
 <script type="module"  src="js/app.js"></script>
 </head>
-<body class="do-fn-noselect">
-<div 
-  id="app" 
-  anot="app" 
-  :class="{blur: isPlaying  && !ktvMode, ktv: ktvMode}" 
-  :css="{'background-image': coverBG}">
+<body class="noselect">
 
-  <div class="title-bar do-fn-drag">
+<div class="app">
 
-    <nav class="btn-box do-fn-nodrag" :if="theme === 1" :class="{focus: winFocus}">
-      <i class="item quit" @click="quit(false)"></i>
-      <i class="item min" @click="minimize"></i>
-      <i class="item max"></i>
-    </nav>
-
-
-    <!-- 背景点位标签 -->
-
-    <div class="tools do-fn-drag">
-      <wc-input 
-        class="search do-fn-nodrag" 
-        label="搜索 音乐/歌手/专辑" 
-        round
-        @submit="searchMusic"
-        :duplex="searchTxt"></wc-input>
+  <div class="title-bar app-drag">
+    <div class="btn-box app-nodrag focus">
+      <a class="item quit"></a>
+      <a class="item min"></a>
+      <a class="item max"></a>
     </div>
-
-
-    <nav class="btn-box-win do-fn-nodrag">
-      <div class="opt">
-        <i class="do-icon-menu-right" @click="toggleOptBox"></i>
-        <section class="opt-list" :visible="optBoxShow">
-          <span @click="change2mini"><i class="do-icon-maximized"></i> 迷你模式</span>
-          <span @click="toggleModule('profile')">
-            <i class="do-icon-setting"></i> 首选项
-          </span>
-          <span class="pipe"></span>
-          <span @click="quit(true)"><i class="do-icon-logout"></i> 退出</span>
-        </section>
-      </div>
-      <span :if="theme === 2">
-        <i class="item do-icon-minimize" @click="minimize"></i>
-        <i class="item do-icon-maximize disabled"></i>
-        <i class="item do-icon-close quit" @click="quit(false)"></i>
-      </span>
-    </nav>
   </div>
 
-  
+  <main class="main-body">
+    <aside class="aside">
+      <fieldset class="playlist">
+        <legend>PLAYLISTS</legend>
+        <section class="item">Defaults</section>
+        <section class="item">Love</section>
+        <section class="item">Pop</section>
+        <section class="item">Light Music</section>
+        <button>+ new</button>
+      </fieldset>
 
-  <div class="main-body">
-
-    <aside class="sidebar do-fn-drag">
-
-      <dl class="music-box do-fn-nodrag">
-        <dt class="title">酷狗在线</dt>
-        <dd class="item" 
-          @click="toggleModule('rank')"
-          :class="{active: mod === 'rank'}">
-          <i class="s-icon-rank"></i> 排行榜
-        </dd>
-        <dd class="item" 
-          @click="toggleModule('artist')"
-          :class="{active: mod === 'artist'}">
-          <i class="s-icon-singer"></i> 歌手
-        </dd>
-        <dd class="item disabled" 
-          @click="toggleModule('mv')"
-          :class="{active: mod === 'mv'}">
-          <i class="s-icon-mv"></i> MV
-        </dd>
-
-        <dt class="title">我的音乐</dt>
-        <dd class="item" 
-          @click="toggleModule('search')"
-          :class="{active: mod === 'search'}">
-          <i class="s-icon-heart"></i> 试听列表
-        </dd>
-        <dd class="item" 
-          @click="toggleModule('local')"
-          :class="{active: mod === 'local'}">
-          <i class="s-icon-play-list"></i> 本地音乐
-        </dd>
-      </dl>
-
+      <fieldset>
+        <legend>PREFERENCES</legend>
+        <section class="item">DSP</section>
+      </fieldset>
     </aside>
 
-    <content class="module" :include="views" data-cache="true"></content>
+    <div class="song-box">
+      <div class="preview">
+        <div class="album">
+          <img src="/images/disk.png">
+        </div>
+        <div class="info">
+          <strong>情是何物</strong>
+          <cite>周深</cite>
+          <p>经典咏流传第三季 第7期</p>
+        </div>
 
-  </div>
-
-
-
-  <div 
-    class="ktv-box" 
-    :if="ktvMode" 
-    :include="'/views/ktv.htm'"
-    :css="{'background-image': coverBG}">
-  </div>
-
-
-
-  <div class="contrl-bar">
-
-    <div class="play-box">
-
-      <div class="btn-bg"></div>
-      <span 
-        class="action play"
-        data-key="play"
-        :class="{'s-icon-play': !isPlaying, 's-icon-pause': isPlaying}">||
-      </span>
-      <span class="action next" data-key="next">>></span>
-    </div>
-
-    <div class="stat-box">
-      <div class="song-stat">
-        <canvas ref="player"></canvas>
+        <span class="duration">98:54</span>
+        <span class="total">118</span>
       </div>
-      <span 
-        class="ctrl"
-        :class="{
-          's-icon-all': playMode === 0,
-          's-icon-single': playMode === 1,
-          's-icon-random': playMode === 2
-        }"
-        @click="togglePlayMode">
-      </span>
-      <section class="ctrl volume">
-        <i 
-          :class="{
-            'do-icon-unmute' : volume > 0 && !muted,
-            'do-icon-mute' : volume === 0 || muted
-          }">
-        </i>
-        <span 
-          class="volume-ctrl" 
-          @click="changeValume">
-          <em :css="{flex: '0 ' + volume + '%'}"></em>
-        </span>
-      </section>
-      <span class="ctrl s-icon-eq"></span>
-      <span class="ctrl lrc" @click="toggleDesktopLrc">词</span>
+      <div class="scroll-box">
+        <wc-scroll class="list">
+          
+          <section class="item">
+            <span class="idx">01</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item">
+            <span class="idx">02</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item on">
+            <span class="idx">03</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item">
+            <span class="idx">04</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item">
+            <span class="idx">05</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item">
+            <span class="idx">06</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item">
+            <span class="idx">07</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item">
+            <span class="idx">08</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item">
+            <span class="idx">09</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item">
+            <span class="idx">10</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+          <section class="item">
+            <span class="idx">11</span>
+            <span class="name">情是何物</span>
+            <span class="artist">周深</span>
+            <span class="duration">04:23</span>
+          </section>
+         
+        </wc-scroll>
+      </div>
     </div>
+  </main>
 
-  </div>
+  <div class="play-bar">
+    <section class="stat-bar">
+      <span class="time">00:13</span>
+      <div class="progress">
+        <span class="thumb"></span>
+      </div>
+      <span class="time">05:31</span>
+    </section>
 
+    <section class="ctrl-box">
+      <div class="info">
+        <strong>情是何物</strong>
+        <cite>周深</cite>
+      </div>
 
-  <div class="loading" :if="loading">
-    <div class="box">
-      <i></i><i></i><i></i><i></i><i></i>
-      <span></span>
-      <span></span>
-      <cite>{{progress}}%</cite>
-    </div>
+      <div class="play-btn">
+        <a class="item prev">
+          <svg viewBox='0 0 120 120'>
+            <path d="M80,82c-0.4,0-0.7-0.1-1.1-0.3l-32-20c-0.9-0.6-1.2-1.8-0.6-2.8c0.2-0.3,0.4-0.5,0.6-0.6l32-20c0.9-0.6,2.2-0.3,2.8,0.6c0.2,0.3,0.3,0.7,0.3,1.1v40C82,81.1,81.1,82,80,82z M42,80L42,80c-1.7,0-3-1.3-3-3V43c0-1.7,1.3-3,3-3l0,0c1.7,0,3,1.3,3,3v34C45,78.7,43.7,80,42,80z"/>
+          </svg>
+        </a>
+        <a class="item on">
+          <svg viewBox="0 0 120 120">
+            <rect width="8" height="50" x="45" y="35" rx="4"/>
+            <rect width="8" height="50" x="67" y="35" rx="4"/>
+          </svg>
+        </a>
+        <a class="item next">
+          <svg viewBox='0 0 120 120'>
+            <path d="M41,38c0.4,0,0.7,0.1,1.1,0.3l32,20c0.9,0.6,1.2,1.8,0.6,2.8c-0.2,0.3-0.4,0.5-0.6,0.6l-32,20c-0.9,0.6-2.2,0.3-2.8-0.6C39.1,80.8,39,80.4,39,80V40C39,38.9,39.9,38,41,38z M79,40L79,40c1.7,0,3,1.3,3,3v34c0,1.7-1.3,3-3,3l0,0c-1.7,0-3-1.3-3-3V43C76,41.3,77.3,40,79,40z"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="holder"></div>
+
+      <div class="play-action">
+        <a class="item mode">
+          <svg viewBox='0 0 120 120'>
+            <path d="M77,68c0.4,0,0.7,0.1,1.1,0.3l13.1,8.2c0.9,0.6,1.2,1.8,0.6,2.8c-0.2,0.3-0.4,0.5-0.6,0.6l-13.1,8.2c-0.9,0.6-2.2,0.3-2.8-0.6c-0.2-0.3-0.3-0.7-0.3-1.1V70C75,68.9,75.9,68,77,68z M34,55L34,55c1.7,0,3,1.3,3,3v20c0,1.7-1.3,3-3,3l0,0c-1.7,0-3-1.3-3-3V58C31,56.3,32.3,55,34,55z M34,75h53c1.7,0,3,1.3,3,3l0,0c0,1.7-1.3,3-3,3H34c-1.7,0-3-1.3-3-3l0,0C31,76.3,32.3,75,34,75z M44,52c-0.4,0-0.7-0.1-1.1-0.3l-13.1-8.2c-0.9-0.6-1.2-1.8-0.6-2.8c0.2-0.3,0.4-0.5,0.6-0.6l13.1-8.2c0.9-0.6,2.2-0.3,2.8,0.6c0.2,0.3,0.3,0.7,0.3,1.1V50C46,51.1,45.1,52,44,52z M89,65L89,65c-1.7,0-3-1.3-3-3V42c0-1.7,1.3-3,3-3l0,0c1.7,0,3,1.3,3,3v20C92,63.7,90.7,65,89,65z M89,45H36c-1.7,0-3-1.3-3-3l0,0c0-1.7,1.3-3,3-3h53c1.7,0,3,1.3,3,3l0,0C92,43.7,90.7,45,89,45z"/>
+          </svg>
+        </a>
+        <a class="item volume">
+          <svg viewBox='0 0 120 120'>
+            <path d="M78,36.5c-0.4,0-0.7,0.1-1.1,0.3L42.4,58.3c-0.9,0.6-1.2,1.8-0.6,2.8c0.2,0.3,0.4,0.5,0.6,0.6l34.5,21.5c0.9,0.6,2.2,0.3,2.8-0.6c0.2-0.3,0.3-0.7,0.3-1.1v-43C80,37.4,79.1,36.5,78,36.5z"/>
+            <path d="M43,46h26c1.7,0,3,1.3,3,3v22c0,1.7-1.3,3-3,3H43c-1.7,0-3-1.3-3-3V49C40,47.3,41.3,46,43,46z"/>
+          </svg>
+        </a>
+      </div>
+    </section>
   </div>
 
 </div>
