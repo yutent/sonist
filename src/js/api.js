@@ -8,6 +8,10 @@
 
 import request from '/lib/request/index.js'
 
+// `http://lyrics.kugou.com/search?client=pc&duration=188000&keyword=%E6%98%93%E7%83%8A%E5%8D%83%E7%8E%BA%20-%20%E4%BD%A0%E6%9B%BE%E6%98%AF%E5%B0%91%E5%B9%B4%20%28Live%29&man=no&ver=1`
+
+// `http://lyrics.kugou.com/download?ver=1&client=pc&fmt=lrc&charset=utf8&accesskey=2128A0ED9B2F6B34C3AE23EA7ACC46A7&id=43066968`
+
 const log = console.log
 
 const BASE_API_URI = 'http://mobilecdnbj.kugou.com'
