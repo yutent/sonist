@@ -4,8 +4,6 @@
  * @date 2019/01/26 18:28:22
  */
 
-'use strict'
-
 const { BrowserWindow } = require('electron')
 
 /**
@@ -46,55 +44,6 @@ exports.createMainWindow = function(icon) {
 }
 
 /**
- * 依赖异常显示窗口
- */
-exports.createErrorWindow = function() {
-  let win = new BrowserWindow({
-    width: 600,
-    height: 360,
-    skipTaskbar: true,
-    maximizable: false,
-    minimizable: false,
-    resizable: false,
-    webPreferences: {
-      devTools: false
-    }
-  })
-  win.setMenuBarVisibility(false)
-  win.loadURL('app://local/depends.html')
-  win.on('closed', _ => {
-    app.exit()
-  })
-}
-
-/**
- * 桌面歌词窗口
- */
-exports.createDesktopLrcWindow = function(screen) {
-  let win = new BrowserWindow({
-    title: '',
-    width: 1000,
-    height: 100,
-    frame: false,
-    resizable: false,
-    alwaysOnTop: true,
-    skipTaskbar: true,
-    x: (screen.width - 1024) / 2,
-    y: screen.height - 100,
-    transparent: true,
-    hasShadow: false,
-    thickFrame: false,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  })
-
-  win.loadURL('app://local/desktop-lrc.html')
-  return win
-}
-
-/**
  * 应用迷你窗口
  */
 exports.createMiniWindow = function(screen) {
@@ -108,9 +57,10 @@ exports.createMiniWindow = function(screen) {
     skipTaskbar: true,
     x: screen.width - 320,
     y: 0,
-    thickFrame: false,
     show: false,
     webPreferences: {
+      webSecurity: false,
+      experimentalFeatures: true,
       nodeIntegration: true
     }
   })

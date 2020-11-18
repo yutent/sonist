@@ -53,71 +53,11 @@
       <div class="scroll-box">
         <wc-scroll class="list">
           
-          <section class="item">
-            <span class="idx">01</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item">
-            <span class="idx">02</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item on">
-            <span class="idx">03</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item">
-            <span class="idx">04</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item">
-            <span class="idx">05</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item">
-            <span class="idx">06</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item">
-            <span class="idx">07</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item">
-            <span class="idx">08</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item">
-            <span class="idx">09</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item">
-            <span class="idx">10</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
-          </section>
-          <section class="item">
-            <span class="idx">11</span>
-            <span class="name">情是何物</span>
-            <span class="artist">周深</span>
-            <span class="duration">04:23</span>
+          <section class="item" :for="i it in list">
+            <span class="idx" :text="i + 1"></span>
+            <span class="name" :text="it.name"></span>
+            <span class="artist" :text="it.artist"></span>
+            <span class="duration" :text="it.duration"></span>
           </section>
          
         </wc-scroll>

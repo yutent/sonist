@@ -6,13 +6,23 @@
 
 import Anot from '/js/lib/anot.js'
 import '/js/lib/scroll/index.js'
+import app from '/js/lib/socket.js'
+
+// const {} from ''
 
 Anot({
   $id: 'app',
   state: {
     isplaying: true,
     playmode: 1,
-    mute: false
+    mute: false,
+    list: []
+  },
+  mounted() {
+    var list = app.dispatch('scan-dir', { path: '/Volumes/extends/music' })
+
+    this.list = list
+    console.log(list)
   },
   methods: {
     play() {

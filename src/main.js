@@ -1,16 +1,19 @@
 /**
  * 主入口
- * @author yutent<yutent@doui.cc>
- * @date 2019/12/13 00:37:04
+ * @author yutent<yutent.io@gmail.com>
+ * @date 2020/11/18 09:27:09
  */
-
-'use strict'
 
 const { app, session, protocol, globalShortcut } = require('electron')
 const path = require('path')
 const fs = require('iofs')
-const { exec } = require('child_process')
-const log = console.log
+// const {exec} = require('child_process')
+
+require('./tools/init.js')
+const { createAppTray, createLrcTray } = require('./tools/tray.js')
+const createMenu = require('./tools/menu.js')
+const { createMainWindow, createMiniWindow } = require('./tools/windows.js')
+
 const MIME_TYPES = {
   '.js': 'text/javascript',
   '.html': 'text/html',
@@ -22,14 +25,6 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/ico'
 }
-
-require('./tools/init')
-const createTray = require('./tools/tray')
-const createMenu = require('./tools/menu')
-
-const { createMainWindow, createErrorWindow } = require('./tools/windows')
-
-const ROOT = __dirname
 
 /* ----------------------------------------------------- */
 app.commandLine.appendSwitch('--lang', 'zh-CN')
@@ -47,7 +42,7 @@ app.once('ready', () => {
   protocol.registerBufferProtocol('app', (req, cb) => {
     let file = req.url.replace(/^app:\/\/local\//, '')
     let ext = path.extname(req.url)
-    let buff = fs.cat(path.resolve(ROOT, file))
+    let buff = fs.cat(path.resolve(__dirname, file))
     cb({ data: buff, mimeType: MIME_TYPES[ext] })
   })
   // 修改app的UA
@@ -55,12 +50,11 @@ app.once('ready', () => {
     'KugouMusic/2.9.5 (Mac OS X Version 10.15.7 (Build 19H2))'
   )
 
-  let win = createMainWindow(path.resolve(ROOT, './images/app.png'))
+  let win = createMainWindow(path.resolve(__dirname, './images/app.png'))
 
-  createTray(win)
+  createAppTray(win)
+  createLrcTray(win)
   createMenu(win)
-
-  app.__MAIN__ = win
 
   // mac专属事件,点击dock栏图标,可激活窗口
   app.on('activate', _ => {
