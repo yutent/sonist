@@ -6,10 +6,14 @@
 
 import Anot from '/js/lib/anot.js'
 import '/js/lib/scroll/index.js'
+
+import Keyboard from '/js/lib/keyboard/index.js'
 import app from '/js/lib/socket.js'
 
 // const id3 = require('jsmediatags')
 const id3 = require('music-metadata')
+
+var kb = new Keyboard()
 
 Anot({
   $id: 'app',
@@ -17,6 +21,19 @@ Anot({
     isplaying: true,
     playmode: 1,
     mute: false,
+    preview: {
+      name: '',
+      album: '',
+      artist: '',
+      cover: ''
+    },
+    song: {
+      name: '',
+      artist: '',
+      src: '',
+      time: 0,
+      duration: 0
+    },
     curr: 2,
     list: []
   },
@@ -29,10 +46,25 @@ Anot({
       let { album, artist, title, duration } = await this.getID3(it.path)
 
       it.name = title || it.name
-      it.artist = artist || '未知歌手'
+      it.artist = artist
       it.album = album
-      it.duration = Anot.filters.time(duration)
+      it.duration = duration
     }
+
+    kb.on(['left'], ev => {
+      var time = this.song.time - 5
+      if (time < 0) {
+        time = 0
+      }
+      this.song.time = time
+    })
+    kb.on(['right'], ev => {
+      var time = this.song.time + 5
+      if (time > this.song.duration) {
+        time = this.song.duration
+      }
+      this.song.time = time
+    })
   },
   methods: {
     play() {
@@ -56,6 +88,19 @@ Anot({
         } = res
         return { album, artist, title, duration: ~~duration }
       })
+    },
+    prviewSong(it, i) {
+      var { album, artist, name, cover } = it
+      Object.assign(this.preview, { album, artist, name, cover })
+    },
+    playSong(it, i) {
+      //
+      this.curr = i
+      this.song.name = it.name
+      this.song.artist = it.artist
+      this.song.duration = it.duration
+      this.song.src = `file://${it.path}`
+      this.song.time = 0
     }
   }
 })

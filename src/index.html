@@ -39,12 +39,12 @@
     <div class="song-box">
       <div class="preview">
         <div class="album">
-          <img src="/images/disk.png">
+          <img :src="preview.cover || '/images/disk.png'">
         </div>
         <div class="info">
-          <strong>情是何物</strong>
-          <cite>周深</cite>
-          <p>经典咏流传第三季 第7期</p>
+          <strong :text="preview.name"></strong>
+          <cite :text="preview.artist || '未知歌手'"></cite>
+          <p :text="preview.album || '未知专辑'"></p>
         </div>
 
         <span class="total" :text="list.size()"></span>
@@ -53,12 +53,14 @@
         <wc-scroll class="list">
           <section 
             class="item" 
+            @click="prviewSong(it, i)"
+            @dblclick="playSong(it, i)"
             :class="{on: curr === i}" 
             :for="i it in list">
             <span class="idx" :text="i + 1"></span>
             <span class="name text-ell" :text="it.name"></span>
-            <span class="artist text-ell" :text="it.artist"></span>
-            <span class="duration" :text="it.duration"></span>
+            <span class="artist text-ell" :text="it.artist || '未知歌手'"></span>
+            <span class="duration" :text="it.duration | time"></span>
           </section>
         </wc-scroll>
       </div>
@@ -67,17 +69,17 @@
 
   <div class="play-bar">
     <section class="stat-bar">
-      <span class="time">00:13</span>
+      <span class="time" :text="song.time | time"></span>
       <div class="progress">
-        <span class="thumb"></span>
+        <span class="thumb" :css="{width: ~~((100 * song.time) / song.duration) + '%'}"></span>
       </div>
-      <span class="time">05:31</span>
+      <span class="time" :text="song.duration | time"></span>
     </section>
 
     <section class="ctrl-box">
       <div class="info">
-        <strong>情是何物</strong>
-        <cite>周深</cite>
+        <strong :text="song.name"></strong>
+        <cite :text="song.artist || '未知歌手'"></cite>
       </div>
 
       <div class="play-btn">
