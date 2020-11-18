@@ -5,11 +5,10 @@
 
 界面预览
 
-![demo](./demo1.jpg)
+![demo](./demo1.png)
 
-![demo](./demo2.jpg)
+![demo](./demo2.png)
 
-![demo](./demo3.jpg)
 
 
 ## 开发计划 & 进度
