@@ -47,19 +47,19 @@
           <p>经典咏流传第三季 第7期</p>
         </div>
 
-        <span class="duration">98:54</span>
-        <span class="total">118</span>
+        <span class="total" :text="list.size()"></span>
       </div>
       <div class="scroll-box">
         <wc-scroll class="list">
-          
-          <section class="item" :for="i it in list">
+          <section 
+            class="item" 
+            :class="{on: curr === i}" 
+            :for="i it in list">
             <span class="idx" :text="i + 1"></span>
-            <span class="name" :text="it.name"></span>
-            <span class="artist" :text="it.artist"></span>
+            <span class="name text-ell" :text="it.name"></span>
+            <span class="artist text-ell" :text="it.artist"></span>
             <span class="duration" :text="it.duration"></span>
           </section>
-         
         </wc-scroll>
       </div>
     </div>

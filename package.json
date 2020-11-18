@@ -16,6 +16,7 @@
   "dependencies": {
     "crypto.js": "^2.0.2",
     "iofs": "^1.5.1",
+    "music-metadata": "^7.5.0",
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {

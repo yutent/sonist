@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS "songs" (
   "name" char(128) NOT NULL,
   "album" char(128) NOT NULL,
   "cover" char(256) NOT NULL,
-  "lrc" text NOT NULL,
+  "path" char(256) NOT NULL,
+  "lrc" text NOT NULL
 )
 `
 // 歌曲和播放列表的关系表(多对多)

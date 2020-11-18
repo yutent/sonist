@@ -7,6 +7,7 @@
 const { app, ipcMain, globalShortcut: GS } = require('electron')
 const path = require('path')
 const fs = require('iofs')
+const sec = require('crypto.js')
 
 const Shortcut = require('./shortcut')
 const Sqlite = require('./db')
@@ -91,7 +92,12 @@ ipcMain.on('app', (ev, conn) => {
           })
           .map(it => {
             var { ext, name } = path.parse(it)
-            return { uuid: '', ext, name, path: it }
+            var buf = fs.origin.createReadStream(it, {
+              start: 0,
+              end: 256,
+              encoding: 'base64'
+            })
+            return { name, path: it, artist: '', album: '', duration: '00:00' }
           })
         ev.returnValue = list
       } else {

@@ -5,199 +5,210 @@
  * @date 2018/12/16 17:15:07
  */
 
-
-@import "./var.scss";
+@import './var.scss';
 
 .app {
-  position:relative;
-  display:flex;flex-direction:column;
-  width:100%;height:100%;
-  background:rgba(0, 0, 0, .3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
 
   // 标题栏样式
   .title-bar {
-    position:relative;
-    display:flex;
-    align-items:center;
-    z-index:9;
-    height:26px;
-    
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 9;
+    height: 26px;
+
     .btn-box {
-      display:inline-flex;;
-      width:auto;height:12px;padding:0 8px;
-  
+      display: inline-flex;
+      width: auto;
+      height: 12px;
+      padding: 0 8px;
+
       .item {
-        display:inline-flex;
-        width:12px;height:12px;
-        margin:0 3px;
-        background:url(/images/btn-grey.svg) no-repeat;background-size:cover;
+        display: inline-flex;
+        width: 12px;
+        height: 12px;
+        margin: 0 3px;
+        background: url(/images/btn-grey.svg) no-repeat;
+        background-size: cover;
       }
-  
+
       &.focus {
-        .quit {background-image:url(/images/btn-close.svg);}
-        .min {background-image:url(/images/btn-mini.svg);}
+        .quit {
+          background-image: url(/images/btn-close.svg);
+        }
+        .min {
+          background-image: url(/images/btn-mini.svg);
+        }
         // .max {background-image:url(/images/btn-maxi.svg);}
       }
       &:hover {
-        .quit {background-image:url(/images/btn-close_a.svg);}
-        .min {background-image:url(/images/btn-mini_a.svg);}
+        .quit {
+          background-image: url(/images/btn-close_a.svg);
+        }
+        .min {
+          background-image: url(/images/btn-mini_a.svg);
+        }
         // .max {background-image:url(/images/btn-maxi_a.svg);}
       }
     }
- 
   }
 
   .main-body {
-    overflow:hidden;
-    flex:1;
+    overflow: hidden;
+    flex: 1;
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
 
     .aside {
-      width:180px;
-      height:100%;
-      padding:0 16px;
-      line-height:2;
+      width: 180px;
+      height: 100%;
+      padding: 0 16px;
+      line-height: 2;
 
       fieldset {
-        border:0;
-        color:#ebebeb;
-        font-size:12px;
+        border: 0;
+        color: #ebebeb;
+        font-size: 12px;
 
         legend {
-          font-size:18px;
-          background:linear-gradient(to bottom,#58ffdf 50%, #459888);
-          background-clip:text;
-          color:transparent;
+          font-size: 18px;
+          background: linear-gradient(to bottom, #58ffdf 50%, #459888);
+          background-clip: text;
+          color: transparent;
         }
 
         .item {
-          padding-left:12px;
-          line-height:1.75;
+          padding-left: 12px;
+          line-height: 1.75;
         }
 
         button {
-          width:42px;height:16px;
-          margin-left:12px;
-          font-size:10px;
-          border:0;
-          border-radius:9px;
-          background:nth($cb, 1);
-          color:#fff;
+          width: 42px;
+          height: 16px;
+          margin-left: 12px;
+          font-size: 10px;
+          border: 0;
+          border-radius: 9px;
+          background: nth($cb, 1);
+          color: #fff;
         }
       }
     }
 
     .song-box {
-      width:618px;
+      width: 618px;
 
       .preview {
-        position:relative;
-        display:flex;
-        align-items:center;
-        width:100%;
-        height:99px;
-        padding-bottom:16px;
-        border-bottom:1px solid rgba(200, 200, 200, .1);
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 99px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(200, 200, 200, 0.1);
 
         .album {
-          width:80px;height:80px;
-          img {width:100%;height:100%;}
+          width: 80px;
+          height: 80px;
+          img {
+            width: 100%;
+            height: 100%;
+          }
         }
 
         .info {
-          display:flex;
-          flex-direction:column;
-          justify-content:center;
-          width:320px;
-          margin-left:32px;
-  
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          width: 320px;
+          margin-left: 32px;
+
           strong {
-            height:36px;
-            font-size:18px;
+            height: 36px;
+            font-size: 18px;
             font-weight: normal;
           }
-  
+
           cite {
-            font-size:12px;
-            font-style:normal;
-            
+            font-size: 12px;
+            font-style: normal;
           }
-          p {font-size:12px;color:#bdbdbd;}
+          p {
+            font-size: 12px;
+            color: #bdbdbd;
+          }
         }
 
-        .duration {
-          position:absolute;
-          right:32px;
-          top:16px;
-          font-size:12px;
-          color:#bdbdbd;
-          
-        }
         .total {
-          position:absolute;
-          right:32px;
-          bottom:16px;
-          font-size:16px;
-          font-weight:bold;
-          font-family:Raleway;
+          position: absolute;
+          right: 32px;
+          bottom: 16px;
+          font-size: 16px;
+          font-weight: bold;
+          font-family: Raleway;
         }
       }
 
       .scroll-box {
-        width:100%;
-        height:269px;
-        padding:16px 6px;
-        border-top:1px solid rgba(32, 32, 32, .1);
+        width: 100%;
+        height: 269px;
+        padding: 16px 6px;
+        border-top: 1px solid rgba(32, 32, 32, 0.1);
       }
 
       .list {
-        height:237px;
-        font-size:12px;
+        height: 237px;
+        font-size: 12px;
 
         .item {
-          display:flex;
-          align-items:center;
-          height:26px;
-          padding:0 12px;
-          border-radius:13px;
+          display: flex;
+          align-items: center;
+          height: 26px;
+          padding: 0 12px;
+          border-radius: 13px;
 
           .idx {
-            position:relative;
-            width:64px;
-            padding-left:16px;
-            font-size:12px;
-            font-family:Raleway;
+            position: relative;
+            width: 64px;
+            padding-left: 16px;
+            font-size: 12px;
+            font-family: Raleway;
           }
-          
+
           .name {
-            overflow:hidden;
-            flex:1;
+            flex: 1;
           }
           .artist {
-            overflow:hidden;
-            width:128px;
-            margin-left:12px;
+            width: 128px;
+            margin-left: 12px;
           }
           .duration {
-            width:42px;
-            margin-left:12px;
+            width: 42px;
+            margin-left: 12px;
           }
 
           &.on {
-            color:#feac23;
-            font-size:14px;
+            color: #feac23;
+            font-size: 14px;
 
             .idx::before {
-              position:absolute;
-              left:0;top:3px;
-              font-size:10px;
-              content:"▶ ";
+              position: absolute;
+              left: 0;
+              top: 3px;
+              font-size: 10px;
+              content: '▶ ';
             }
           }
 
-          &.active, &:hover {
-            color:#58ffdf;
+          &.active,
+          &:hover {
+            color: #58ffdf;
             background: rgba(29, 77, 68, 0.15);
           }
         }
@@ -205,189 +216,195 @@
     }
   }
 
-
-
-
-
   .play-bar {
-    height:66px;width:100%;
-    background:rgba(255, 255, 255, .25);
-    color:#fff;
+    height: 66px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
 
     .stat-bar {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      height:20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 20px;
       color: #ebebeb;
 
       .time {
-        width:42px;
-        margin:0 6px;
-        text-align:center;
-        font-size:12px;
+        width: 42px;
+        margin: 0 6px;
+        text-align: center;
+        font-size: 12px;
       }
 
       .progress {
-        flex:1;
-        display:flex;
+        flex: 1;
+        display: flex;
         align-items: flex-start;
-        height:3px;
+        height: 3px;
         background: #b2cfe3;
       }
 
       .thumb {
-        width:8%;
-        height:3px;
-        background:#58ffdf;
+        width: 8%;
+        height: 3px;
+        background: #58ffdf;
       }
     }
 
     .ctrl-box {
-      display:flex;
-      align-items:center;
-      height:42px;
+      display: flex;
+      align-items: center;
+      height: 42px;
 
       .holder {
-        flex:1;
+        flex: 1;
       }
 
       .info {
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        width:320px;
-        height:42px;
-        padding-left:12px;
-        line-height:1.25;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 320px;
+        height: 42px;
+        padding-left: 12px;
+        line-height: 1.25;
 
         strong {
-          font-size:14px;
+          font-size: 14px;
           font-weight: 500;
         }
 
         cite {
-          font-size:12px;
-          font-style:normal;
-          color:#aeaeae;
+          font-size: 12px;
+          font-style: normal;
+          color: #aeaeae;
         }
       }
-      
+
       .play-btn {
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        width:120px;
-        height:42px;
-        margin-left:32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 120px;
+        height: 42px;
+        margin-left: 32px;
 
         .item {
-          width:22px;height:22px;
-          background-repeat:no-repeat;
-          background-size:cover;
-          transition:background .1s ease-in-out;
-          cursor:pointer;
+          width: 22px;
+          height: 22px;
+          background-repeat: no-repeat;
+          background-size: cover;
+          transition: background 0.1s ease-in-out;
+          cursor: pointer;
 
           &.prev {
-            background-image:url(/images/ctrl/prev.png);
-            &:hover,&:active {
-              background-image:url(/images/ctrl/prev_a.png);
+            background-image: url(/images/ctrl/prev.png);
+            &:hover,
+            &:active {
+              background-image: url(/images/ctrl/prev_a.png);
             }
           }
 
-          &.on,&.off {
-            width:42px;height:42px;
+          &.on,
+          &.off {
+            width: 42px;
+            height: 42px;
           }
 
           &.on {
-            background-image:url(/images/ctrl/play.png);
-            animation:round 2s linear infinite;
+            background-image: url(/images/ctrl/play.png);
+            animation: round 2s linear infinite;
 
-            &:hover,&:active {
-              background-image:url(/images/ctrl/play_a.png);
+            &:hover,
+            &:active {
+              background-image: url(/images/ctrl/play_a.png);
             }
           }
 
           &.off {
-            background-image:url(/images/ctrl/pause.png);
-            &:hover,&:active {
-              background-image:url(/images/ctrl/pause_a.png);
+            background-image: url(/images/ctrl/pause.png);
+            &:hover,
+            &:active {
+              background-image: url(/images/ctrl/pause_a.png);
             }
           }
 
           &.next {
-            background-image:url(/images/ctrl/next.png);
-            &:hover,&:active {
-              background-image:url(/images/ctrl/next_a.png);
+            background-image: url(/images/ctrl/next.png);
+            &:hover,
+            &:active {
+              background-image: url(/images/ctrl/next_a.png);
             }
           }
-
-         
         }
       }
 
       .play-action {
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        width:64px;
-        height:22px;
-        margin-right:16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 64px;
+        height: 22px;
+        margin-right: 16px;
 
         .item {
-          width:22px;height:22px;
-          background-repeat:no-repeat;
-          background-size:cover;
-          transition:background .1s ease-in-out;
-          cursor:pointer;
+          width: 22px;
+          height: 22px;
+          background-repeat: no-repeat;
+          background-size: cover;
+          transition: background 0.1s ease-in-out;
+          cursor: pointer;
 
           &.volume {
-            background-image:url(/images/ctrl/volume.png);
-            &:hover,&:active {
-              background-image:url(/images/ctrl/volume_a.png);
+            background-image: url(/images/ctrl/volume.png);
+            &:hover,
+            &:active {
+              background-image: url(/images/ctrl/volume_a.png);
             }
           }
 
           &.mute {
-            background-image:url(/images/ctrl/mute.png);
-            &:hover,&:active {
-              background-image:url(/images/ctrl/mute_a.png);
+            background-image: url(/images/ctrl/mute.png);
+            &:hover,
+            &:active {
+              background-image: url(/images/ctrl/mute_a.png);
             }
           }
 
           &.single {
-            background-image:url(/images/ctrl/single.png);
-            &:hover,&:active {
-              background-image:url(/images/ctrl/single_a.png);
+            background-image: url(/images/ctrl/single.png);
+            &:hover,
+            &:active {
+              background-image: url(/images/ctrl/single_a.png);
             }
           }
 
           &.all {
-            background-image:url(/images/ctrl/all.png);
-            &:hover,&:active {
-              background-image:url(/images/ctrl/all_a.png);
+            background-image: url(/images/ctrl/all.png);
+            &:hover,
+            &:active {
+              background-image: url(/images/ctrl/all_a.png);
             }
           }
 
           &.rand {
-            background-image:url(/images/ctrl/rand.png);
-            &:hover,&:active {
-              background-image:url(/images/ctrl/rand_a.png);
+            background-image: url(/images/ctrl/rand.png);
+            &:hover,
+            &:active {
+              background-image: url(/images/ctrl/rand_a.png);
             }
           }
         }
       }
     }
   }
-
-
 }
 
 @keyframes round {
   from {
-    transform:rotate(0);
+    transform: rotate(0);
   }
   to {
-    transform:rotate(360deg);
+    transform: rotate(360deg);
   }
 }

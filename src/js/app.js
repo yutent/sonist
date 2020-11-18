@@ -8,7 +8,8 @@ import Anot from '/js/lib/anot.js'
 import '/js/lib/scroll/index.js'
 import app from '/js/lib/socket.js'
 
-// const {} from ''
+// const id3 = require('jsmediatags')
+const id3 = require('music-metadata')
 
 Anot({
   $id: 'app',
@@ -16,13 +17,22 @@ Anot({
     isplaying: true,
     playmode: 1,
     mute: false,
+    curr: 2,
     list: []
   },
-  mounted() {
+  async mounted() {
     var list = app.dispatch('scan-dir', { path: '/Volumes/extends/music' })
 
     this.list = list
-    console.log(list)
+
+    for (let it of this.list) {
+      let { album, artist, title, duration } = await this.getID3(it.path)
+
+      it.name = title || it.name
+      it.artist = artist || '未知歌手'
+      it.album = album
+      it.duration = Anot.filters.time(duration)
+    }
   },
   methods: {
     play() {
@@ -37,6 +47,15 @@ Anot({
     },
     toggleMute() {
       this.mute = !this.mute
+    },
+    getID3(file) {
+      return id3.parseFile(file).then(res => {
+        let {
+          common: { album, artist, title },
+          format: { duration }
+        } = res
+        return { album, artist, title, duration: ~~duration }
+      })
     }
   }
 })
