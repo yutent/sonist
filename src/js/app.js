@@ -18,6 +18,7 @@ var kb = new Keyboard()
 Anot({
   $id: 'app',
   state: {
+    defaultCover: '/images/disk.png',
     isplaying: true,
     playmode: 1,
     mute: false,

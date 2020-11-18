@@ -11,6 +11,10 @@
 
 <div class="app" anot="app">
 
+  <div class="album-cover">
+    <img :src="preview.cover || defaultCover">
+  </div>
+
   <div class="title-bar app-drag">
     <div class="btn-box app-nodrag focus">
       <a class="item quit"></a>
@@ -39,7 +43,7 @@
     <div class="song-box">
       <div class="preview">
         <div class="album">
-          <img :src="preview.cover || '/images/disk.png'">
+          <img :src="preview.cover || defaultCover">
         </div>
         <div class="info">
           <strong :text="preview.name"></strong>
