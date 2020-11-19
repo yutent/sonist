@@ -9,11 +9,18 @@ import '/js/lib/scroll/index.js'
 
 import Keyboard from '/js/lib/keyboard/index.js'
 import app from '/js/lib/socket.js'
+import fetch from '/js/lib/fetch/index.js'
 
-// const id3 = require('jsmediatags')
+import Player from '/js/lib/audio/index.js'
+
 const id3 = require('music-metadata')
 
 var kb = new Keyboard()
+
+var player = new Player()
+
+window.fetch = fetch
+window.player = player
 
 Anot({
   $id: 'app',
@@ -52,6 +59,8 @@ Anot({
       it.duration = duration
     }
 
+    player.load(list.map(it => `sonist://${it.path}`))
+
     kb.on(['left'], ev => {
       var time = this.song.time - 5
       if (time < 0) {
@@ -68,6 +77,12 @@ Anot({
     })
   },
   methods: {
+    load() {
+      // window.player = new Howl({
+      //   src: [`sonist://${this.list[0].path}`]
+      // })
+      // window.player = this.__PLAYER__
+    },
     play() {
       this.isplaying = !this.isplaying
     },

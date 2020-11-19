@@ -23,7 +23,14 @@ const MIME_TYPES = {
   '.png': 'image/png',
   '.gif': 'image/gif',
   '.svg': 'image/svg+xml',
-  '.ico': 'image/ico'
+  '.ico': 'image/ico',
+  '.mp3': 'audio/mpeg',
+  '.m4a': 'audio/m4a',
+  '.aac': 'audio/x-aac',
+  '.ogg': 'audio/ogg',
+  '.wav': 'audio/x-wav',
+  '.flac': 'audio/flac',
+  all: 'audio/*'
 }
 
 /* ----------------------------------------------------- */
@@ -31,7 +38,8 @@ app.commandLine.appendSwitch('--lang', 'zh-CN')
 app.commandLine.appendSwitch('--autoplay-policy', 'no-user-gesture-required')
 
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } }
+  { scheme: 'app', privileges: { secure: true, standard: true } },
+  { scheme: 'sonist', privileges: { secure: true, standard: true } }
 ])
 
 /* ----------------------------------------------------- */
@@ -40,10 +48,17 @@ protocol.registerSchemesAsPrivileged([
 app.once('ready', () => {
   // 注册协议
   protocol.registerBufferProtocol('app', (req, cb) => {
-    let file = req.url.replace(/^app:\/\/local\//, '')
+    let file = decodeURIComponent(req.url.replace(/^app:\/\/local\//, ''))
     let ext = path.extname(req.url)
     let buff = fs.cat(path.resolve(__dirname, file))
     cb({ data: buff, mimeType: MIME_TYPES[ext] })
+  })
+
+  protocol.registerBufferProtocol('sonist', (req, cb) => {
+    let file = decodeURIComponent(req.url.replace(/^sonist:[\/]+/, '/'))
+    let ext = path.extname(req.url)
+    let buff = fs.cat(file)
+    cb({ data: buff, mimeType: MIME_TYPES[ext] || MIME_TYPES.all })
   })
   // 修改app的UA
   session.defaultSession.setUserAgent(
