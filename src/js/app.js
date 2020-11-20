@@ -10,6 +10,7 @@ import '/js/lib/scroll/index.js'
 import Keyboard from '/js/lib/keyboard/index.js'
 import app from '/js/lib/socket.js'
 import fetch from '/js/lib/fetch/index.js'
+import Api from '/js/api.js'
 
 import Player from '/js/lib/audio/index.js'
 
@@ -123,7 +124,7 @@ Anot({
           break
       }
 
-      this.playSong(this.list[idx], idx, repeat)
+      this.playSong(idx, repeat)
     })
   },
   watch: {
@@ -226,6 +227,15 @@ Anot({
       this.previewSong(it)
       player.play(i)
       this.$refs.list.scrollTop = (i - 3) * 26
+
+      // if (!it.lrc) {
+      //   Api.searchLrc(it.name, it.duration).then(list => {
+      //     var { id, accesskey } = list[0]
+      //     Api.downloadLrc(id, accesskey).then(lrc => {
+      //       console.log(lrc)
+      //     })
+      //   })
+      // }
     }
   }
 })
