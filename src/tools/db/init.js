@@ -4,6 +4,7 @@
  * @date 2020/07/14 18:17:59
  */
 
+// 歌单
 const TABLE_PLAYLIST = `
 CREATE TABLE IF NOT EXISTS "playlist" (
   "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -11,15 +12,16 @@ CREATE TABLE IF NOT EXISTS "playlist" (
 )
 `
 
+// aid: 歌手ID
 const TABLE_SONGS = `
 CREATE TABLE IF NOT EXISTS "songs" (
   "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-  "pid" integer NOT NULL,
-  "aid" integer NOT NULL,
   "name" char(128) NOT NULL,
+  "artist" char(128) NOT NULL,
   "album" char(128) NOT NULL,
+  "duration" integer NOT NULL,
   "cover" char(256) NOT NULL,
-  "path" char(256) NOT NULL,
+  "file_path" char(256) NOT NULL,
   "lrc" text NOT NULL
 )
 `
@@ -28,15 +30,7 @@ const TABLE_RELATIONS = `
 CREATE TABLE IF NOT EXISTS "relations" (
   "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   "sid" integer NOT NULL,
-  "pid" integer NOT NULL,
-)
-`
-
-const TABLE_ARTISTS = `
-CREATE TABLE IF NOT EXISTS "artists" (
-  "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-  "name" integer NOT NULL,
-  "avatar" char(256) NOT NULL
+  "pid" integer NOT NULL
 )
 `
 
@@ -50,5 +44,4 @@ module.exports = function(db) {
   db.query(TABLE_PLAYLIST).catch(error)
   db.query(TABLE_SONGS).catch(error)
   db.query(TABLE_RELATIONS).catch(error)
-  db.query(TABLE_ARTISTS).catch(error)
 }

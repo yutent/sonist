@@ -7,7 +7,7 @@
 const { ipcRenderer } = require('electron')
 
 export default {
-  dispatch(type = '', params = {}) {
-    return ipcRenderer.sendSync('app', Object.assign(params, { type }))
+  dispatch(type = '', data = {}) {
+    return ipcRenderer.sendSync('app', { data, type })
   }
 }

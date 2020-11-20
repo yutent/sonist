@@ -15,7 +15,13 @@ module.exports = function(win) {
       submenu: [
         { role: 'about', label: '关于 Sonist' },
         { type: 'separator' },
-        { role: 'quit', label: '退出' }
+        {
+          label: '退出 Sonist',
+          accelerator: 'Command+Q',
+          click(a, b, ev) {
+            win.destroy()
+          }
+        }
       ]
     },
     {

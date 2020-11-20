@@ -74,11 +74,63 @@ ipcMain.on('app', (ev, conn) => {
       fs.echo(JSON.stringify(conn.data, null, 2), INIT_FILE)
       break
 
+    case 'add-song':
+      var {
+        name,
+        artist = '',
+        album = '',
+        duration,
+        cover = '',
+        file_path,
+        lrc = ''
+      } = conn.data
+      db.query(
+        'INSERT INTO `songs` (name, artist, album, duration, cover, file_path, lrc) VALUES ($name, $artist, $album, $duration, $cover, $file_path, $lrc)',
+        {
+          $name: name,
+          $artist: artist,
+          $album: album,
+          $duration: duration,
+          $cover: cover,
+          $file_path: file_path,
+          $lrc: lrc
+        }
+      )
+      ev.returnValue = true
+      break
+
+    case 'get-all-songs':
+      db.getAll('SELECT id, name, duration, artist, file_path FROM songs')
+        .then(res => {
+          ev.returnValue = res
+        })
+        .catch(err => {
+          ev.returnValue = err
+        })
+      break
+
+    case 'get-songs':
+      db.getAll(
+        'SELECT id, name, duration, artist, file_path ' +
+          'FROM songs ' +
+          'WHERE id IN ' +
+          '(SELECT sid FROM relations WHERE pid = $pid)',
+        { $pid: conn.pid }
+      )
+        .then(res => {
+          ev.returnValue = res
+        })
+        .catch(err => {
+          ev.returnValue = err
+        })
+      break
+
     // 扫描目录
     case 'scan-dir':
-      if (fs.isdir(conn.path)) {
+      var { dir } = conn.data
+      if (fs.isdir(dir)) {
         let list = fs
-          .ls(conn.path, true)
+          .ls(dir, true)
           .filter(it => {
             if (fs.isdir(it)) {
               return false
@@ -97,7 +149,13 @@ ipcMain.on('app', (ev, conn) => {
               end: 256,
               encoding: 'base64'
             })
-            return { name, path: it, artist: '', album: '', duration: '00:00' }
+            return {
+              name,
+              file_path: it,
+              artist: '',
+              album: '',
+              duration: '00:00'
+            }
           })
         ev.returnValue = list
       } else {

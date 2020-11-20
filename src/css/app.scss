@@ -39,41 +39,6 @@
     z-index: 9;
     height: 26px;
     background: rgba(32, 32, 32, 0.5);
-
-    .btn-box {
-      display: inline-flex;
-      width: auto;
-      height: 12px;
-      padding: 0 8px;
-
-      .item {
-        display: inline-flex;
-        width: 12px;
-        height: 12px;
-        margin: 0 3px;
-        background: url(/images/btn-grey.svg) no-repeat;
-        background-size: cover;
-      }
-
-      &.focus {
-        .quit {
-          background-image: url(/images/btn-close.svg);
-        }
-        .min {
-          background-image: url(/images/btn-mini.svg);
-        }
-        // .max {background-image:url(/images/btn-maxi.svg);}
-      }
-      &:hover {
-        .quit {
-          background-image: url(/images/btn-close_a.svg);
-        }
-        .min {
-          background-image: url(/images/btn-mini_a.svg);
-        }
-        // .max {background-image:url(/images/btn-maxi_a.svg);}
-      }
-    }
   }
 
   .main-body {
@@ -255,11 +220,22 @@
       }
 
       .progress {
+        position: relative;
         flex: 1;
         display: flex;
         align-items: flex-start;
         height: 3px;
         background: #b2cfe3;
+
+        input {
+          position: absolute;
+          left: 0;
+          top: 0;
+          display: block;
+          width: 100%;
+          height: 3px;
+          opacity: 0;
+        }
       }
 
       .thumb {
@@ -373,7 +349,46 @@
           transition: background 0.1s ease-in-out;
           cursor: pointer;
 
-          &.volume {
+          &.volume,
+          &.mute {
+            position: relative;
+
+            a {
+              display: block;
+              width: 22px;
+              height: 22px;
+              background-repeat: no-repeat;
+              background-size: cover;
+              transition: background 0.1s ease-in-out;
+            }
+            .range {
+              visibility: hidden;
+              position: absolute;
+              right: -5px;
+              bottom: 20px;
+              width: 32px;
+              height: 128px;
+              padding: 14px;
+              border-radius: 3px;
+              background: rgba(128, 128, 128, 0.8);
+
+              input {
+                display: block;
+                width: 4px;
+                height: 100px;
+                border-radius: 3px;
+                appearance: slider-vertical;
+              }
+            }
+
+            &:hover {
+              .range {
+                visibility: visible;
+              }
+            }
+          }
+
+          &.volume a {
             background-image: url(/images/ctrl/volume.png);
             &:hover,
             &:active {
@@ -381,7 +396,7 @@
             }
           }
 
-          &.mute {
+          &.mute a {
             background-image: url(/images/ctrl/mute.png);
             &:hover,
             &:active {

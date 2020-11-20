@@ -7,12 +7,12 @@
 const { app, session, protocol, globalShortcut } = require('electron')
 const path = require('path')
 const fs = require('iofs')
-// const {exec} = require('child_process')
 
 require('./tools/init.js')
+
+const { createMainWindow, createMiniWindow } = require('./tools/windows.js')
 const { createAppTray, createLrcTray } = require('./tools/tray.js')
 const createMenu = require('./tools/menu.js')
-const { createMainWindow, createMiniWindow } = require('./tools/windows.js')
 
 const MIME_TYPES = {
   '.js': 'text/javascript',
@@ -47,18 +47,17 @@ protocol.registerSchemesAsPrivileged([
 //  初始化应用
 app.once('ready', () => {
   // 注册协议
-  protocol.registerBufferProtocol('app', (req, cb) => {
-    let file = decodeURIComponent(req.url.replace(/^app:\/\/local\//, ''))
-    let ext = path.extname(req.url)
-    let buff = fs.cat(path.resolve(__dirname, file))
+  protocol.registerBufferProtocol('app', function(req, cb) {
+    var file = decodeURIComponent(req.url.replace(/^app:\/\/local\//, ''))
+    var ext = path.extname(req.url)
+    var buff = fs.cat(path.resolve(__dirname, file))
     cb({ data: buff, mimeType: MIME_TYPES[ext] })
   })
 
-  protocol.registerBufferProtocol('sonist', (req, cb) => {
-    let file = decodeURIComponent(req.url.replace(/^sonist:[\/]+/, '/'))
-    let ext = path.extname(req.url)
-    let buff = fs.cat(file)
-    cb({ data: buff, mimeType: MIME_TYPES[ext] || MIME_TYPES.all })
+  protocol.registerBufferProtocol('sonist', function(req, cb) {
+    var file = decodeURIComponent(req.url.replace(/^sonist:[\/]+/, '/'))
+    var ext = path.extname(req.url)
+    cb({ data: fs.cat(file), mimeType: MIME_TYPES[ext] || MIME_TYPES.all })
   })
   // 修改app的UA
   session.defaultSession.setUserAgent(
@@ -74,7 +73,7 @@ app.once('ready', () => {
   // mac专属事件,点击dock栏图标,可激活窗口
   app.on('activate', _ => {
     if (win) {
-      win.webContents.send('dock-click')
+      win.restore()
     }
   })
 })

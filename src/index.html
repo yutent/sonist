@@ -16,11 +16,7 @@
   </div>
 
   <div class="title-bar app-drag">
-    <div class="btn-box app-nodrag focus">
-      <a class="item quit"></a>
-      <a class="item min"></a>
-      <a class="item max"></a>
-    </div>
+
   </div>
 
   <main class="main-body">
@@ -57,8 +53,8 @@
         <wc-scroll class="list">
           <section 
             class="item" 
-            @click="prviewSong(it, i)"
-            @dblclick="playSong(it, i)"
+            @click="previewSong(it, i)"
+            @dblclick="playSong(i)"
             :class="{on: curr === i}" 
             :for="i it in list">
             <span class="idx" :text="i + 1"></span>
@@ -75,7 +71,8 @@
     <section class="stat-bar">
       <span class="time" :text="song.time | time"></span>
       <div class="progress">
-        <span class="thumb" :css="{width: ~~((100 * song.time) / song.duration) + '%'}"></span>
+        <span class="thumb" :css="{width: ((100 * song.time) / song.duration).toFixed(1) + '%'}"></span>
+        <input type="range" max="712" min="0" step="1" :duplex="progress">
       </div>
       <span class="time" :text="song.duration | time"></span>
     </section>
@@ -87,22 +84,30 @@
       </div>
 
       <div class="play-btn">
-        <a class="item prev"></a>
-        <a class="item" :class="{on: isplaying, off: !isplaying}" @click="play"></a>
-        <a class="item next"></a>
+        <a class="item prev" @click="play(-1)"></a>
+        <a class="item" 
+          :class="{on: isplaying, off: !isplaying}"
+          @click="play(0)">
+        </a>
+        <a class="item next" @click="play(1)"></a>
       </div>
 
       <div class="holder"></div>
 
       <div class="play-action">
-        <a class="item" :class="{
+        <item class="item" :class="{
             all: playmode === 1,
             single: playmode === 2,
             rand: playmode === 3,
           }"
           @click="switchMode">
-        </a>
-        <a class="item" :class="{mute: mute, volume: !mute}" @click="toggleMute"></a>
+        </item>
+        <item class="item" :class="{mute: mute || volume <= 0, volume: !mute && volume > 0}">
+          <div class="range">
+            <input type="range" max="100" min="0" step="1" :duplex="volume">
+          </div>
+          <a @click="toggleMute"></a>
+        </item>
       </div>
     </section>
   </div>

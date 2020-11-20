@@ -11,7 +11,7 @@
     "name": "yutent",
     "email": "yutent.io@gmail.com"
   },
-  "homepage": "https://yutent.me",
+  "homepage": "https://yutent.top",
   "license": "MIT",
   "dependencies": {
     "crypto.js": "^2.0.2",

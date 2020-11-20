@@ -16,6 +16,7 @@ exports.createMainWindow = function(icon) {
     width: 820,
     height: 460,
     frame: false,
+    titleBarStyle: 'hiddenInset',
     resizable: false,
     maximizable: false,
     icon,
@@ -38,6 +39,11 @@ exports.createMainWindow = function(icon) {
   win.on('ready-to-show', _ => {
     win.show()
     win.openDevTools()
+  })
+
+  win.on('close', ev => {
+    ev.preventDefault()
+    win.hide()
   })
 
   return win
