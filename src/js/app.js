@@ -225,6 +225,7 @@ Anot({
       this.isplaying = true
       this.previewSong(it)
       player.play(i)
+      this.$refs.list.scrollTop = (i - 3) * 26
     }
   }
 })

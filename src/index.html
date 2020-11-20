@@ -37,7 +37,7 @@
     </aside>
 
     <div class="song-box">
-      <div class="preview">
+      <div class="preview" :visible="curr > -1">
         <div class="album">
           <img :src="preview.cover || defaultCover">
         </div>
@@ -50,7 +50,7 @@
         <span class="total" :text="list.size()"></span>
       </div>
       <div class="scroll-box">
-        <wc-scroll class="list">
+        <wc-scroll class="list" ref="list">
           <section 
             class="item" 
             @click="previewSong(it, i)"
