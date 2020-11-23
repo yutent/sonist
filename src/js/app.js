@@ -52,7 +52,7 @@ Anot({
   },
   async mounted() {
     var list = app.dispatch('get-all-songs')
-    // var list = app.dispatch('scan-dir', { dir: '/Volumes/extends/music' })
+    // var list = app.dispatch('scan-dir', { dir: '/Volumes/ooc/music' })
 
     kb.on(['left'], ev => {
       var time = this.song.time - 5
@@ -85,19 +85,21 @@ Anot({
 
     // for (let it of list) {
     //   let { album, artist, title, duration } = await this.getID3(it.file_path)
-
     //   it.name = title || it.name
     //   it.artist = artist
     //   it.album = album
     //   it.duration = duration
+
     //   app.dispatch('add-song', {
     //     name: it.name,
     //     artist,
     //     album,
     //     duration,
-    //     file_path: it.path
+    //     file_path: it.file_path
     //   })
     // }
+
+    // console.log(list)
     this.list = list
 
     player.volume = this.volume / 100

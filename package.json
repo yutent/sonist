@@ -39,7 +39,8 @@
       "src/**/*",
       "node_modules/iofs/*",
       "node_modules/sqlite3/*",
-      "node_modules/crypto.js/*"
+      "node_modules/crypto.js/*",
+      "node_modules/music-metadata/*"
     ],
     "mac": {
       "category": "public.app-category.music",
