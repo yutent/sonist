@@ -55,7 +55,13 @@ Anot({
     // var list = app.dispatch('scan-dir', { dir: '/Volumes/ooc/music' })
 
     app.on('tray-play', ev => {
-      console.log('tray-play:', ev)
+      this.play(0)
+    })
+    app.on('tray-prev', ev => {
+      this.play(-1)
+    })
+    app.on('tray-next', ev => {
+      this.play(1)
     })
 
     kb.on(['left'], ev => {
@@ -155,10 +161,10 @@ Anot({
         case 0:
           if (idx > -1) {
             player.play(-1)
+            this.isplaying = !this.isplaying
           } else {
             this.playSong(0)
           }
-          this.isplaying = !this.isplaying
           break
 
         default:

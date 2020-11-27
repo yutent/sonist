@@ -7,29 +7,32 @@
 const path = require('path')
 const { ipcMain, Tray, Menu, nativeImage } = require('electron')
 
-var playIcon = [
-  path.join(__dirname, '../images/trays/playTemplate.png'),
-  path.join(__dirname, '../images/trays/pauseTemplate.png')
-]
+const ICON_DICT = {
+  app: path.join(__dirname, '../images/trays/tray.png'),
+  play: path.join(__dirname, '../images/trays/playTemplate.png'),
+  pause: path.join(__dirname, '../images/trays/pauseTemplate.png'),
+  next: path.join(__dirname, '../images/trays/nextTemplate.png'),
+  prev: path.join(__dirname, '../images/trays/prevTemplate.png')
+}
 
-function create(ico) {
+function create(ico = nativeImage.createEmpty()) {
   var tray = new Tray(ico)
   tray.setIgnoreDoubleClickEvents(true)
   return tray
 }
 
 exports.ctrlTrayBtn = function(win) {
-  var next = create(path.join(__dirname, '../images/trays/nextTemplate.png'))
-  var play = create(playIcon[1])
-  var prev = create(path.join(__dirname, '../images/trays/prevTemplate.png'))
+  var next = create(ICON_DICT.next)
+  var play = create(ICON_DICT.pause)
+  var prev = create(ICON_DICT.prev)
   var isPlaying = false
 
   play.on('click', _ => {
     isPlaying = !isPlaying
     if (isPlaying) {
-      play.setImage(playIcon[0])
+      play.setImage(ICON_DICT.play)
     } else {
-      play.setImage(playIcon[1])
+      play.setImage(ICON_DICT.pause)
     }
     win.webContents.send('app', { type: 'tray-play', data: { isPlaying } })
   })
@@ -44,7 +47,7 @@ exports.ctrlTrayBtn = function(win) {
 }
 
 exports.createAppTray = function(win) {
-  var tray = create(path.join(__dirname, '../images/trays/tray.png'))
+  var tray = create(ICON_DICT.app)
   var menuList = Menu.buildFromTemplate([
     {
       label: '退出 Sonist',
@@ -66,8 +69,7 @@ exports.createAppTray = function(win) {
 }
 
 exports.createLrcTray = function(win) {
-  var nullImage = nativeImage.createEmpty()
-  var tray = create(nullImage)
+  var tray = create()
   tray.setTitle('这是顶栏歌词, blablablabla...')
 
   return tray
