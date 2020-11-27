@@ -5,9 +5,22 @@
  */
 
 const { ipcRenderer } = require('electron')
+const EventEmitter = require('events')
+const util = require('util')
 
-export default {
+class Socket {
+  constructor() {
+    ipcRenderer.on('app', (ev, conn) => {
+      // console.log(ev, conn)
+      this.emit(conn.type, conn.data)
+    })
+  }
+
   dispatch(type = '', data = {}) {
     return ipcRenderer.sendSync('app', { data, type })
   }
 }
+
+util.inherits(Socket, EventEmitter)
+
+export default new Socket()

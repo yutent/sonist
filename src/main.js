@@ -11,8 +11,6 @@ const fs = require('iofs')
 require('./tools/init.js')
 
 const { createMainWindow, createMiniWindow } = require('./tools/windows.js')
-const { createAppTray, createLrcTray } = require('./tools/tray.js')
-const createMenu = require('./tools/menu.js')
 
 const MIME_TYPES = {
   '.js': 'text/javascript',
@@ -65,10 +63,6 @@ app.once('ready', () => {
   )
 
   let win = createMainWindow(path.resolve(__dirname, './images/app.png'))
-
-  createAppTray(win)
-  createLrcTray(win)
-  createMenu(win)
 
   // mac专属事件,点击dock栏图标,可激活窗口
   app.on('activate', _ => {

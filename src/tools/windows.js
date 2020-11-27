@@ -1,10 +1,13 @@
 /**
  * 各种窗口创建
- * @author yutent<yutent@doui.cc>
- * @date 2019/01/26 18:28:22
+ * @author yutent<yutent.io@gmail.com>
+ * @date 2020/11/27 13:59:55
  */
 
 const { BrowserWindow } = require('electron')
+
+const { createAppTray, createLrcTray, ctrlTrayBtn } = require('./tray.js')
+const createMenu = require('./menu.js')
 
 /**
  * 应用主窗口
@@ -36,9 +39,15 @@ exports.createMainWindow = function(icon) {
 
   win.loadURL('app://local/index.html')
 
+  createAppTray(win)
+  ctrlTrayBtn(win)
+  createLrcTray(win)
+
+  createMenu(win)
+
   win.on('ready-to-show', _ => {
     win.show()
-    // win.openDevTools()
+    win.openDevTools()
   })
 
   win.on('close', ev => {

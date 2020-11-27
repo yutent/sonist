@@ -54,6 +54,10 @@ Anot({
     var list = app.dispatch('get-all-songs')
     // var list = app.dispatch('scan-dir', { dir: '/Volumes/ooc/music' })
 
+    app.on('tray-play', ev => {
+      console.log('tray-play:', ev)
+    })
+
     kb.on(['left'], ev => {
       var time = this.song.time - 5
       if (time < 0) {
