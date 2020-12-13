@@ -4,13 +4,13 @@
  * @date 2020/11/18 09:27:09
  */
 
-const { app, session, protocol, globalShortcut } = require('electron')
+const { app, session, protocol, globalShortcut, ipcMain } = require('electron')
 const path = require('path')
 const fs = require('iofs')
 
 require('./tools/init.js')
 
-const { createMainWindow, createMiniWindow } = require('./tools/windows.js')
+const { createMainWindow } = require('./tools/windows.js')
 
 const MIME_TYPES = {
   '.js': 'text/javascript',
@@ -45,14 +45,14 @@ protocol.registerSchemesAsPrivileged([
 //  初始化应用
 app.once('ready', () => {
   // 注册协议
-  protocol.registerBufferProtocol('app', function(req, cb) {
+  protocol.registerBufferProtocol('app', function (req, cb) {
     var file = decodeURIComponent(req.url.replace(/^app:\/\/local\//, ''))
     var ext = path.extname(req.url)
     var buff = fs.cat(path.resolve(__dirname, file))
     cb({ data: buff, mimeType: MIME_TYPES[ext] })
   })
 
-  protocol.registerBufferProtocol('sonist', function(req, cb) {
+  protocol.registerBufferProtocol('sonist', function (req, cb) {
     var file = decodeURIComponent(req.url.replace(/^sonist:[\/]+/, '/'))
     var ext = path.extname(req.url)
     cb({ data: fs.cat(file), mimeType: MIME_TYPES[ext] || MIME_TYPES.all })
@@ -68,6 +68,18 @@ app.once('ready', () => {
   app.on('activate', _ => {
     if (win) {
       win.restore()
+    }
+  })
+
+  ipcMain.on('app', (ev, conn) => {
+    switch (conn.type) {
+      case 'update-lrc':
+        win.__lrc__.setTitle(conn.data.lrc)
+        ev.returnValue = true
+        break
+
+      default:
+        break
     }
   })
 })

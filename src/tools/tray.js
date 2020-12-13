@@ -5,7 +5,7 @@
  */
 
 const path = require('path')
-const { ipcMain, Tray, Menu, nativeImage } = require('electron')
+const { Tray, Menu, nativeImage } = require('electron')
 
 const ICON_DICT = {
   app: path.join(__dirname, '../images/trays/tray.png'),
@@ -74,7 +74,7 @@ exports.createAppTray = function (win) {
 
 exports.createLrcTray = function (win) {
   var tray = create()
-  tray.setTitle('这是顶栏歌词, blablablabla...')
+  tray.setTitle('Hello Sonist!')
 
   win.__lrc__ = tray
   return tray

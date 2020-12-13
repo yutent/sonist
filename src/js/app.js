@@ -229,6 +229,7 @@ Anot({
         }
         return
       }
+      // player.stop()
       this.curr = i
       this.song.name = it.name
       this.song.artist = it.artist
@@ -239,6 +240,8 @@ Anot({
       this.previewSong(it)
       player.play(i)
       this.$refs.list.scrollTop = (i - 3) * 26
+
+      app.dispatch('update-lrc', { lrc: '正在播放: ' + it.name })
 
       // if (!it.lrc) {
       //   Api.searchLrc(it.name, it.duration).then(list => {

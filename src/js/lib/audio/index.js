@@ -72,8 +72,10 @@ export default class Player {
     this.gain = this.__AC__.createGain()
     this.gain.gain.value = this.volume
 
-    this.track = this.__AC__.createMediaElementSource(this.__AUDIO__)
-    this.track.connect(this.gain).connect(this.__AC__.destination)
+    this.track = this.__AC__
+      .createMediaElementSource(this.__AUDIO__)
+      .connect(this.gain)
+      .connect(this.__AC__.destination)
   }
 
   get volume() {
@@ -147,6 +149,7 @@ export default class Player {
 
   stop() {
     if (this.track) {
+      this.track.disconnect()
       this.track = null
       this.gain = null
       this.__destroy__()

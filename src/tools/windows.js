@@ -24,7 +24,6 @@ exports.createMainWindow = function (icon) {
     maximizable: false,
     icon,
     transparent: true,
-    backgroundColor: '#00ffffff',
     vibrancy: 'dark',
     visualEffectState: 'active',
     webPreferences: {
@@ -47,7 +46,7 @@ exports.createMainWindow = function (icon) {
 
   win.on('ready-to-show', _ => {
     win.show()
-    win.openDevTools()
+    // win.openDevTools()
   })
 
   win.on('close', ev => {
@@ -55,31 +54,5 @@ exports.createMainWindow = function (icon) {
     win.hide()
   })
 
-  return win
-}
-
-/**
- * 应用迷你窗口
- */
-exports.createMiniWindow = function (screen) {
-  let win = new BrowserWindow({
-    title: '',
-    width: 320,
-    height: 60,
-    frame: false,
-    resizable: false,
-    alwaysOnTop: true,
-    skipTaskbar: true,
-    x: screen.width - 320,
-    y: 0,
-    show: false,
-    webPreferences: {
-      webSecurity: false,
-      experimentalFeatures: true,
-      nodeIntegration: true
-    }
-  })
-
-  win.loadURL('app://local/mini-win.html')
   return win
 }
