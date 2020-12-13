@@ -21,7 +21,7 @@ function create(ico = nativeImage.createEmpty()) {
   return tray
 }
 
-exports.ctrlTrayBtn = function(win) {
+exports.ctrlTrayBtn = function (win) {
   var next = create(ICON_DICT.next)
   var play = create(ICON_DICT.pause)
   var prev = create(ICON_DICT.prev)
@@ -42,11 +42,14 @@ exports.ctrlTrayBtn = function(win) {
   next.on('click', _ => {
     win.webContents.send('app', { type: 'tray-next', data: { isPlaying } })
   })
-  console.log('ready', prev, play, next)
+
+  win.__prev__ = prev
+  win.__play__ = play
+  win.__next__ = next
   return { prev, play, next }
 }
 
-exports.createAppTray = function(win) {
+exports.createAppTray = function (win) {
   var tray = create(ICON_DICT.app)
   var menuList = Menu.buildFromTemplate([
     {
@@ -65,12 +68,14 @@ exports.createAppTray = function(win) {
     tray.popUpContextMenu(menuList)
   })
 
+  win.__tray__ = tray
   return tray
 }
 
-exports.createLrcTray = function(win) {
+exports.createLrcTray = function (win) {
   var tray = create()
   tray.setTitle('这是顶栏歌词, blablablabla...')
 
+  win.__lrc__ = tray
   return tray
 }

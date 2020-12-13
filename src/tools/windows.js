@@ -12,7 +12,7 @@ const createMenu = require('./menu.js')
 /**
  * 应用主窗口
  */
-exports.createMainWindow = function(icon) {
+exports.createMainWindow = function (icon) {
   // 创建浏览器窗口
   let win = new BrowserWindow({
     title: 'sonist',
@@ -61,7 +61,7 @@ exports.createMainWindow = function(icon) {
 /**
  * 应用迷你窗口
  */
-exports.createMiniWindow = function(screen) {
+exports.createMiniWindow = function (screen) {
   let win = new BrowserWindow({
     title: '',
     width: 320,
