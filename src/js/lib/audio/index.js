@@ -19,10 +19,54 @@ function hide(target, key, value) {
   })
 }
 
+class AudioTrack {
+  constructor(elem) {
+    var AC = new AudioContext()
+
+    this._el = elem
+
+    this.gain = AC.createGain()
+
+    this._track = AC.createMediaElementSource(elem)
+      .connect(this.gain)
+      .connect(AC.destination)
+
+    this.__playFn = $.bind(elem, 'timeupdate', _ => {
+      this.emit('play', elem.currentTime)
+    })
+    this.__stopFn = $.bind(elem, 'ended', _ => {
+      this.emit('stop')
+    })
+  }
+
+  set volume(val) {
+    if (this.gain) {
+      this.gain.gain.value = val
+    }
+  }
+
+  destroy() {
+    $.unbind(this._el, 'timeupdate', this.__playFn)
+    $.unbind(this._el, 'ended', this.__stopFn)
+    this.removeAllListeners()
+
+    this._track.disconnect()
+
+    this._el.src = ''
+    this._el.currentTime = 0
+    this._el.pause()
+
+    delete this.__playFn
+    delete this.__stopFn
+    delete this._el
+    delete this.gain
+    delete this._track
+  }
+}
+
 export default class Player {
   constructor() {
     hide(this, '__LIST__', [])
-    hide(this, '__AC__', new AudioContext())
     hide(this, 'props', {
       curr: '',
       stat: 'ready',
@@ -30,32 +74,6 @@ export default class Player {
       duration: 0
     })
     hide(this, 'track', null)
-    hide(this, 'gain', null)
-
-    this.__main__()
-  }
-
-  __main__() {
-    hide(this, '__AUDIO__', new Audio())
-
-    this.__playFn = $.bind(this.__AUDIO__, 'timeupdate', _ => {
-      this.emit('play', this.__AUDIO__.currentTime)
-    })
-    this.__stopFn = $.bind(this.__AUDIO__, 'ended', _ => {
-      this.props.stat = 'paused'
-      this.emit('stop')
-    })
-  }
-
-  __destroy__() {
-    $.unbind(this.__AUDIO__, 'timeupdate', this.__playFn)
-    $.unbind(this.__AUDIO__, 'ended', this.__stopFn)
-
-    this.__AUDIO__.pause()
-    this.__AUDIO__.currentTime = 0
-
-    delete this.__playFn
-    delete this.__stopFn
   }
 
   load(list) {
@@ -64,18 +82,17 @@ export default class Player {
   }
 
   async _getTrack(file) {
-    this.__main__()
+    hide(this, '__AUDIO__', new Audio())
+
     this.__AUDIO__.src = URL.createObjectURL(
       await fetch(file).then(r => r.blob())
     )
 
-    this.gain = this.__AC__.createGain()
-    this.gain.gain.value = this.volume
+    this.track = new AudioTrack(this.__AUDIO__)
+    this.track.volume = this.props.volume
 
-    this.track = this.__AC__
-      .createMediaElementSource(this.__AUDIO__)
-      .connect(this.gain)
-      .connect(this.__AC__.destination)
+    this.track.on('play', t => this.emit('play', t))
+    this.track.on('stop', _ => this.emit('stop'))
   }
 
   get volume() {
@@ -91,8 +108,8 @@ export default class Player {
       val = 1
     }
     this.props.volume = val
-    if (this.gain) {
-      this.gain.gain.value = val
+    if (this.track) {
+      this.track.volume = val
     }
   }
 
@@ -108,7 +125,7 @@ export default class Player {
    * id: 歌曲序号
    * force: 强制重新播放
    */
-  play(id, force = false) {
+  async play(id, force = false) {
     if (id === -1) {
       if (this.track) {
         if (force) {
@@ -134,7 +151,7 @@ export default class Player {
       }
 
       this.props.curr = url
-      this._getTrack(url)
+      await this._getTrack(url)
 
       this.__AUDIO__.play()
       this.props.stat = 'playing'
@@ -149,13 +166,11 @@ export default class Player {
 
   stop() {
     if (this.track) {
-      this.track.disconnect()
-      this.track = null
-      this.gain = null
-      this.__destroy__()
+      this.track.destroy()
       this.props.stat = 'stoped'
     }
   }
 }
 
+util.inherits(AudioTrack, EventEmitter)
 util.inherits(Player, EventEmitter)

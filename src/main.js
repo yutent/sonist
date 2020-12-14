@@ -45,17 +45,30 @@ protocol.registerSchemesAsPrivileged([
 //  初始化应用
 app.once('ready', () => {
   // 注册协议
-  protocol.registerBufferProtocol('app', function (req, cb) {
+  protocol.registerStreamProtocol('app', function(req, cb) {
     var file = decodeURIComponent(req.url.replace(/^app:\/\/local\//, ''))
     var ext = path.extname(req.url)
-    var buff = fs.cat(path.resolve(__dirname, file))
-    cb({ data: buff, mimeType: MIME_TYPES[ext] })
+    file = path.resolve(__dirname, file)
+
+    cb({
+      data: fs.origin.createReadStream(file),
+      mimeType: MIME_TYPES[ext],
+      headers: {
+        'Cache-Control': 'max-age=144000000'
+      }
+    })
   })
 
-  protocol.registerBufferProtocol('sonist', function (req, cb) {
+  protocol.registerStreamProtocol('sonist', function(req, cb) {
     var file = decodeURIComponent(req.url.replace(/^sonist:[\/]+/, '/'))
     var ext = path.extname(req.url)
-    cb({ data: fs.cat(file), mimeType: MIME_TYPES[ext] || MIME_TYPES.all })
+    cb({
+      data: fs.origin.createReadStream(file),
+      mimeType: MIME_TYPES[ext] || MIME_TYPES.all,
+      headers: {
+        'Cache-Control': 'max-age=144000000'
+      }
+    })
   })
   // 修改app的UA
   session.defaultSession.setUserAgent(

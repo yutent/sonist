@@ -138,6 +138,19 @@ Anot({
 
       this.playSong(idx, repeat)
     })
+
+    window.foo = _ => {
+      var n = 128,
+        t
+      t = setInterval(() => {
+        n--
+        this.play(1)
+        if (n < 0) {
+          clearInterval(t)
+        }
+      }, 100)
+    }
+    // foo()
   },
   watch: {
     volume(v) {
