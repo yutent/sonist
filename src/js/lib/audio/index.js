@@ -10,6 +10,8 @@ import fetch from '../fetch/index.js'
 const { EventEmitter } = require('events')
 const util = require('util')
 
+const AC = new AudioContext()
+
 function hide(target, key, value) {
   Object.defineProperty(target, key, {
     value,
@@ -21,15 +23,15 @@ function hide(target, key, value) {
 
 class AudioTrack {
   constructor(elem) {
-    var AC = new AudioContext()
-
     this._el = elem
 
     this.gain = AC.createGain()
 
     this._track = AC.createMediaElementSource(elem)
-      .connect(this.gain)
-      .connect(AC.destination)
+
+    this._track.connect(this.gain)
+
+    this.gain.connect(AC.destination)
 
     this.__playFn = $.bind(elem, 'timeupdate', _ => {
       this.emit('play', elem.currentTime)
@@ -51,6 +53,7 @@ class AudioTrack {
     this.removeAllListeners()
 
     this._track.disconnect()
+    // this._track.disconnect(AC.destination)
 
     this._el.src = ''
     this._el.currentTime = 0
